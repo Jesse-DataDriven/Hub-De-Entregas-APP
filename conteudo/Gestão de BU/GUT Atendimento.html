@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Matriz GUT — BU Atendimento</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600;700&display=swap');
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Barlow',sans-serif; background:#fff; color:#1A2340; font-size:14px; }
+  .page { max-width:900px; margin:0 auto; padding:40px 32px 60px; }
+  @media print {
+    body { background:#fff; }
+    .no-print { display:none; }
+    .page { padding:20px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div style="background:#000F44;border-radius:14px;padding:24px 28px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;">
+    <div>
+      <div style="background:#78DF40;color:#000F44;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;padding:3px 14px 3px 10px;clip-path:polygon(0 0,93% 0,100% 50%,93% 100%,0 100%);display:inline-block;margin-bottom:8px;">Grupo de Trabalho</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#fff;letter-spacing:.02em;">Matriz de Dores — <span style="color:#78DF40;">GUT</span></div>
+      <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:3px;">BU Atendimento · 08 de maio de 2026</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:11px;color:rgba(255,255,255,.35);margin-bottom:4px;">Total de dores</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:900;color:#78DF40;line-height:1;">6</div>
+    </div>
+  </div>
+
+  <!-- SUMMARY TABLE -->
+  <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#000F44;margin-bottom:14px;">📊 Tabela Resumo — Ordenada por GUT</h2>
+  <table style="width:100%;border-collapse:collapse;margin-bottom:36px;font-size:13px;">
+    <thead>
+      <tr style="background:#000F44;color:#fff;">
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">#</th>
+        <th style="padding:10px 12px;text-align:left;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">Dor</th>
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">G</th>
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">U</th>
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">T</th>
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">GUT</th>
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">Nível</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">1</td>
+        <td style="font-weight:700;color:#000F44;">Solicitação e Simulação de empréstimo</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">
+          <span style="background:#D63031;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">125</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#D63031;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Crítico</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">2</td>
+        <td style="font-weight:700;color:#000F44;">Tabulação automática</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">
+          <span style="background:#D63031;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">100</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#D63031;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Crítico</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">3</td>
+        <td style="font-weight:700;color:#000F44;">Casos em Branco</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">
+          <span style="background:#D63031;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">75</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#D63031;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Crítico</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">4</td>
+        <td style="font-weight:700;color:#000F44;">Pesquisa de satisfação CSAT</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">
+          <span style="background:#D63031;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">75</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#D63031;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Crítico</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">5</td>
+        <td style="font-weight:700;color:#000F44;">Inteligência e agilidade em regras de roteamento</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">
+          <span style="background:#E17055;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">64</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#E17055;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Alto</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">6</td>
+        <td style="font-weight:700;color:#000F44;">Dados canal WhatsApp</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">
+          <span style="background:#FDCB6E;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">48</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#FDCB6E;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Médio</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- DETAIL CARDS -->
+  <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#000F44;margin-bottom:16px;">📋 Detalhamento por Dor</h2>
+  
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#D63031;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">Solicitação e Simulação de empréstimo</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#D63031;font-weight:700;">125</span> · G:5 U:5 T:5 · Crítico</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">Sendo principal motivo de contato na central, buscar alternativas para melhorar a jornada, diminuir derivação ao humano e otimizar a esteira</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Em 2025 460.061 atendimentos, em 2026 195.284 (projeção simples 2026 607.738) Intraday</li><li style="margin-bottom:4px;color:#445;">TMA médio do assunto 2026 - 522segundos Intraday</li><li style="margin-bottom:4px;color:#445;">Jornada de simulação empréstimo otimizada</li><li style="margin-bottom:4px;color:#445;">Elegibilidade de crédito nos canais (ura/whatsapp)</li></ul>
+        </div>
+      </div>
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#D63031;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">Tabulação automática</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#D63031;font-weight:700;">100</span> · G:4 U:5 T:5 · Crítico</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">Fase 1 entregue (higienização) em validação. O desafio agora é automatizar</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Até 2min para uma tabulação finalizada</li><li style="margin-bottom:4px;color:#445;">Pontencial ganho financeiro com esse TMA evitado</li><li style="margin-bottom:4px;color:#445;">Melhor nota de Qualidade (item deixa de ser critério)</li><li style="margin-bottom:4px;color:#445;">Ganho em dados por padronização, facilidade de identificação de motivos e causas</li></ul>
+        </div>
+      </div>
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#D63031;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">Casos em Branco</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#D63031;font-weight:700;">75</span> · G:3 U:5 T:5 · Crítico</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">Existe desde minimamente abril de 2025</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Em Nov tentamos tracionar estudo técnico sem sucesso</li><li style="margin-bottom:4px;color:#445;">Afeta mais de 30% dos casos</li><li style="margin-bottom:4px;color:#445;">533.761 em branco do total (2.1M) (fonte estudo Planej.)</li><li style="margin-bottom:4px;color:#445;">O item cresceu +65% de Jan-Mai/2026 (fonte estudo Planej.)</li></ul>
+        </div>
+      </div>
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#D63031;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">Pesquisa de satisfação CSAT</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#D63031;font-weight:700;">75</span> · G:5 U:5 T:3 · Crítico</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">Viés de amostra</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Transferência manual (atendente)</li><li style="margin-bottom:4px;color:#445;">Multiplos cliques para transferência (UX)</li></ul>
+        </div>
+      </div>
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#E17055;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">Inteligência e agilidade em regras de roteamento</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#E17055;font-weight:700;">64</span> · G:4 U:4 T:4 · Alto</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">Atuar no mapa principal de jornada: Evoluir a habilidade dos canais para identificar a intenção para definir a jornada</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Alimentar banco de dados para rastrear o CPF (propensão)</li><li style="margin-bottom:4px;color:#445;">Autonomia e flexibilidade tríade: Qual insumo, qual análise, qual decisão</li></ul>
+        </div>
+      </div>
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#FDCB6E;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">6</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">Dados canal WhatsApp</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#FDCB6E;font-weight:700;">48</span> · G:3 U:4 T:4 · Médio</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">perda significativa de dados de jornadas do chatbot, comprometendo a confiabilidade das análises de comportamento do usuário e dificultando a identificação de pontos de fricção reais.</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Em abril de 2026, a jornada "Consulta de Limite" do chatbot registrou 13.349 sessões únicas</li><li style="margin-bottom:4px;color:#445;">+38 padrões distintos de gaps, incluindo sessões que "pulam" direto para etapas intermediárias sem passar pelo menu</li></ul>
+        </div>
+      </div>
+
+  <!-- FOOTER -->
+  <div style="border-top:1px solid #D1DAEA;padding-top:16px;margin-top:8px;display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-size:11px;color:#8899BB;font-weight:600;">BU Atendimento · Metodologia GUT</span>
+    <span style="font-size:11px;color:#8899BB;">GUT = Gravidade × Urgência × Tendência</span>
+  </div>
+
+  <div class="no-print" style="text-align:center;margin-top:32px;">
+    <button onclick="window.print()" style="background:#000F44;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;">🖨 Imprimir / Salvar como PDF</button>
+  </div>
+
+</div>
+</body>
+</html>
