@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Matriz GUT — BU Atendimento</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600;700&display=swap');
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Barlow',sans-serif; background:#fff; color:#1A2340; font-size:14px; }
+  .page { max-width:900px; margin:0 auto; padding:40px 32px 60px; }
+  @media print {
+    body { background:#fff; }
+    .no-print { display:none; }
+    .page { padding:20px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div style="background:#000F44;border-radius:14px;padding:24px 28px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;">
+    <div>
+      <div style="background:#78DF40;color:#000F44;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;padding:3px 14px 3px 10px;clip-path:polygon(0 0,93% 0,100% 50%,93% 100%,0 100%);display:inline-block;margin-bottom:8px;">Grupo de Trabalho</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#fff;letter-spacing:.02em;">Matriz de Dores — <span style="color:#78DF40;">GUT</span></div>
+      <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:3px;">BU Atendimento · 14 de maio de 2026</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:11px;color:rgba(255,255,255,.35);margin-bottom:4px;">Total de dores</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:900;color:#78DF40;line-height:1;">6</div>
+    </div>
+  </div>
+
+  <!-- SUMMARY TABLE -->
+  <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#000F44;margin-bottom:14px;">📊 Tabela Resumo — Ordenada por GUT</h2>
+  <table style="width:100%;border-collapse:collapse;margin-bottom:36px;font-size:13px;">
+    <thead>
+      <tr style="background:#000F44;color:#fff;">
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">#</th>
+        <th style="padding:10px 12px;text-align:left;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">Dor</th>
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">G</th>
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">U</th>
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">T</th>
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">GUT</th>
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">Nível</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">1</td>
+        <td style="font-weight:700;color:#000F44;">CONTESTAÇÃO DE EMPRÉSTIMO</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">
+          <span style="background:#D63031;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">125</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#D63031;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Crítico</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">2</td>
+        <td style="font-weight:700;color:#000F44;">DÉBITO INDEVIDO</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">
+          <span style="background:#D63031;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">100</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#D63031;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Crítico</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">3</td>
+        <td style="font-weight:700;color:#000F44;">LIBERAÇÃO DA MARGEM CONSIGNÁVEL</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">
+          <span style="background:#D63031;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">80</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#D63031;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Crítico</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">4</td>
+        <td style="font-weight:700;color:#000F44;">RESSARCIMENTO</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">
+          <span style="background:#D63031;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">80</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#D63031;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Crítico</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">5</td>
+        <td style="font-weight:700;color:#000F44;">ANTECIPAÇÃO DE PARCELAS</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">
+          <span style="background:#D63031;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">80</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#D63031;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Crítico</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">6</td>
+        <td style="font-weight:700;color:#000F44;">SOLICITAÇÃO DE EMPRÉSTIMO</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">
+          <span style="background:#55EFC4;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">20</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#55EFC4;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Baixo</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- DETAIL CARDS -->
+  <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#000F44;margin-bottom:16px;">📋 Detalhamento por Dor</h2>
+  
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#D63031;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">CONTESTAÇÃO DE EMPRÉSTIMO</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#D63031;font-weight:700;">125</span> · G:5 U:5 T:5 · Crítico</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">Este sintoma protagoniza um dos principais itens de reclamação em órgão regulador e produz um alto índice de procedências na governança desse KPI</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Falta Clareza do que é o desconto no extrato, e ao tentar obter informações há dificuldade</li><li style="margin-bottom:4px;color:#445;">Este Perfil tem um padrão de alta quantidade de refins contratados na loja ou via APP</li><li style="margin-bottom:4px;color:#445;">É o 2º maior em reclamações no órgão regulador 188 (13% no pareto)</li><li style="margin-bottom:4px;color:#445;">1º em julgamentos procedentes 20 (43% no pareto de procedências)</li><li style="margin-bottom:4px;color:#445;">Regulador procede com reclamação pela falta de evidências da venda. Biometria/contrato assinado não é suficiente dado público hiper vulnerável.</li></ul>
+        </div>
+      </div>
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#D63031;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">DÉBITO INDEVIDO</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#D63031;font-weight:700;">100</span> · G:5 U:5 T:4 · Crítico</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">Situações como Refinanciamento ou antecipação (gerando parcela transitória), geram débito indevido</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Desaverbação pendente gerando parcela, ressarcimento lento e depende de dataprev</li><li style="margin-bottom:4px;color:#445;">Público financeiramente vulnerável, as vezes demoramos 30~60 para ressarcir</li><li style="margin-bottom:4px;color:#445;">Sem informações ao cliente (status), sem fluxo de retenção e crédito em confiança.</li><li style="margin-bottom:4px;color:#445;">4ª maior em reclamações nos órgãos reguladores - 139 (9,5% no pareto)</li><li style="margin-bottom:4px;color:#445;">2º maior em julgamentos procedentes 15 (31% no pareto de procedências)</li></ul>
+        </div>
+      </div>
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#D63031;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">LIBERAÇÃO DA MARGEM CONSIGNÁVEL</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#D63031;font-weight:700;">80</span> · G:5 U:4 T:4 · Crítico</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">Falha na agilidade de desaverbação, gerando bastante fricção na liberação de margem</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Contrato liquidado deveria ser desaverbado via dataprev em até 5 d.u. (regulação);</li><li style="margin-bottom:4px;color:#445;">Processo automático falha com contratos fora do prazo expondo a Cia com o regulador</li><li style="margin-bottom:4px;color:#445;">Não existe processo de conciliação eficiente, contratos desaverbados após acionamento</li><li style="margin-bottom:4px;color:#445;">5º maior em reclamações nos órgãos reguladores - 107 (7,3% no pareto)</li><li style="margin-bottom:4px;color:#445;">3º maior em julgamentos procedentes (28,6% no pareto de procedências)</li></ul>
+        </div>
+      </div>
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#D63031;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">RESSARCIMENTO</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#D63031;font-weight:700;">80</span> · G:5 U:4 T:4 · Crítico</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">Processo de ressarcimento apontando +10 motivos de chamada sendo o 5º Maior motivo chamador</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Atraso no Ressarcimento</li><li style="margin-bottom:4px;color:#445;">Demora para resolver questões de ressarcimento</li><li style="margin-bottom:4px;color:#445;">8º Maior motivo por volume de recontato com 18,7% de taxa</li><li style="margin-bottom:4px;color:#445;">6º Maior motivo chamador +5k chamadas em 2026</li></ul>
+        </div>
+      </div>
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#D63031;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">ANTECIPAÇÃO DE PARCELAS</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#D63031;font-weight:700;">80</span> · G:4 U:4 T:5 · Crítico</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">Processo de antecipação de parcelas</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Exigência de baixa do pagamento anterior para liberar antecipação;</li><li style="margin-bottom:4px;color:#445;">Falta de funcionalidades no aplicativo para antecipação;</li><li style="margin-bottom:4px;color:#445;">Dúvidas sobre valores e datas de desconto, especialmente no 13º;</li><li style="margin-bottom:4px;color:#445;">Problemas com reconhecimento de pagamentos antecipados;</li><li style="margin-bottom:4px;color:#445;">9º assunto Recontato: ~24,2% taxa de Rechamada- Fonte: Comitê Resultados</li><li style="margin-bottom:4px;color:#445;">4º Motivo mais chamador com média/mês ~2.k acionamentos/MÊS</li><li style="margin-bottom:4px;color:#445;">Dificuldade em obter informações claras sobre valores, prazos e quantidade de parcelas</li></ul>
+        </div>
+      </div>
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#55EFC4;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">6</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">SOLICITAÇÃO DE EMPRÉSTIMO</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#55EFC4;font-weight:700;">20</span> · G:2 U:2 T:5 · Baixo</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">Jornada de prospecção com cliente</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Falta de ofertas ou propostas disponíveis para contratação;</li><li style="margin-bottom:4px;color:#445;">Demora para retorno de uma proposta efetiva;</li><li style="margin-bottom:4px;color:#445;">Dificuldade para concluir a contratação pelo aplicativo ou canais digitais;</li><li style="margin-bottom:4px;color:#445;">Reprovação e dificuldade na aprovação do consignado;</li><li style="margin-bottom:4px;color:#445;">8º assunto Recontato: ~23,8% taxa de Rechamada - Fonte: Comitê Resultados</li><li style="margin-bottom:4px;color:#445;">1º Motivo mais chamador com ~13k acionamentos 2026</li></ul>
+        </div>
+      </div>
+
+  <!-- FOOTER -->
+  <div style="border-top:1px solid #D1DAEA;padding-top:16px;margin-top:8px;display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-size:11px;color:#8899BB;font-weight:600;">BU Atendimento · Metodologia GUT</span>
+    <span style="font-size:11px;color:#8899BB;">GUT = Gravidade × Urgência × Tendência</span>
+  </div>
+
+  <div class="no-print" style="text-align:center;margin-top:32px;">
+    <button onclick="window.print()" style="background:#000F44;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;">🖨 Imprimir / Salvar como PDF</button>
+  </div>
+
+</div>
+</body>
+</html>
