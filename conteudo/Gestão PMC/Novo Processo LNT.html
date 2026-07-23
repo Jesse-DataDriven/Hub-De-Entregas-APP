@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fluxo de Treinamento · Projeto LNT</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --blue-deep:  #0d1f6e;
+  --blue-mid:   #1a3a9f;
+  --blue-brand: #2563eb;
+  --blue-light: #3b82f6;
+  --text-dark:  #0f172a;
+  --text-mid:   #334780;
+  --text-soft:  #6b82b0;
+  --radius:     18px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: #fff; color: var(--text-dark); min-height: 100vh; }
+.page { max-width: 1320px; margin: 0 auto; padding: 44px 24px 64px; }
+
+/* ── HEADER ── */
+.header { text-align: center; margin-bottom: 44px; }
+.header-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(37,99,235,.09); border: 1.5px solid rgba(37,99,235,.2);
+  border-radius: 100px; padding: 6px 20px; margin-bottom: 16px;
+}
+.pill-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue-brand); }
+.header-pill span { font-size: 11px; font-weight: 800; color: var(--blue-brand); letter-spacing: 2.5px; text-transform: uppercase; }
+h1 { font-size: clamp(24px, 3.5vw, 42px); font-weight: 900; color: var(--blue-deep); letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 12px; }
+.header-sub { font-size: 15px; color: var(--text-soft); font-weight: 600; line-height: 1.6; max-width: 540px; margin: 0 auto; }
+
+/* ── PHASE CARDS ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 22px;
+}
+
+.card {
+  background: #f8faff;
+  border-radius: var(--radius);
+  border: 2px solid rgba(37,99,235,.13);
+  box-shadow: 0 2px 16px rgba(13,31,110,.07), 0 1px 4px rgba(13,31,110,.04);
+  overflow: hidden; cursor: pointer;
+  transition: transform .22s, box-shadow .22s, border-color .22s;
+}
+.card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(37,99,235,.2); border-color: var(--blue-brand); }
+.card.active { border-color: var(--blue-brand); box-shadow: 0 12px 40px rgba(37,99,235,.22), 0 0 0 4px rgba(37,99,235,.08); transform: translateY(-5px); }
+
+.card-header { padding: 18px 20px 14px; position: relative; overflow: hidden; }
+.card-header::after { content: ''; position: absolute; top: -24px; right: -24px; width: 88px; height: 88px; border-radius: 50%; background: rgba(255,255,255,.08); pointer-events: none; }
+.card-header-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.card-tag { font-size: 10px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,.65); margin-bottom: 4px; }
+.card-phase { font-size: 19px; font-weight: 900; color: #fff; letter-spacing: -.5px; }
+.card-week-badge { background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.25); border-radius: 100px; padding: 4px 13px; color: #fff; font-size: 11px; font-weight: 800; white-space: nowrap; }
+
+/* ── MOMENT BADGES ── */
+.card-moment-badges { display: flex; gap: 6px; margin-top: 9px; flex-wrap: wrap; }
+.moment-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  border-radius: 7px; padding: 4px 10px;
+  font-size: 10px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase;
+}
+.moment-badge.vale { background: #fff; color: #14532d; border: 1.5px solid rgba(21,128,61,.4); }
+.moment-badge.vale .dot { background: #15803d; }
+.moment-badge.dmm  { background: #fff; color: #7f1d1d; border: 1.5px solid rgba(220,38,38,.35); }
+.moment-badge.dmm  .dot { background: #dc2626; }
+.moment-badge .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── CARD BODY ── */
+.card-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 11px; }
+
+.step { background: rgba(37,99,235,.03); border: 1px solid rgba(37,99,235,.09); border-left-width: 3px; border-radius: 12px; padding: 12px 13px; transition: background .2s; }
+.step:hover { background: rgba(37,99,235,.06); }
+.step-top { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; flex-wrap: wrap; }
+.step-num { width: 21px; height: 21px; border-radius: 50%; color: #fff; font-size: 10px; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.step-badge { border-radius: 5px; padding: 2px 7px; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; }
+.step-title { font-size: 12px; font-weight: 800; color: var(--blue-deep); line-height: 1.3; }
+.step-deadline { font-size: 11px; font-weight: 700; color: var(--text-soft); margin-bottom: 8px; }
+.step-items { display: flex; flex-direction: column; gap: 4px; }
+.step-item { display: flex; gap: 6px; font-size: 12px; line-height: 1.45; }
+.step-item-label { color: #94a8d8; font-weight: 800; flex-shrink: 0; min-width: 62px; }
+.step-item-value { color: var(--text-mid); font-weight: 600; }
+
+.highlight-box { border-radius: 12px; padding: 13px 15px; margin-top: 2px; }
+.highlight-box-title { color: #fff; font-weight: 900; font-size: 13px; margin-bottom: 9px; }
+.highlight-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.highlight-tag { background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.25); border-radius: 100px; padding: 4px 11px; color: #fff; font-size: 11px; font-weight: 800; }
+
+.card-footer-banner { border-radius: 10px; padding: 10px 14px; text-align: center; color: #fff; font-size: 11px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase; margin-top: 2px; }
+.card-note { background: rgba(37,99,235,.05); border: 1px solid rgba(37,99,235,.12); border-radius: 10px; padding: 10px 13px; color: var(--blue-mid); font-size: 12px; font-weight: 600; line-height: 1.55; }
+
+@media (max-width: 700px) {
+  .page { padding: 24px 14px 48px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-pill">
+      <div class="pill-dot"></div>
+      <span>Projeto LNT</span>
+    </div>
+    <h1>Fluxo de Treinamento da Operação</h1>
+    <p class="header-sub">Calendário executivo mensal · Da identificação de necessidades à validação final dos materiais</p>
+  </div>
+
+  <!-- PHASE CARDS -->
+  <div class="grid">
+
+    <!-- FASE 1 — 2ª Semana — VALE -->
+    <div class="card" id="card-1" onclick="toggleCard(1)">
+      <div class="card-header" style="background:linear-gradient(135deg,#0d1f6e,#1a3a9f)">
+        <div class="card-header-top">
+          <div><div class="card-tag">Levantamento</div><div class="card-phase">1ª FASE</div></div>
+          <div class="card-week-badge">2ª Semana</div>
+        </div>
+        <div class="card-moment-badges">
+          <span class="moment-badge vale"><span class="dot"></span>VALE — Menor Movimento</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="step" style="border-left-color:#0d1f6e">
+          <div class="step-top">
+            <div class="step-num" style="background:#0d1f6e">1</div>
+            <span class="step-badge" style="background:#111">EX</span>
+            <span class="step-title">Necessidades de Treinamento</span>
+          </div>
+          <div class="step-deadline">📅 Até 2º dia da 2ª Semana</div>
+          <div class="step-items">
+            <div class="step-item"><span class="step-item-label">Responsável</span><span class="step-item-value">BPO</span></div>
+            <div class="step-item"><span class="step-item-label">Fonte</span><span class="step-item-value">ATENDENTE</span></div>
+            <div class="step-item"><span class="step-item-label">Como</span><span class="step-item-value">Pesquisas internas</span></div>
+            <div class="step-item"><span class="step-item-label">Quem</span><span class="step-item-value">Qualidade ou Treinamento BPO</span></div>
+          </div>
+        </div>
+        <div class="step" style="border-left-color:#1a3a9f">
+          <div class="step-top">
+            <div class="step-num" style="background:#1a3a9f">2</div>
+            <span class="step-badge" style="background:#1a3a9f">CX</span>
+            <span class="step-title">Motivos Cliente</span>
+          </div>
+          <div class="step-deadline">📅 Até 3º dia da 2ª Semana</div>
+          <div class="step-items">
+            <div class="step-item"><span class="step-item-label">Responsável</span><span class="step-item-value">Qualidade Agi</span></div>
+            <div class="step-item"><span class="step-item-label">Fonte</span><span class="step-item-value">NPS e CSAT</span></div>
+            <div class="step-item"><span class="step-item-label">Como</span><span class="step-item-value">Conectando com CX e Central</span></div>
+            <div class="step-item"><span class="step-item-label">Quem</span><span class="step-item-value">Maria Eduarda</span></div>
+          </div>
+        </div>
+        <div class="step" style="border-left-color:#1a3a9f">
+          <div class="step-top">
+            <div class="step-num" style="background:#1a3a9f">3</div>
+            <span class="step-badge" style="background:#1a3a9f">CS</span>
+            <span class="step-title">Motivos CL</span>
+          </div>
+          <div class="step-deadline">📅 Até 4º dia da 2ª Semana</div>
+          <div class="step-items">
+            <div class="step-item"><span class="step-item-label">Responsável</span><span class="step-item-value">Qualidade Agi</span></div>
+            <div class="step-item"><span class="step-item-label">Fonte</span><span class="step-item-value">Check List e Qualidade</span></div>
+            <div class="step-item"><span class="step-item-label">Como</span><span class="step-item-value">Cobrando do BPO ou puxando por conta</span></div>
+            <div class="step-item"><span class="step-item-label">Quem</span><span class="step-item-value">Maria Eduarda</span></div>
+          </div>
+        </div>
+        <div class="card-footer-banner" style="background:#0d1f6e">🗓 Na sexta-feira da 2ª Semana — Temos o Mapa</div>
+      </div>
+    </div>
+
+    <!-- FASE 2 — 3ª Semana — VALE -->
+    <div class="card" id="card-2" onclick="toggleCard(2)">
+      <div class="card-header" style="background:linear-gradient(135deg,#1a3a9f,#2563eb)">
+        <div class="card-header-top">
+          <div><div class="card-tag">Validação</div><div class="card-phase">2ª FASE</div></div>
+          <div class="card-week-badge">3ª Semana</div>
+        </div>
+        <div class="card-moment-badges">
+          <span class="moment-badge vale"><span class="dot"></span>VALE — Menor Movimento</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="step" style="border-left-color:#1a3a9f">
+          <div class="step-top">
+            <div class="step-num" style="background:#1a3a9f">1</div>
+            <span class="step-title">Validação de Operações</span>
+          </div>
+          <div class="step-deadline">📅 Até 3º dia da 3ª Semana</div>
+          <div class="step-items">
+            <div class="step-item"><span class="step-item-label">Como</span><span class="step-item-value">Treinamento Agi convoca cerimônia para apresentar os temas</span></div>
+            <div class="step-item"><span class="step-item-label">Quem</span><span class="step-item-value">Vivi e equipe validam as prioridades</span></div>
+          </div>
+        </div>
+        <div class="step" style="border-left-color:#2563eb">
+          <div class="step-top">
+            <div class="step-num" style="background:#2563eb">2</div>
+            <span class="step-title">Definição de Métodos e Técnicas</span>
+          </div>
+          <div class="step-deadline">📅 Até 5º dia da 3ª Semana</div>
+          <div class="step-items">
+            <div class="step-item"><span class="step-item-label">Responsável</span><span class="step-item-value">Treinamento Agibank</span></div>
+            <div class="step-item"><span class="step-item-label">Como</span><span class="step-item-value">Estimando método e KPI que estamos perseguindo</span></div>
+            <div class="step-item"><span class="step-item-label">Quem</span><span class="step-item-value">Treinamento Agi</span></div>
+          </div>
+        </div>
+        <div class="highlight-box" style="background:linear-gradient(135deg,#1a3a9f,#2563eb)">
+          <div class="highlight-box-title">Aqui já desdobramos:</div>
+          <div class="highlight-tags">
+            <span class="highlight-tag">— Assuntos</span>
+            <span class="highlight-tag">— Prioridades</span>
+            <span class="highlight-tag">— Métodos</span>
+            <span class="highlight-tag">— KPI de sucesso</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 3 — 4ª Semana — DMM -->
+    <div class="card" id="card-3" onclick="toggleCard(3)">
+      <div class="card-header" style="background:linear-gradient(135deg,#2563eb,#3b82f6)">
+        <div class="card-header-top">
+          <div><div class="card-tag">Produção · DMM</div><div class="card-phase">3ª FASE</div></div>
+          <div class="card-week-badge">4ª Semana</div>
+        </div>
+        <div class="card-moment-badges">
+          <span class="moment-badge dmm"><span class="dot"></span>DMM — Maior Movimento</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="step" style="border-left-color:#2563eb">
+          <div class="step-top">
+            <div class="step-num" style="background:#2563eb">1</div>
+            <span class="step-title">Produção do Material</span>
+          </div>
+          <div class="step-deadline">📅 Até 5º dia da 4ª Semana</div>
+          <div class="step-items">
+            <div class="step-item"><span class="step-item-label">Entregas</span><span class="step-item-value">AVCs</span></div>
+            <div class="step-item"><span class="step-item-label">KPI's</span><span class="step-item-value">Retrato — antes do treinamento</span></div>
+            <div class="step-item"><span class="step-item-label">Expectativa</span><span class="step-item-value">O que se espera ganhar (depois)</span></div>
+          </div>
+        </div>
+        <div class="card-note">🎯 <strong>DMM:</strong> Momento de PRODUÇÃO de material para treinamentos do próximo mês.</div>
+      </div>
+    </div>
+
+    <!-- FASE 4 — 1ª Semana — DMM -->
+    <div class="card" id="card-4" onclick="toggleCard(4)">
+      <div class="card-header" style="background:linear-gradient(135deg,#3b82f6,#60a5fa)">
+        <div class="card-header-top">
+          <div><div class="card-tag">Validação Final</div><div class="card-phase">4ª FASE</div></div>
+          <div class="card-week-badge">1ª Semana</div>
+        </div>
+        <div class="card-moment-badges">
+          <span class="moment-badge dmm"><span class="dot"></span>DMM — Maior Movimento</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="step" style="border-left-color:#3b82f6">
+          <div class="step-top">
+            <div class="step-num" style="background:#3b82f6">1</div>
+            <span class="step-title">Validação dos Materiais</span>
+          </div>
+          <div class="step-deadline">📅 Até 5º dia da 1ª Semana</div>
+          <div class="step-items">
+            <div class="step-item"><span class="step-item-label">Ação 1</span><span class="step-item-value">Validação dos materiais elaborados pela BPO</span></div>
+            <div class="step-item"><span class="step-item-label">Ação 2</span><span class="step-item-value">TTT (se necessário) de materiais criados pelo Agibank</span></div>
+            <div class="step-item"><span class="step-item-label">Ação 3</span><span class="step-item-value">Comunicação com Planejamento: calendário mês seguinte, carga horária, público alvo</span></div>
+          </div>
+        </div>
+        <div class="card-note">📋 <strong>Vale:</strong> Momento de treinamento na Operação dos motivos levantados no fluxo anterior.</div>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+</div><!-- /page -->
+
+<script>
+  function toggleCard(id) {
+    const card = document.getElementById('card-' + id);
+    const wasActive = card.classList.contains('active');
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+    if (!wasActive) card.classList.add('active');
+  }
+</script>
+</body>
+</html>
