@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agibank | Mapeamento Meios de Pagto — Estudo Executivo</title>
+<style>
+:root{
+  --azul:#0064f5;--azul-escuro:#000f44;--verde:#77df40;--branco:#fff;
+  --cinza:#f5f5f5;--texto:#101828;--muted:#667085;--borda:#dce7f5;
+  --shadow:0 12px 36px rgba(0,15,68,.11);--radius:14px;
+  --red:#ef4444;--orange:#f59e0b;--amber:#fbbf24;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;scroll-behavior:smooth}
+body{font-family:Inter,"Segoe UI",system-ui,sans-serif;background:linear-gradient(180deg,#fff 0%,#f0f6ff 100%);color:var(--texto);-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer}
+
+/* NAV */
+.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-bottom:1px solid #e5edf8}
+.top-inner{max-width:1300px;margin:auto;padding:8px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-logo{width:128px;height:37px;display:block;object-fit:contain;flex:none;background:transparent}
+.brand-text strong{display:block;font-size:13px;font-weight:900;color:var(--azul-escuro)}
+.brand-text small{display:block;font-size:10px;color:var(--muted)}
+.nav{display:flex;gap:5px;flex-wrap:wrap}
+.nav button{border:1px solid var(--borda);border-radius:999px;background:#fff;color:var(--azul-escuro);font-weight:800;padding:5px 12px;font-size:11px;transition:.18s}
+.nav button:hover{background:#f0f6ff;border-color:#b0cef5}
+.nav button.active{background:var(--azul);border-color:var(--azul);color:#fff;box-shadow:0 2px 8px rgba(0,100,245,.22)}
+
+/* PAGES */
+.page{display:none;animation:fadeIn .35s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.container{max-width:1300px;margin:0 auto;padding:10px 16px 40px}
+
+/* HERO */
+.hero{border-radius:16px;background:linear-gradient(125deg,#00114d 0%,#001a6e 40%,#000f44 72%,#012080 100%);color:#fff;padding:22px 28px 18px;margin:10px 0 14px;box-shadow:0 14px 40px rgba(0,15,68,.26);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(119,223,64,.20),transparent 70%);pointer-events:none}
+.hero-inner{position:relative;z-index:2}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:var(--verde);background:rgba(119,223,64,.10);border:1px solid rgba(119,223,64,.28);padding:4px 10px;border-radius:999px;margin-bottom:10px}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--verde);box-shadow:0 0 7px var(--verde)}
+.hero h1{font-size:22px;font-weight:950;letter-spacing:-.7px;line-height:1.1;margin-bottom:8px}
+.hero h1 .g{background:linear-gradient(90deg,var(--verde),#a6f573);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:12px;color:#c5d5f5;line-height:1.5;max-width:720px}
+.hero-stats{display:flex;gap:24px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.10)}
+.hstat b{display:block;font-size:20px;font-weight:950;letter-spacing:-.8px;line-height:1}
+.hstat b.g{background:linear-gradient(90deg,var(--verde),#a6f573);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hstat span{font-size:10px;color:#94a9d6;font-weight:700}
+
+/* STAT BAND */
+.stat-band{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 20px}
+.stat-box{background:#fff;border:1px solid #e5edf8;border-radius:12px;padding:14px 16px;box-shadow:0 3px 12px rgba(0,15,68,.05);border-top:3px solid var(--azul);transition:.2s}
+.stat-box:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,15,68,.09)}
+.stat-box.red{border-top-color:var(--red)}
+.stat-box.orange{border-top-color:var(--orange)}
+.stat-box.green{border-top-color:var(--verde)}
+.stat-box.amber{border-top-color:var(--amber)}
+.stat-box .num{font-size:24px;font-weight:950;letter-spacing:-.8px;color:var(--azul-escuro);line-height:1}
+.stat-box.green .num{background:linear-gradient(90deg,#16a34a,#22c55e);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-box.red .num{color:var(--red)}
+.stat-box .cap{font-size:11px;color:#667085;font-weight:700;margin-top:6px;line-height:1.3}
+.stat-box .sub{font-size:10px;color:#94a3b8;margin-top:3px}
+
+/* SECTION HEAD */
+.sec-head{margin:28px 0 14px}
+.sec-head .kicker{font-size:10px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:var(--azul)}
+.sec-head h2{font-size:18px;color:var(--azul-escuro);letter-spacing:-.5px;margin:3px 0 5px;font-weight:950}
+.sec-head p{font-size:12.5px;color:#667085;line-height:1.5}
+
+/* VARIAÇÃO CARDS */
+.var-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.var-card{background:#fff;border:1px solid #e5edf8;border-radius:12px;padding:13px;box-shadow:0 3px 10px rgba(0,15,68,.05)}
+.var-card .vt{font-size:11px;font-weight:800;color:var(--azul-escuro);margin-bottom:6px}
+.var-card .vval{font-size:17px;font-weight:950;line-height:1;margin-bottom:3px}
+.var-card .vval span{font-size:10px;font-weight:850;line-height:1.15;display:inline-block;margin-left:4px;vertical-align:middle}
+.var-card .vval.up{color:#16a34a}
+.var-card .vval.down{color:var(--red)}
+.var-card .vval.neutral{color:var(--muted)}
+.var-card .vsub{font-size:10px;color:var(--muted)}
+.var-card .valert{display:inline-block;margin-top:5px;font-size:9px;font-weight:900;border-radius:4px;padding:2px 6px}
+.var-card .valert.crit{background:#fee2e2;color:#991b1b}
+.var-card .valert.watch{background:#fef3c7;color:#92400e}
+.var-card .valert.ok{background:#dcfce7;color:#166534}
+
+/* TOP 10 TABLE */
+.top10-wrap{background:#fff;border:1px solid #e5edf8;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:20px}
+.top10-wrap table{width:100%;border-collapse:collapse;font-size:12px}
+.top10-wrap thead th{background:#000f44;color:#fff;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:10px 13px;text-align:left;white-space:nowrap}
+.top10-wrap tbody tr:nth-child(even){background:#f8fbff}
+.top10-wrap tbody tr:hover{background:#eef5ff}
+.top10-wrap tbody td{padding:10px 13px;vertical-align:middle;border-bottom:1px solid #f0f4f8;color:var(--texto)}
+.rank-badge{width:24px;height:24px;border-radius:50%;background:var(--azul);color:#fff;font-size:10px;font-weight:900;display:inline-flex;align-items:center;justify-content:center}
+.rank-badge.c1{background:#dc2626}
+.rank-badge.c2{background:#ea580c}
+.rank-badge.c3{background:#0064f5}
+.criticidade{display:inline-block;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:900}
+.crit-critico{background:#fee2e2;color:#991b1b}
+.crit-relevante{background:#fef3c7;color:#92400e}
+.crit-monitorar{background:#f0fdf4;color:#166534}
+.bar-mini{display:flex;align-items:center;gap:5px}
+.bar-mini .bm{height:6px;border-radius:3px;background:var(--azul);min-width:2px}
+.bar-mini .bm.red{background:var(--red)}
+.bar-mini span{font-size:11px;font-weight:700}
+
+/* JORNADA */
+.jornada-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.jorn-card{background:#fff;border:1px solid #e5edf8;border-radius:12px;padding:14px;box-shadow:0 3px 10px rgba(0,15,68,.05);border-left:4px solid var(--azul)}
+.jorn-card.red{border-left-color:var(--red)}
+.jorn-card.orange{border-left-color:var(--orange)}
+.jorn-card.green{border-left-color:var(--verde)}
+.jorn-card .jt{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--azul);margin-bottom:4px}
+.jorn-card.red .jt{color:var(--red)}
+.jorn-card.orange .jt{color:var(--orange)}
+.jorn-card h4{font-size:13px;font-weight:900;color:var(--azul-escuro);margin-bottom:6px}
+.jorn-card .jp{font-size:11px;color:#475569;line-height:1.45;margin-bottom:8px}
+.jorn-nums{display:flex;gap:12px;margin-top:8px;padding-top:8px;border-top:1px solid #f0f4f8}
+.jorn-nums .jn b{display:block;font-size:14px;font-weight:950;color:var(--azul-escuro)}
+.jorn-nums .jn span{font-size:9px;color:var(--muted);font-weight:700}
+.jorn-tag{display:inline-block;padding:3px 7px;border-radius:5px;font-size:10px;font-weight:900;margin-top:5px}
+.jtag-alto{background:#fee2e2;color:#991b1b}
+.jtag-medio{background:#fef3c7;color:#92400e}
+.jtag-baixo{background:#f0fdf4;color:#166534}
+
+/* BIRDIE */
+.birdie-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:24px}
+.birdie-card{background:#fff;border:1px solid #e5edf8;border-radius:12px;padding:14px;box-shadow:0 3px 10px rgba(0,15,68,.05)}
+.birdie-card .bt{font-size:11px;font-weight:900;color:var(--azul-escuro);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.birdie-card .bt .btag{font-size:9px;font-weight:900;padding:2px 6px;border-radius:4px}
+.btag-falha{background:#fee2e2;color:#991b1b}
+.btag-bloqueio{background:#fef3c7;color:#92400e}
+.btag-duvida{background:#eff6ff;color:#1d4ed8}
+.birdie-card ul{list-style:none;padding:0}
+.birdie-card ul li{font-size:11px;color:#475569;line-height:1.45;padding:4px 0;border-bottom:1px solid #f5f5f5;display:flex;gap:7px}
+.birdie-card ul li::before{content:"›";color:var(--azul);font-weight:900;flex:none}
+.birdie-card ul li:last-child{border-bottom:none}
+
+/* FOOTER NOTE */
+.footer-note{background:#f8fbff;border:1px solid #e5edf8;border-radius:10px;padding:12px 16px;font-size:11px;color:#667085;line-height:1.5;margin-top:8px}
+.footer-note strong{color:var(--azul-escuro)}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .stat-band{grid-template-columns:repeat(2,1fr)!important}
+  .var-grid{grid-template-columns:repeat(2,1fr)!important}
+  .jornada-grid{grid-template-columns:repeat(2,1fr)!important}
+}
+@media(max-width:760px){
+  .stat-band{grid-template-columns:1fr 1fr!important}
+  .jornada-grid,.birdie-grid{grid-template-columns:1fr!important}
+  .hero h1{font-size:18px}
+  .top10-wrap{overflow-x:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <img class="brand-logo" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22829%22%20height%3D%22239%22%20viewBox%3D%220%200%20829%20239%22%20fill%3D%22none%22%3E%3Cg%20clip-path%3D%22url(%23clip0_231_831)%22%3E%3Cpath%20d%3D%22M262.484%2051.3111L262.454%2069.6176C251.799%2054.993%20236.46%2048.5276%20216.554%2048.5276C198.57%2048.5276%20184.487%2054.9194%20171.748%2068.1448C159.01%2081.3849%20152.833%2096.9815%20152.833%20116.334C152.833%20135.686%20159.512%20151.444%20172.251%20164.773C184.989%20178.101%20198.57%20184.272%20216.554%20184.272C232.692%20184.272%20252.538%20178.44%20262.469%20166.216C262.883%20187.115%20254.489%20200.782%20237.613%20207.026C218.047%20214.287%20193.235%20207.615%20182.078%20192.475L161.404%20213.094C175.398%20229.545%20197.727%20239%20220.456%20239C259.706%20239%20291.493%20218.808%20291.493%20160.929V51.2964H262.484V51.3111ZM251.253%20146.275C243.406%20154.213%20233.549%20158.175%20221.682%20158.175C209.816%20158.175%20199.959%20154.213%20192.112%20146.275C184.265%20138.351%20180.334%20128.381%20180.334%20116.363C180.334%20104.345%20184.265%2094.3747%20192.112%2086.4365C199.959%2078.513%20209.816%2074.5513%20221.682%2074.5513C233.549%2074.5513%20243.406%2078.513%20251.253%2086.4365C259.1%2094.36%20263.031%20104.331%20263.031%20116.363C263.031%20128.396%20259.1%20138.351%20251.253%20146.275Z%22%20fill%3D%22%230068FF%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M109.637%2051.3112V69.8681C99.1147%2055.5381%2084.0562%2048.3657%2064.4756%2048.3657C46.6831%2048.3657%2031.4915%2054.9195%2018.9008%2068.0124C6.29535%2081.1052%200%2097.2173%200%20116.334C0%20135.45%206.29535%20151.341%2018.9008%20164.523C31.5063%20177.704%2046.6979%20184.287%2064.4756%20184.287C80.1992%20184.287%2099.6024%20178.646%20109.637%20166.216V181.459H138.675V51.3112H109.637ZM98.3906%20146.26C90.5288%20154.184%2080.672%20158.145%2068.7907%20158.145C56.9093%20158.145%2047.0525%20154.184%2039.1907%20146.26C31.3289%20138.337%2027.3981%20128.351%2027.3981%20116.334C27.3981%20104.316%2031.3289%2094.3454%2039.1907%2086.4072C47.0525%2078.4837%2056.9093%2074.522%2068.7907%2074.522C80.672%2074.522%2090.5288%2078.4837%2098.3906%2086.4072C106.252%2094.3307%20110.183%20104.301%20110.183%20116.334C110.183%20128.351%20106.238%20138.337%2098.3906%20146.26Z%22%20fill%3D%22%230068FF%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M322.57%2037.526C332.959%2037.526%20341.382%2029.1313%20341.382%2018.763C341.382%208.39475%20332.959%200%20322.57%200C312.182%200%20303.773%208.39475%20303.773%2018.763C303.773%2029.1313%20312.182%2037.526%20322.57%2037.526Z%22%20fill%3D%22%2300CD5C%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M337.082%2051.0752H308.044V181.223H337.082V51.0752Z%22%20fill%3D%22%230068FF%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M472.993%20126.569C472.993%20161.43%20447.708%20184.037%20416.749%20184.037C397.375%20184.037%20382.242%20175.082%20373.272%20160.958H372.799V182.858H360.741V9.51416H373.272V91.0022H373.745C383.203%2075.9358%20399.266%2067.217%20417.221%2067.217C450.073%2067.217%20472.993%2093.3586%20472.993%20126.569ZM460.225%20126.805C460.225%2097.8358%20440.142%2079.2348%20415.803%2079.2348C391.464%2079.2348%20372.799%20100.192%20372.799%20126.805C372.799%20153.418%20392.882%20172.255%20416.039%20172.255C442.27%20172.255%20460.225%20152.475%20460.225%20126.805Z%22%20fill%3D%22%230068FF%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M593.979%2068.395V182.858H582.156V160.958H581.683C572.699%20175.082%20557.581%20184.036%20538.207%20184.036C507.248%20184.036%20481.963%20161.429%20481.963%20126.569C481.963%2091.7089%20504.883%2067.2168%20537.734%2067.2168C555.689%2067.2168%20571.768%2075.9356%20581.211%2091.0019H581.683V68.395H593.979ZM582.171%20126.805C582.171%20100.192%20564.216%2079.2345%20539.168%2079.2345C514.119%2079.2345%20494.746%2097.8355%20494.746%20126.805C494.746%20152.475%20512.701%20172.254%20538.931%20172.254C562.073%20172.254%20582.171%20153.889%20582.171%20126.805Z%22%20fill%3D%22%230068FF%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M713.073%20115.023V182.844H700.541V116.658C700.541%2086.746%20687.552%2078.9698%20671.473%2078.9698C646.189%2078.9698%20629.416%2097.5708%20629.416%20126.069V182.829H616.884V68.366H629.416V90.7372H629.652C639.347%2075.6709%20655.646%2067.1877%20674.311%2067.1877C697.246%2067.2172%20713.073%2080.8697%20713.073%20115.023Z%22%20fill%3D%22%230068FF%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M784.923%20116.672L828.872%20182.858H814.463L776.41%20126.569H775.938L747.579%20157.659V182.858H735.047V9.51416H747.579V139.986H747.815L813.045%2068.3952H828.872L784.923%20116.672Z%22%20fill%3D%22%230068FF%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3Cdefs%3E%3CclipPath%20id%3D%22clip0_231_831%22%3E%3Crect%20width%3D%22828.872%22%20height%3D%22239%22%20fill%3D%22white%22%3E%3C%2Frect%3E%3C%2FclipPath%3E%3C%2Fdefs%3E%3C%2Fsvg%3E" alt="Agibank">
+      <div class="brand-text">
+        <small>Mapeamento Meios de Pagto — Estudo Executivo Mai–Jul 2026</small>
+      </div>
+    </div>
+    <nav class="nav">
+      <button class="active" onclick="setPage('visao')">Visão Geral</button>
+      <button onclick="setPage('top10')">Top Temas + Jornada</button>
+    </nav>
+  </div>
+</div>
+
+<!-- ===================== PAGE 1: VISÃO GERAL ===================== -->
+<div class="page active" id="page-visao">
+<div class="container">
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">Análise Executiva — Mapeamento Meios de Pagto</div>
+      <h1>Diagnóstico de Contatos <span class="g">Jornadas Meios de Pagto</span><br>Trimestre Mai–Julho 2026</h1>
+      <p>Análise destrinchada para PIX, Boleto, TED e Convênios. Identificação dos principais ofensores, volumes e rechamada, variações mensais e oportunidades prioritárias de redução de contato e processos.</p>
+      <div class="hero-stats">
+        <div class="hstat"><b>28.870</b><span>Total chamadas Meios de Pagto Mai–Jul 2026</span></div>
+        <div class="hstat"><b>23.517</b><span>Chamadas Meios — Mai+Jun</span></div>
+        <div class="hstat"><b class="g">34,3%</b><span>Taxa de rechamada geral</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIG NUMBERS -->
+  <div class="stat-band">
+    <div class="stat-box">
+      <div class="num">28.870</div>
+      <div class="cap">Total chamadas Meios de Pagto<br>Maio a Julho 2026</div>
+      <div class="sub">Fonte: Banco de dados (Filas e Tabulações)</div>
+    </div>
+    <div class="stat-box orange">
+      <div class="num">23.517</div>
+      <div class="cap">Chamadas Meios — Mai+Jun<br>Base bimestral de comparação</div>
+      <div class="sub">Mai+Jun 2026</div>
+    </div>
+    <div class="stat-box green">
+      <div class="num">34,3%</div>
+      <div class="cap">Taxa de rechamada geral<br>Média ponderada do trimestre</div>
+      <div class="sub">Fonte: Intraday Rechamada</div>
+    </div>
+  </div>
+
+  <!-- VARIAÇÕES MAI→JUN -->
+  <div class="sec-head">
+    <div class="kicker">Variação Mensal</div>
+    <h2>Destaques de Movimento — Maio para Junho</h2>
+    <p>Temas que mais variaram entre os meses. Os percentuais indicam variação no volume de chamadas de maio para junho; crescimentos expressivos exigem investigação imediata de causa.</p>
+  </div>
+
+  <div class="var-grid">
+    <div class="var-card">
+      <div class="vt">Vítima de Golpe</div>
+      <div class="vval up">+12% <span>(crescimento de chamadas)</span></div>
+      <div class="vsub">2.125 → 2.388 chamadas</div>
+      <span class="valert watch">Monitorar</span>
+    </div>
+    <div class="var-card">
+      <div class="vt">Vítima de Golpe — Boleto/TED</div>
+      <div class="vval up">+18% <span>(crescimento de chamadas)</span></div>
+      <div class="vsub">754 → 891 chamadas</div>
+      <span class="valert watch">Monitorar</span>
+    </div>
+    <div class="var-card">
+      <div class="vt">Exclusão de Chave PIX</div>
+      <div class="vval up">+27% <span>(crescimento de chamadas)</span></div>
+      <div class="vsub">263 → 335 chamadas</div>
+      <span class="valert crit">Alerta Crítico</span>
+    </div>
+    <div class="var-card">
+      <div class="vt">Limite Transacional</div>
+      <div class="vval up">+2% <span>(crescimento de chamadas)</span></div>
+      <div class="vsub">404 → 411 chamadas</div>
+      <span class="valert watch">Estável</span>
+    </div>
+    <div class="var-card">
+      <div class="vt">Transação Não Autorizada</div>
+      <div class="vval down">−42% <span>(redução de chamadas)</span></div>
+      <div class="vsub">2.759 → 1.591 chamadas</div>
+      <span class="valert ok">Redução</span>
+    </div>
+    <div class="var-card">
+      <div class="vt">Compensação de PIX</div>
+      <div class="vval down">−35% <span>(redução de chamadas)</span></div>
+      <div class="vsub">2.390 → 1.552 chamadas</div>
+      <span class="valert ok">Redução</span>
+    </div>
+    <div class="var-card">
+      <div class="vt">Solicitações TED</div>
+      <div class="vval down">−4% <span>(redução de chamadas)</span></div>
+      <div class="vsub">1.979 → 1.905 chamadas</div>
+      <span class="valert ok">Leve redução</span>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <strong>Fontes:</strong> Banco de dados (Filas e Tabulações), Birdie (Módulos Qualitativo e VoC), BD Rechamada.
+  </div>
+
+</div>
+</div>
+
+<!-- ===================== PAGE 2: TOP TEMAS + JORNADA ===================== -->
+<div class="page" id="page-top10">
+<div class="container">
+
+  <div class="sec-head">
+    <div class="kicker">Ranking de Temas</div>
+    <h2>Tabela Priorizada — Meios de Pagamento</h2>
+    <p>Ranking por volume de chamadas e variação mensal. Criticidade classificada em Crítico / Relevante / Monitorar.</p>
+  </div>
+
+  <div class="top10-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tema</th>
+          <th>Vol. Maio</th>
+          <th>Vol. Junho</th>
+          <th>Variação Jun/Mai</th>
+          <th>Criticidade</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="rank-badge c1">1</span></td>
+          <td><strong>Vítima de Golpe</strong></td>
+          <td><div class="bar-mini"><div class="bm" style="width:80px"></div><span>2.125</span></div></td>
+          <td><div class="bar-mini"><div class="bm red" style="width:82px"></div><span>2.388</span></div></td>
+          <td style="color:var(--red);font-weight:800">▲ +12%</td>
+          <td><span class="criticidade crit-critico">Crítico</span></td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge c1">2</span></td>
+          <td><strong>Transação Não Autorizada</strong></td>
+          <td><div class="bar-mini"><div class="bm" style="width:78px"></div><span>2.759</span></div></td>
+          <td><div class="bar-mini"><div class="bm" style="width:45px"></div><span>1.591</span></div></td>
+          <td style="color:var(--verde);font-weight:800">▼ −42%</td>
+          <td><span class="criticidade crit-critico">Crítico</span></td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge c1">3</span></td>
+          <td><strong>Compensação de PIX</strong></td>
+          <td><div class="bar-mini"><div class="bm" style="width:70px"></div><span>2.390</span></div></td>
+          <td><div class="bar-mini"><div class="bm" style="width:46px"></div><span>1.552</span></div></td>
+          <td style="color:var(--verde);font-weight:800">▼ −35%</td>
+          <td><span class="criticidade crit-critico">Crítico</span></td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge c2">4</span></td>
+          <td>Solicitações TED</td>
+          <td><div class="bar-mini"><div class="bm" style="width:58px"></div><span>1.979</span></div></td>
+          <td><div class="bar-mini"><div class="bm" style="width:56px"></div><span>1.905</span></div></td>
+          <td style="color:var(--verde);font-weight:800">▼ −4%</td>
+          <td><span class="criticidade crit-relevante">Relevante</span></td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge c2">5</span></td>
+          <td>Limite Transacional</td>
+          <td><div class="bar-mini"><div class="bm" style="width:12px"></div><span>404</span></div></td>
+          <td><div class="bar-mini"><div class="bm" style="width:12px"></div><span>411</span></div></td>
+          <td style="color:var(--red);font-weight:800">▲ +2%</td>
+          <td><span class="criticidade crit-relevante">Relevante</span></td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge c2">6</span></td>
+          <td>Vítima de Golpe — Boleto/TED <span style="font-size:10px;color:var(--red);font-weight:900">⚠️ +18%</span></td>
+          <td><div class="bar-mini"><div class="bm" style="width:22px"></div><span>754</span></div></td>
+          <td><div class="bar-mini"><div class="bm red" style="width:26px"></div><span>891</span></div></td>
+          <td style="color:var(--red);font-weight:800">▲ +18%</td>
+          <td><span class="criticidade crit-relevante">Relevante</span></td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge c3">7</span></td>
+          <td>Exclusão de Chave PIX <span style="font-size:10px;color:var(--red);font-weight:900">🚨 +27%</span></td>
+          <td><div class="bar-mini"><div class="bm" style="width:8px"></div><span>263</span></div></td>
+          <td><div class="bar-mini"><div class="bm red" style="width:10px"></div><span>335</span></div></td>
+          <td style="color:var(--red);font-weight:800">▲ +27%</td>
+          <td><span class="criticidade crit-monitorar">Monitorar</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- JORNADA -->
+  <div class="sec-head">
+    <div class="kicker">Mapa de Jornada</div>
+    <h2>Etapas Impactadas — Onde a Jornada Quebra</h2>
+    <p>Agrupamento dos temas por etapa da jornada do cliente, com análise qualitativa baseada em VoC e Birdie.</p>
+  </div>
+
+  <div class="jornada-grid">
+
+    <!-- Card 1: Transação Não Autorizada / PIX -->
+    <div class="jorn-card red">
+      <div class="jt">Etapa crítica</div>
+      <h4>PIX — Transação Não Autorizada</h4>
+      <p class="jp">Cliente tenta realizar um PIX e recebe mensagem de "Transação não autorizada" ou similar - (genéricos). A transação é bloqueada gerando frustração e impedindo pagamentos essenciais.</p>
+      <p class="jp">Após a tentativa frustrada, o cliente busca atendimento, mas o processo acaba demorado, devido prazos para análise. O atendimento inicial pelo BOT frequentemente não resolve, exigindo atendimento humano.</p>
+      <p class="jp"><strong>Temas:</strong> Transação Não Autorizada</p>
+      <div class="jorn-nums">
+        <div class="jn"><b>4.350</b><span>Chamadas Mai+Jun</span></div>
+        <div class="jn"><b>−42%</b><span>Var. Jun/Mai</span></div>
+      </div>
+      <span class="jorn-tag jtag-alto">TMA: 23min | CSAT: 71% | Rechamada: 49% | Resolut: 39,6%</span>
+    </div>
+
+    <!-- Card 2: Limite Transacional -->
+    <div class="jorn-card red">
+      <div class="jt">Etapa crítica</div>
+      <h4>PIX — Limite Transacional Excedido</h4>
+      <p class="jp">Ao tentar realizar transferências via PIX, o cliente recebe mensagem de erro informando que o limite foi ultrapassado ou que a transação não é autorizada por exceder o limite permitido — mesmo tendo saldo e limite disponíveis.</p>
+      <p class="jp">O erro persiste mesmo após reinstalar o aplicativo e verificar limites. Os clientes recebem mensagens genéricas sem informações claras sobre o motivo de aparecer limite excedido, nem sobre como proceder para desbloquear ou regularizar o limite.</p>
+      <p class="jp"><strong>Temas:</strong> Limite Transacional</p>
+      <div class="jorn-nums">
+        <div class="jn"><b>815</b><span>Chamadas Mai+Jun</span></div>
+        <div class="jn"><b>+2%</b><span>Var. Jun/Mai</span></div>
+      </div>
+      <span class="jorn-tag jtag-alto">TMA: 20min | CSAT: 57% | Rechamada: 64% | Resolut: 30,6%</span>
+    </div>
+
+    <!-- Card 3: Compensação de PIX -->
+    <div class="jorn-card orange">
+      <div class="jt">Etapa relevante</div>
+      <h4>PIX — Compensação / Status da Transação</h4>
+      <p class="jp">Cliente realiza o PIX, mas o valor não cai na conta destino ou não há confirmação visível no app. A falta de clareza sobre prazo ou status da transação gera insegurança e motiva o contato com o suporte.</p>
+      <p class="jp">O cliente não sabe se deve aguardar, refazer, cancelar ou abrir chamado. Ausência de feedback claro pós-transação é o principal driver de rechamada neste tema.</p>
+      <p class="jp"><strong>Temas:</strong> Compensação de PIX</p>
+      <div class="jorn-nums">
+        <div class="jn"><b>3.942</b><span>Chamadas Mai+Jun</span></div>
+        <div class="jn"><b>−35%</b><span>Var. Jun/Mai</span></div>
+      </div>
+      <span class="jorn-tag jtag-alto">TMA: 20min | CSAT: 70% | Rechamada: 59% | Resolut: 62,2%</span>
+    </div>
+
+    <!-- Card 4: Solicitações TED -->
+    <div class="jorn-card orange">
+      <div class="jt">Etapa relevante</div>
+      <h4>TED — Falha, Bloqueio e Incerteza</h4>
+      <p class="jp">Cliente tenta realizar uma TED e a transação não é autorizada ou apresenta erro — mesmo com saldo e limite disponíveis. Em alguns casos, o erro é semelhante ao do PIX, com mensagens indicando bloqueio por questões de segurança ou limite excedido.</p>
+      <p class="jp">Alguns clientes tentam TED após falha no PIX, mas também enfrentam erros ou bloqueios. Quando a TED é realizada mas o valor ainda não caiu na conta destino, o cliente é informado que o prazo de compensação é de até 24 horas, gerando dúvidas e insegurança. O atendimento inicial via BOT frequentemente não resolve o problema.</p>
+      <p class="jp"><strong>Temas:</strong> Solicitações TED</p>
+      <div class="jorn-nums">
+        <div class="jn"><b>3.884</b><span>Chamadas Mai+Jun</span></div>
+        <div class="jn"><b>−4%</b><span>Var. Jun/Mai</span></div>
+      </div>
+      <span class="jorn-tag jtag-medio">TMA: 17min | Rechamada: 57% </span>
+    </div>
+
+    <!-- Card 5: Vítima de Golpe -->
+    <div class="jorn-card red">
+      <div class="jt">Etapa crítica</div>
+      <h4>Fraude — Vítima de Golpe (PIX, Boleto e TED)</h4>
+      <p class="jp">Cliente relata ter sido vítima de golpe envolvendo transferências via PIX, boleto ou TED. O volume cresce consistentemente: +12% em Vítima de Golpe (geral) e +18% em Vítima de Golpe — Boleto/TED entre maio e junho, sinalizando tendência de alta.</p>
+      <p class="jp">O cliente busca contestação, estorno ou orientação sobre como proceder após a fraude. A complexidade do processo e os prazos de análise elevam o esforço do cliente e o risco de rechamada.</p>
+      <p class="jp"><strong>Temas:</strong> Vítima de Golpe · Vítima de Golpe — Boleto/TED</p>
+      <div class="jorn-nums">
+        <div class="jn"><b>6.158</b><span>Chamadas Mai+Jun</span></div>
+        <div class="jn"><b>+12% / +18%</b><span>Var. Jun/Mai</span></div>
+      </div>
+      <span class="jorn-tag jtag-alto">🚨Crescimento | TMA: 21min | CSAT: 57% | Rechamada: 63% | Resolut: 52,4%</span>
+    </div>
+
+    <!-- Card 6: Exclusão de Chave PIX -->
+    <div class="jorn-card">
+      <div class="jt">Monitorar</div>
+      <h4>PIX — Exclusão de Chave</h4>
+      <p class="jp">Ao tentar excluir a chave PIX pelo aplicativo, o cliente recebe mensagens de erro ou a operação não é concluída, mesmo seguindo as instruções fornecidas. Isso gera frustração e necessidade de buscar suporte adicional.</p>
+      <p class="jp">Diante da falha no app, o cliente solicita que o banco realize a exclusão diretamente, o que provoca rechamada com prazos para resolução gerando frustração nas transações que o cliente planejava.</p>
+      <p class="jp"><strong>Temas:</strong> Exclusão de Chave PIX</p>
+      <div class="jorn-nums">
+        <div class="jn"><b>598</b><span>Chamadas Mai+Jun</span></div>
+        <div class="jn"><b>+27%</b><span>Var. Jun/Mai</span></div>
+      </div>
+      <span class="jorn-tag jtag-alto">🚨+27% | TMA: 21min | CSAT: 74% | Rechamada: 46% | Resolut: 75,7%</span>
+    </div>
+
+  </div>
+
+  <!-- BIRDIE / VOZ DO CLIENTE -->
+  <div class="sec-head">
+    <div class="kicker">Voz do Cliente</div>
+    <h2>O Que o Cliente Está Dizendo — Birdie / VoC</h2>
+    <p>Padrões de relatos extraídos da análise qualitativa Birdie e VoC por tema de Meios de Pagamento.</p>
+  </div>
+
+  <div class="birdie-grid">
+    <div class="birdie-card">
+      <div class="bt">Transação Não Autorizada — PIX <span class="btag btag-bloqueio">Bloqueio</span></div>
+      <ul>
+        <li>Cliente tenta fazer PIX (para outra conta ou para a própria conta) e a transação é bloqueada ou negada por motivos de segurança, mesmo com saldo suficiente e limite disponível</li>
+        <li>Mensagens de erro no app como "limite excedido" ou "bloqueio preventivo" impedem a conclusão da transação — o problema persiste mesmo após reinstalar o app</li>
+        <li>Após a tentativa frustrada, o cliente busca abrir contestação ou solicitar estorno, mas o processo pode ser complexo e demorado (até 11 dias para análise)</li>
+        <li>Atendimento inicial por assistente virtual não resolve — necessário aguardar atendimento humano, o que atrasa a resolução</li>
+        <li>Risco de rechamada: <strong>alto</strong></li>
+      </ul>
+    </div>
+    <div class="birdie-card">
+      <div class="bt">Limite Transacional — PIX <span class="btag btag-bloqueio">Limite</span></div>
+      <ul>
+        <li>Ao tentar transferências via PIX, cliente recebe erro informando que o limite foi ultrapassado — mesmo tendo saldo e limite disponíveis</li>
+        <li>Erro persiste mesmo após reinstalar o aplicativo e verificar limites, indicando possível restrição interna ou falha técnica</li>
+        <li>Cliente é orientado a tentar pagamentos por TED, boleto, cartão ou valores menores, ou aguardar até 24 horas úteis — processo demorado e pouco claro</li>
+        <li>Clientes recebem mensagens genéricas sem informações claras sobre o motivo do limite excedido nem sobre como proceder para desbloquear ou aumentar o limite</li>
+        <li>Risco de rechamada: <strong>alto</strong></li>
+      </ul>
+    </div>
+    <div class="birdie-card">
+      <div class="bt">Solicitações TED <span class="btag btag-falha">Falha + Incerteza</span></div>
+      <ul>
+        <li>TED não é autorizada ou apresenta erro mesmo com saldo e limite disponíveis — em alguns casos o erro é semelhante ao do PIX (bloqueio ou limite excedido)</li>
+        <li>Alguns clientes tentam TED após falha no PIX, mas também enfrentam erros ou bloqueios, gerando frustração adicional</li>
+        <li>Quando a TED é realizada mas o valor ainda não caiu na conta destino, o cliente é informado sobre prazo de até 24 horas — gera dúvidas e insegurança sobre o status</li>
+        <li>Atendimento inicial por assistente virtual não resolve — necessário aguardar atendimento humano; ausência de explicações claras sobre o motivo do erro</li>
+        <li>Risco de rechamada: <strong>alto</strong></li>
+      </ul>
+    </div>
+    <div class="birdie-card">
+      <div class="bt">Exclusão de Chave PIX <span class="btag btag-falha">Falha de fluxo</span></div>
+      <ul>
+        <li>Ao tentar excluir a chave PIX pelo app, cliente recebe mensagens de erro ou a operação não é concluída, mesmo seguindo as instruções fornecidas</li>
+        <li>Diante da falha no app, o cliente solicita que o banco realize a exclusão diretamente, levando à abertura de chamado interno com prazo de até 24 horas úteis</li>
+        <li>Após a solicitação, o cliente precisa aguardar o prazo informado para que a exclusão seja efetivada, gerando insegurança e demora na resolução</li>
+        <li>Risco de rechamada: <strong>médio-alto</strong> — cliente retorna para confirmar conclusão</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <strong>Fontes:</strong> Base de dados Painel de Filas e Tabulações, Birdie (Qualitativo e VoC), Intraday Rechamada. Período: trimestre maio–julho 2026.
+  </div>
+
+</div>
+</div>
+
+<script>
+function setPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const idx = {visao:0,top10:1}[id];
+  document.querySelectorAll('.nav button')[idx].classList.add('active');
+}
+</script>
+</body>
+</html>
