@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Análise Granular | Agibank</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #f0f6ff; color: #101828; }
+        .card { background: #fff; border: 1px solid #dce7f5; border-radius: 14px; box-shadow: 0 3px 10px rgba(0,15,68,.05); }
+        th { background: #000f44 !important; color: white !important; font-size: 10px !important; text-transform: uppercase; padding: 12px !important; position: sticky; top: 0; z-index: 10; }
+        td { font-size: 11px; padding: 10px !important; border-bottom: 1px solid #f0f4f8; }
+        .del-btn { color: #ef4444; font-weight: 900; cursor: pointer; transition: 0.2s; }
+        .del-btn:hover { color: #991b1b; }
+        .footer-math { background: #f8fbff; border-top: 1px solid #dce7f5; padding: 20px; margin-top: 30px; font-size: 11px; color: #667085; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+<div class="max-w-[1200px] mx-auto">
+    <div class="flex justify-between items-end mb-6">
+        <div>
+            <h1 class="text-2xl font-black text-[#000f44]">Análise Granular (114 Motivos)</h1>
+            <p class="text-sm text-[#667085]">Gestão de prioridade baseada em criticidade ponderada.</p>
+        </div>
+        <button onclick="restaurar()" class="bg-[#0064f5] text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-blue-700 transition">↺ Restaurar Todos</button>
+    </div>
+    
+    <div class="card p-6 mb-6">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+            <div><label class="text-[9px] font-black uppercase text-[#0064f5]">Peso TMO</label><input type="range" id="wTMO" min="0" max="3" step="0.5" value="1" class="w-full mt-1" oninput="render()"></div>
+            <div><label class="text-[9px] font-black uppercase text-[#0064f5]">Peso Rechamada</label><input type="range" id="wRech" min="0" max="3" step="0.5" value="2" class="w-full mt-1" oninput="render()"></div>
+            <div><label class="text-[9px] font-black uppercase text-[#0064f5]">Peso Resolut.</label><input type="range" id="wResol" min="0" max="3" step="0.5" value="3" class="w-full mt-1" oninput="render()"></div>
+            <div><label class="text-[9px] font-black uppercase text-[#0064f5]">Peso CSAT</label><input type="range" id="wCSAT" min="0" max="3" step="0.5" value="1" class="w-full mt-1" oninput="render()"></div>
+            <div><label class="text-[9px] font-black uppercase text-[#0064f5]">Peso Atendidas</label><input type="range" id="wAtend" min="0" max="3" step="0.5" value="2" class="w-full mt-1" oninput="render()"></div>
+        </div>
+        <input type="text" id="filtro" placeholder="🔍 Filtrar por BU ou Detalhe..." class="w-full p-2 border border-gray-300 rounded text-sm" oninput="render()">
+    </div>
+
+    <div class="card overflow-y-auto max-h-[600px]">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr><th>BU</th><th>Detalhe</th><th>TMO</th><th>CSAT</th><th>Atend.</th><th>Resolut.</th><th>Rech.</th><th>Score</th><th></th></tr>
+            </thead>
+            <tbody id="tabelaCorpo"></tbody>
+        </table>
+    </div>
+
+    <footer class="footer-math rounded-lg">
+        <h4 class="font-bold text-[#000f44] mb-2 uppercase text-[10px]">Metodologia de Cálculo Científico</h4>
+        <p class="leading-relaxed">
+            O <strong>Score de Criticidade</strong> é calculado normalizando cada KPI em uma escala de 0 a 1 e aplicando os pesos (W) definidos pelo usuário. 
+            O volume de atendimentos (Atendidas) atua como um multiplicador de escala, garantindo que ofensores com alto volume recebam maior visibilidade.<br>
+            <strong>Fórmula:</strong> <code>Score = (W<sub>TMO</sub>·N<sub>TMO</sub> + W<sub>Rech</sub>·N<sub>Rech</sub> + W<sub>Resol</sub>·(1-N<sub>Resol</sub>) + W<sub>CSAT</sub>·(1-N<sub>CSAT</sub>)) × (1 + W<sub>Atend</sub>·N<sub>Atend</sub>)</code>
+        </p>
+    </footer>
+</div>
+
+<script>
+const baseData = [
+    {id: 0, bu: "CONSIGNADO", det: "Decisão Judicial", tmo: 3035, csat: 0.00, atend: 1, resol: 0.00, rech: 1.00},
+    {id: 1, bu: "Ñ RELAC.", det: "Inclusão de Procuração/Curatela", tmo: 2237, csat: 0.88, atend: 18, resol: 0.70, rech: 0.66},
+    {id: 2, bu: "CONSIGNADO", det: "Bloqueio Preventivo Falcon - SMS", tmo: 1052, csat: 1.00, atend: 6, resol: 0.00, rech: 0.66},
+    {id: 3, bu: "CP", det: "Recusa", tmo: 1044, csat: 1.00, atend: 3, resol: 0.33, rech: 0.66},
+    {id: 4, bu: "CONSIGNADO", det: "Estorno", tmo: 1840, csat: 0.87, atend: 35, resol: 0.77, rech: 0.62},
+    {id: 5, bu: "CONSIGNADO", det: "TED DEVOLVIDA", tmo: 1627, csat: 0.80, atend: 8, resol: 0.80, rech: 0.62},
+    {id: 6, bu: "Ñ RELAC.", det: "Gravação de Atendimento", tmo: 1432, csat: 0.73, atend: 65, resol: 0.50, rech: 0.60},
+    {id: 7, bu: "CONSIGNADO", det: "Reversão de Cancelamento", tmo: 1296, csat: 0.90, atend: 41, resol: 0.61, rech: 0.56},
+    {id: 8, bu: "CP", det: "Reapresentação de Pagamento", tmo: 1884, csat: 0.87, atend: 118, resol: 0.77, rech: 0.54},
+    {id: 9, bu: "CONSIGNADO", det: "Reapresentação de Pagamento", tmo: 1952, csat: 0.76, atend: 1259, resol: 0.65, rech: 0.50},
+    {id: 10, bu: "CB", det: "Compensação", tmo: 1749, csat: 0.67, atend: 645, resol: 0.50, rech: 0.47},
+    {id: 11, bu: "CONSIGNADO", det: "Cancelamento de Contrato", tmo: 1302, csat: 0.83, atend: 592, resol: 0.67, rech: 0.45},
+    {id: 12, bu: "CB", det: "Reversão de Cancelamento", tmo: 1669, csat: 0.83, atend: 63, resol: 0.68, rech: 0.44},
+    {id: 13, bu: "CONSIGNADO", det: "Baixa de Pagamento", tmo: 1963, csat: 0.77, atend: 470, resol: 0.64, rech: 0.44},
+    {id: 14, bu: "CP", det: "Redução do Valor de Parcelas", tmo: 627, csat: 0.66, atend: 144, resol: 0.58, rech: 0.43},
+    {id: 15, bu: "CB", det: "Acordo", tmo: 1250, csat: 0.93, atend: 291, resol: 0.76, rech: 0.42},
+    {id: 16, bu: "SEGUROS", det: "Cancelamento e Ressarcimento", tmo: 1319, csat: 0.94, atend: 1968, resol: 0.76, rech: 0.42},
+    {id: 17, bu: "CB", det: "Devolução SVR - Cliente Falecido", tmo: 2688, csat: 0.86, atend: 29, resol: 0.82, rech: 0.41},
+    {id: 18, bu: "CB", det: "Exceção de Documento", tmo: 1619, csat: 0.50, atend: 10, resol: 0.16, rech: 0.40},
+    {id: 19, bu: "CONSIGNADO", det: "Desaverbar Margem", tmo: 1204, csat: 0.86, atend: 847, resol: 0.65, rech: 0.39},
+    {id: 20, bu: "Ñ RELAC.", det: "Alteração de Endereço", tmo: 1769, csat: 0.88, atend: 1602, resol: 0.84, rech: 0.39},
+    {id: 21, bu: "CONSIGNADO", det: "Devolução SVR", tmo: 1454, csat: 0.86, atend: 184, resol: 0.65, rech: 0.36},
+    {id: 22, bu: "CB", det: "Devolução SVR", tmo: 1808, csat: 0.86, atend: 417, resol: 0.74, rech: 0.36},
+    {id: 23, bu: "CONSIGNADO", det: "Comprovante de Quitação", tmo: 1717, csat: 0.89, atend: 154, resol: 0.76, rech: 0.36},
+    {id: 24, bu: "CONSIGNADO", det: "Cancelar Autorização", tmo: 1130, csat: 1.00, atend: 11, resol: 1.00, rech: 0.36},
+    {id: 25, bu: "CP", det: "Negociação - Topaz", tmo: 741, csat: 0.91, atend: 270, resol: 0.87, rech: 0.36},
+    {id: 26, bu: "CP", det: "Inclusão de Optante Avulso", tmo: 1114, csat: 1.00, atend: 25, resol: 0.69, rech: 0.36},
+    {id: 27, bu: "Ñ RELAC.", det: "Comunicado de Falecimento", tmo: 1479, csat: 0.90, atend: 2220, resol: 0.86, rech: 0.35},
+    {id: 28, bu: "CB", det: "Bloqueio", tmo: 1577, csat: 0.73, atend: 1052, resol: 0.64, rech: 0.34},
+    {id: 29, bu: "CONSIGNADO", det: "Negociação - Topaz", tmo: 609, csat: 0.83, atend: 184, resol: 0.45, rech: 0.34},
+    {id: 30, bu: "CP", det: "Cancelamento de Contrato", tmo: 1194, csat: 0.88, atend: 2539, resol: 0.73, rech: 0.34},
+    {id: 31, bu: "CLT", det: "Reapresentação de Pagamento", tmo: 1508, csat: 0.90, atend: 582, resol: 0.84, rech: 0.33},
+    {id: 32, bu: "CONSIGNADO", det: "Portabilidade de Dívida", tmo: 991, csat: 0.88, atend: 48, resol: 0.38, rech: 0.33},
+    {id: 33, bu: "CLT", det: "Cancelamento de Originação", tmo: 2055, csat: 1.00, atend: 6, resol: 1.00, rech: 0.33},
+    {id: 34, bu: "Ñ RELAC.", det: "Sugestões de Melhorias", tmo: 962, csat: 1.00, atend: 3, resol: 1.00, rech: 0.33},
+    {id: 35, bu: "CB", det: "Transf. Saldo (Conta Encerrada)", tmo: 1674, csat: 0.80, atend: 2600, resol: 0.72, rech: 0.33},
+    {id: 36, bu: "CP", det: "Baixa de Pagamento", tmo: 1914, csat: 0.76, atend: 438, resol: 0.66, rech: 0.32},
+    {id: 37, bu: "CONSIGNADO", det: "Acordo", tmo: 1308, csat: 0.89, atend: 320, resol: 0.77, rech: 0.32},
+    {id: 38, bu: "SEGUROS", det: "Encerramento do Seguro", tmo: 1173, csat: 0.88, atend: 2311, resol: 0.65, rech: 0.32},
+    {id: 39, bu: "CONSIGNADO", det: "Repactuação", tmo: 1725, csat: 0.73, atend: 108, resol: 0.58, rech: 0.32},
+    {id: 40, bu: "CONSIGNADO", det: "Antecipação de Parcelas", tmo: 1194, csat: 0.92, atend: 4183, resol: 0.76, rech: 0.32},
+    {id: 41, bu: "Ñ RELAC.", det: "Exclusão Telefone", tmo: 1033, csat: 0.91, atend: 253, resol: 0.72, rech: 0.31},
+    {id: 42, bu: "CONSIGNADO", det: "2ª Via de Fatura", tmo: 1096, csat: 0.87, atend: 3800, resol: 0.67, rech: 0.31},
+    {id: 43, bu: "CONSIGNADO", det: "Ação Conductor", tmo: 1251, csat: 0.87, atend: 256, resol: 0.63, rech: 0.31},
+    {id: 44, bu: "CB", det: "Baixa de Pagamento", tmo: 1788, csat: 0.66, atend: 150, resol: 0.56, rech: 0.31},
+    {id: 45, bu: "CP", det: "Acordo", tmo: 1061, csat: 0.96, atend: 954, resol: 0.74, rech: 0.31},
+    {id: 46, bu: "CLT", det: "Renegociação - Empacotador", tmo: 737, csat: 0.50, atend: 29, resol: 0.33, rech: 0.31},
+    {id: 47, bu: "CB", det: "Troca da Forma de Pagamento", tmo: 1170, csat: 0.87, atend: 121, resol: 0.75, rech: 0.30},
+    {id: 48, bu: "CONSIGNADO", det: "Contactless", tmo: 690, csat: 0.94, atend: 108, resol: 0.75, rech: 0.30},
+    {id: 49, bu: "CB", det: "Encerramento de Conta", tmo: 1246, csat: 0.79, atend: 288, resol: 0.65, rech: 0.30},
+    {id: 50, bu: "CLT", det: "Cancelamento de Contrato", tmo: 1500, csat: 0.83, atend: 2271, resol: 0.72, rech: 0.29},
+    {id: 51, bu: "SEGUROS", det: "Certificado Seguro Vida", tmo: 1210, csat: 0.75, atend: 27, resol: 0.55, rech: 0.29},
+    {id: 52, bu: "CP", det: "Comprovante de Quitação", tmo: 1430, csat: 0.86, atend: 213, resol: 0.75, rech: 0.29},
+    {id: 53, bu: "CB", det: "Vítima de Golpe - Pix/MED", tmo: 1593, csat: 0.82, atend: 153, resol: 0.80, rech: 0.29},
+    {id: 54, bu: "CP", det: "Portabilidade de Dívida", tmo: 1434, csat: 0.50, atend: 17, resol: 0.50, rech: 0.29},
+    {id: 55, bu: "CLT", det: "Baixa de Pagamento", tmo: 1803, csat: 0.76, atend: 2586, resol: 0.69, rech: 0.29},
+    {id: 56, bu: "CONSIGNADO", det: "Desbloqueio", tmo: 759, csat: 0.95, atend: 780, resol: 0.68, rech: 0.29},
+    {id: 57, bu: "CLT", det: "Comprovante de Quitação", tmo: 1604, csat: 0.85, atend: 2074, resol: 0.77, rech: 0.28},
+    {id: 58, bu: "CB", det: "2ª Via de Fatura", tmo: 1177, csat: 0.81, atend: 1294, resol: 0.59, rech: 0.27},
+    {id: 59, bu: "CONSIGNADO", det: "Cancelamento de Cartão", tmo: 1114, csat: 0.89, atend: 2289, resol: 0.71, rech: 0.27},
+    {id: 60, bu: "CB", det: "Desbloqueio", tmo: 712, csat: 0.94, atend: 2947, resol: 0.71, rech: 0.27},
+    {id: 61, bu: "CB", det: "Pix", tmo: 1272, csat: 0.82, atend: 1731, resol: 0.72, rech: 0.26},
+    {id: 62, bu: "CP", det: "Repactuação", tmo: 1931, csat: 0.82, atend: 60, resol: 0.60, rech: 0.26},
+    {id: 63, bu: "Ñ RELAC.", det: "Solicitação de Empréstimo", tmo: 1025, csat: 0.68, atend: 109, resol: 0.64, rech: 0.26},
+    {id: 64, bu: "CB", det: "Portabilidade de Dívida", tmo: 1644, csat: 1.00, atend: 19, resol: 1.00, rech: 0.26},
+    {id: 65, bu: "CP", det: "Antecipação de Parcelas", tmo: 968, csat: 0.93, atend: 11515, resol: 0.77, rech: 0.25},
+    {id: 66, bu: "CB", det: "Portabilidade de Salário", tmo: 1032, csat: 0.91, atend: 70, resol: 0.66, rech: 0.25},
+    {id: 67, bu: "CONSIGNADO", det: "2ª Via de Cartão", tmo: 1085, csat: 0.93, atend: 1449, resol: 0.77, rech: 0.25},
+    {id: 68, bu: "CP", det: "Alteração de Fonte Pagadora", tmo: 1185, csat: 1.00, atend: 43, resol: 0.89, rech: 0.25},
+    {id: 69, bu: "Ñ RELAC.", det: "Demanda Securitizadora", tmo: 1989, csat: 0.00, atend: 4, resol: 0.00, rech: 0.25},
+    {id: 70, bu: "CB", det: "Bloqueio de Celular", tmo: 923, csat: 0.87, atend: 149, resol: 0.70, rech: 0.24},
+    {id: 71, bu: "CB", det: "Antecipação de Parcelas", tmo: 1213, csat: 0.88, atend: 70, resol: 0.73, rech: 0.24},
+    {id: 72, bu: "Ñ RELAC.", det: "Devolução SVR", tmo: 2030, csat: 0.84, atend: 29, resol: 0.61, rech: 0.24},
+    {id: 73, bu: "Ñ RELAC.", det: "Alteração de E-mail", tmo: 1702, csat: 0.87, atend: 1702, resol: 0.75, rech: 0.24},
+    {id: 74, bu: "CLT", det: "Devolução SVR", tmo: 1786, csat: 0.86, atend: 71, resol: 0.68, rech: 0.23},
+    {id: 75, bu: "CB", det: "Comprovante", tmo: 1670, csat: 0.80, atend: 156, resol: 0.64, rech: 0.23},
+    {id: 76, bu: "CB", det: "Cancelamento de Cartão", tmo: 920, csat: 0.91, atend: 2223, resol: 0.74, rech: 0.23},
+    {id: 77, bu: "SEGUROS", det: "Cancelamento de Seguro", tmo: 1233, csat: 0.90, atend: 18444, resol: 0.81, rech: 0.23},
+    {id: 78, bu: "CB", det: "2ª Via de Cartão", tmo: 1004, csat: 0.93, atend: 5642, resol: 0.77, rech: 0.23},
+    {id: 79, bu: "CB", det: "Conta Bloqueada", tmo: 1290, csat: 0.93, atend: 156, resol: 0.78, rech: 0.23},
+    {id: 80, bu: "CB", det: "PIX Reverso", tmo: 1421, csat: 0.94, atend: 943, resol: 0.83, rech: 0.22},
+    {id: 81, bu: "CLT", det: "Repactuação", tmo: 1792, csat: 0.74, atend: 216, resol: 0.58, rech: 0.22},
+    {id: 82, bu: "CP", det: "Contratos Cedidos", tmo: 1728, csat: 1.00, atend: 9, resol: 0.66, rech: 0.22},
+    {id: 83, bu: "CLT", det: "Parcela Não Descontada", tmo: 969, csat: 1.00, atend: 9, resol: 0.66, rech: 0.22},
+    {id: 84, bu: "CP", det: "Demonstrativo Evolução", tmo: 1476, csat: 0.86, atend: 1839, resol: 0.78, rech: 0.22},
+    {id: 85, bu: "SEGUROS", det: "Cancelamento", tmo: 1076, csat: 0.85, atend: 458, resol: 0.88, rech: 0.20},
+    {id: 86, bu: "CB", det: "Cancelamento de Limite", tmo: 863, csat: 0.93, atend: 230, resol: 0.75, rech: 0.20},
+    {id: 87, bu: "Ñ RELAC.", det: "Score Negativo", tmo: 2043, csat: 1.00, atend: 5, resol: 0.00, rech: 0.20},
+    {id: 88, bu: "Ñ RELAC.", det: "Alteração de Dados", tmo: 1491, csat: 0.90, atend: 1618, resol: 0.85, rech: 0.19},
+    {id: 89, bu: "Ñ RELAC.", det: "Alteração de Telefone", tmo: 1431, csat: 0.88, atend: 8848, resol: 0.76, rech: 0.18},
+    {id: 90, bu: "SEGUROS", det: "Cópia de Contrato", tmo: 1562, csat: 0.55, atend: 135, resol: 0.60, rech: 0.18},
+    {id: 91, bu: "CLT", det: "Antecipação de Parcelas", tmo: 1173, csat: 0.93, atend: 17321, resol: 0.84, rech: 0.18},
+    {id: 92, bu: "CP", det: "Cancelamento de Optante", tmo: 959, csat: 0.89, atend: 14368, resol: 0.82, rech: 0.18},
+    {id: 93, bu: "CLT", det: "Parcela Descontada Parcial", tmo: 1647, csat: 1.00, atend: 22, resol: 1.00, rech: 0.18},
+    {id: 94, bu: "CB", det: "Contactless", tmo: 825, csat: 0.92, atend: 839, resol: 0.78, rech: 0.17},
+    {id: 95, bu: "CLT", det: "Parcela em Atraso", tmo: 1239, csat: 0.93, atend: 8000, resol: 0.84, rech: 0.17},
+    {id: 96, bu: "CONSIGNADO", det: "Evolução Dívida", tmo: 1369, csat: 0.80, atend: 720, resol: 0.77, rech: 0.16},
+    {id: 97, bu: "CP", det: "Cópia de Contrato", tmo: 1413, csat: 0.83, atend: 2568, resol: 0.78, rech: 0.16},
+    {id: 98, bu: "CONSIGNADO", det: "Cópia de Contrato", tmo: 1341, csat: 0.82, atend: 1010, resol: 0.73, rech: 0.16},
+    {id: 99, bu: "CP", det: "Pendente Arrecadação", tmo: 807, csat: 0.80, atend: 6, resol: 0.80, rech: 0.16},
+    {id: 100, bu: "Ñ RELAC.", det: "Exclusão SPC/Serasa", tmo: 1344, csat: 0.90, atend: 44, resol: 0.73, rech: 0.15},
+    {id: 101, bu: "CLT", det: "Contato Empresa", tmo: 511, csat: 1.00, atend: 70, resol: 0.64, rech: 0.15},
+    {id: 102, bu: "CB", det: "Tarifa de Comunicação", tmo: 1246, csat: 0.82, atend: 3340, resol: 0.78, rech: 0.14},
+    {id: 103, bu: "Ñ RELAC.", det: "Solicitação de Contato", tmo: 1238, csat: 0.70, atend: 111, resol: 0.68, rech: 0.14},
+    {id: 104, bu: "CLT", det: "Evolução Dívida", tmo: 1254, csat: 0.92, atend: 1464, resol: 0.85, rech: 0.14},
+    {id: 105, bu: "CP", det: "Troca da Data de Pagamento", tmo: 1354, csat: 0.60, atend: 16, resol: 0.83, rech: 0.12},
+    {id: 106, bu: "CB", det: "Saque ATM", tmo: 2089, csat: 1.00, atend: 8, resol: 0.00, rech: 0.12},
+    {id: 107, bu: "CLT", det: "Cópia de Contrato", tmo: 1358, csat: 0.82, atend: 1059, resol: 0.72, rech: 0.10},
+    {id: 108, bu: "CB", det: "Contratos Cedidos", tmo: 1536, csat: 0.33, atend: 10, resol: 1.00, rech: 0.10},
+    {id: 109, bu: "CP", det: "Devolução SVR", tmo: 1858, csat: 0.33, atend: 6, resol: 1.00, rech: 0.00},
+    {id: 110, bu: "CONSIGNADO", det: "Cancelamento de Originação", tmo: 895, csat: 0.00, atend: 3, resol: 0.00, rech: 0.00},
+    {id: 111, bu: "CONSIGNADO", det: "Cancel. Seguro Prestamista", tmo: 1312, csat: 0.50, atend: 3, resol: 0.66, rech: 0.00},
+    {id: 112, bu: "CP", det: "Cancelamento de Originação", tmo: 618, csat: 1.00, atend: 2, resol: 1.00, rech: 0.00},
+    {id: 113, bu: "CLT", det: "Consignado Colaborador", tmo: 1407, csat: 0.00, atend: 1, resol: 0.00, rech: 0.00}
+];
+
+let currentData = [...baseData];
+
+function excluir(id) {
+    currentData = currentData.filter(item => item.id !== id);
+    render();
+}
+
+function restaurar() {
+    currentData = [...baseData];
+    render();
+}
+
+function render() {
+    const term = document.getElementById('filtro').value.toLowerCase();
+    const w = { tmo: +document.getElementById('wTMO').value, rech: +document.getElementById('wRech').value, resol: +document.getElementById('wResol').value, csat: +document.getElementById('wCSAT').value, atend: +document.getElementById('wAtend').value };
+    const maxAtend = Math.max(...baseData.map(d => d.atend));
+
+    const html = currentData
+        .filter(d => d.bu.toLowerCase().includes(term) || d.det.toLowerCase().includes(term))
+        .map(d => {
+            let nAtend = d.atend / maxAtend;
+            let score = ((d.tmo/2000 * w.tmo) + (d.rech * w.rech) + ((1-d.resol) * w.resol) + ((1-d.csat) * w.csat)) * (1 + (nAtend * w.atend));
+            return {...d, score: score.toFixed(2)};
+        })
+        .sort((a,b) => b.score - a.score)
+        .map(r => `<tr>
+            <td class="font-bold text-[#000f44]">${r.bu}</td>
+            <td>${r.det}</td>
+            <td>${r.tmo}s</td>
+            <td>${(r.csat*100).toFixed(0)}%</td>
+            <td>${r.atend.toLocaleString()}</td>
+            <td>${(r.resol*100).toFixed(0)}%</td>
+            <td>${(r.rech*100).toFixed(0)}%</td>
+            <td class="font-black ${r.score > 3 ? 'text-red-600' : 'text-green-600'}">${r.score}</td>
+            <td><span class="del-btn" onclick="excluir(${r.id})">✕</span></td>
+        </tr>`).join('');
+    document.getElementById('tabelaCorpo').innerHTML = html;
+}
+render();
+</script>
+</body>
+</html>
