@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Description Monitoria - Birdie</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Barlow+Condensed:wght@700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --green: #4ce050;
+        --navy: #0d2b6b;
+        --blue: #1a4dbf;
+        --blue2: #1565c0;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Nunito", sans-serif;
+        background: #f0f4f8;
+        overflow: hidden;
+      }
+      .slide {
+        position: fixed;
+        inset: 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.35s;
+        overflow-y: auto;
+      }
+      .slide.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+      .dot-nav {
+        position: fixed;
+        top: 50%;
+        right: 18px;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 200;
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        border: 2px solid var(--navy);
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .dot.active {
+        background: var(--green);
+        border-color: var(--green);
+      }
+      .nav-arrows {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 12px;
+        z-index: 200;
+        align-items: center;
+      }
+      .nav-btn {
+        background: var(--navy);
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        font-size: 1.3rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+        transition: background 0.2s;
+      }
+      .nav-btn:hover {
+        background: var(--blue);
+      }
+      .slide-counter {
+        background: #fff;
+        border-radius: 20px;
+        padding: 6px 18px;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--navy);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      }
+      #s1 {
+        background: var(--green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .capa-inner {
+        position: relative;
+        width: 88%;
+        max-width: 920px;
+        height: 520px;
+      }
+      .capa-photo-block {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 66%;
+        height: 100%;
+        background: linear-gradient(135deg, #1a8fbf 0%, #0d2b6b 100%);
+        clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .capa-svg {
+        opacity: 0.15;
+      }
+      .capa-label {
+        position: absolute;
+        left: 0;
+        border-radius: 8px;
+        padding: 14px 36px;
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 800;
+        color: #fff;
+        z-index: 10;
+      }
+      .cl1 {
+        top: 155px;
+        background: var(--navy);
+        font-size: 2rem;
+      }
+      .cl2 {
+        top: 265px;
+        background: var(--blue);
+        font-size: 2.6rem;
+        padding: 20px 48px;
+      }
+      #s2,
+      #s3,
+      #s4,
+      #s5 {
+        background: #f4f8fc;
+      }
+      .banner {
+        display: flex;
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 1.3rem;
+        font-weight: 800;
+      }
+      .bl {
+        background: var(--green);
+        color: var(--navy);
+        padding: 14px 32px;
+        clip-path: polygon(0 0, 94% 0, 100% 100%, 0 100%);
+        min-width: 260px;
+      }
+      .br {
+        background: var(--blue);
+        color: #fff;
+        padding: 14px 40px;
+        flex: 1;
+      }
+      .section {
+        padding: 32px 36px 70px;
+      }
+      .header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        padding-bottom: 24px;
+      }
+      .header h2 {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: var(--navy);
+      }
+      .header p {
+        max-width: 620px;
+        font-size: 0.95rem;
+        color: #455a64;
+        line-height: 1.8;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 18px;
+      }
+      .card {
+        background: #fff;
+        border-radius: 18px;
+        padding: 22px 24px;
+        box-shadow: 0 10px 25px rgba(13, 43, 107, 0.08);
+        border: 1px solid rgba(13, 43, 107, 0.08);
+      }
+      .card-title {
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: #607d8b;
+        text-transform: uppercase;
+        letter-spacing: 0.9px;
+        margin-bottom: 10px;
+      }
+      .card-value {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 2.6rem;
+        font-weight: 900;
+        color: var(--navy);
+        line-height: 1.1;
+      }
+      .card-sub {
+        margin-top: 10px;
+        font-size: 0.82rem;
+        color: #607d8b;
+        line-height: 1.6;
+      }
+      .highlight {
+        color: var(--green);
+        font-weight: 900;
+      }
+      .breakdown {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 18px;
+        margin-top: 24px;
+      }
+      .break-card {
+        background: #fff;
+        border-radius: 18px;
+        padding: 22px 24px;
+        box-shadow: 0 10px 20px rgba(13, 43, 107, 0.08);
+        border: 1px solid rgba(13, 43, 107, 0.08);
+      }
+      .break-card h3 {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 1.2rem;
+        font-weight: 900;
+        color: var(--navy);
+        margin-bottom: 8px;
+      }
+      .break-card p {
+        font-size: 0.85rem;
+        color: #455a64;
+        line-height: 1.6;
+      }
+      .list-block {
+        background: #fff;
+        border-radius: 18px;
+        padding: 22px 26px;
+        box-shadow: 0 10px 20px rgba(13, 43, 107, 0.08);
+        border: 1px solid rgba(13, 43, 107, 0.08);
+        margin-top: 24px;
+      }
+      .list-block h3 {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 1.15rem;
+        font-weight: 900;
+        color: var(--navy);
+        margin-bottom: 14px;
+      }
+      .list-block ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 10px;
+      }
+      .list-block li {
+        padding-left: 18px;
+        position: relative;
+        font-size: 0.93rem;
+        color: #455a64;
+        line-height: 1.7;
+      }
+      .list-block li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: var(--blue);
+        font-size: 1.2rem;
+        line-height: 1;
+      }
+      .summary {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 24px;
+        margin-top: 24px;
+      }
+      .summary-box {
+        background: #fff;
+        border-radius: 18px;
+        padding: 24px;
+        box-shadow: 0 10px 20px rgba(13, 43, 107, 0.08);
+        border: 1px solid rgba(13, 43, 107, 0.08);
+      }
+      .summary-box h3 {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 1.15rem;
+        font-weight: 900;
+        color: var(--navy);
+        margin-bottom: 14px;
+      }
+      .summary-box p {
+        font-size: 0.92rem;
+        color: #455a64;
+        line-height: 1.75;
+      }
+      .summary-num {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 3rem;
+        font-weight: 900;
+        color: var(--blue);
+        line-height: 1.1;
+        margin-top: 10px;
+      }
+      .corner {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 90px;
+        height: 90px;
+        background: var(--green);
+        clip-path: polygon(100% 0, 100% 100%, 0 100%);
+        z-index: 0;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dot-nav">
+      <div class="dot active" onclick="goTo(0)"></div>
+      <div class="dot" onclick="goTo(1)"></div>
+      <div class="dot" onclick="goTo(2)"></div>
+      <div class="dot" onclick="goTo(3)"></div>
+      <div class="dot" onclick="goTo(4)"></div>
+    </div>
+    <div class="nav-arrows">
+      <button class="nav-btn" onclick="prev()">&#8592;</button>
+      <span class="slide-counter" id="counter">1 / 5</span>
+      <button class="nav-btn" onclick="next()">&#8594;</button>
+    </div>
+    <div class="corner"></div>
+
+    <div class="slide active" id="s1">
+      <div
+        style="
+          width: 100%;
+          min-height: 100vh;
+          background: var(--green);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <div class="capa-inner">
+          <div class="capa-photo-block">
+            <svg class="capa-svg" viewBox="0 0 320 280" width="320">
+              <ellipse cx="110" cy="90" rx="38" ry="48" fill="#fff" />
+              <rect
+                x="75"
+                y="130"
+                width="70"
+                height="100"
+                rx="12"
+                fill="#fff"
+              />
+              <ellipse cx="210" cy="100" rx="34" ry="42" fill="#fff" />
+              <rect
+                x="178"
+                y="138"
+                width="64"
+                height="90"
+                rx="12"
+                fill="#fff"
+              />
+              <circle cx="110" cy="64" r="22" fill="#aee" />
+              <circle cx="210" cy="76" r="20" fill="#aee" />
+            </svg>
+          </div>
+          <div class="capa-label cl1">Job Description</div>
+          <div class="capa-label cl2">Qualidade BPO - Birdie</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="s2">
+      <div class="banner">
+        <div class="bl">Memória de cálculo</div>
+        <div class="br">Base de horas e capacidade produtiva</div>
+      </div>
+      <div class="section">
+        <div class="header">
+          <h2>Visão geral de tempo</h2>
+          <p>
+            O novo job description considera um monitor com 220 horas mês, 85%
+            de tempo produtivo e 66% de monitorias automatizadas via Birdie.
+          </p>
+        </div>
+        <div class="cards">
+          <div class="card">
+            <div class="card-title">Horas do mês</div>
+            <div class="card-value">220h</div>
+            <div class="card-sub">
+              Total de horas disponíveis por monitor no mês.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Horas produtivas</div>
+            <div class="card-value">187h</div>
+            <div class="card-sub">
+              85% de produtividade aplicada sobre 220h.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">TMA</div>
+            <div class="card-value">00:15</div>
+            <div class="card-sub">Tempo médio de atendimento base.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">TMM</div>
+            <div class="card-value">00:19:30</div>
+            <div class="card-sub">
+              Tempo médio de monitoria estimado (130% do TMA).
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Automação Birdie</div>
+            <div class="card-value">66%</div>
+            <div class="card-sub">
+              Percentual de monitorias já cobertas por automação.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Tempo manual restante</div>
+            <div class="card-value">34%</div>
+            <div class="card-sub">
+              Tempo potencial para atividade humana em monitorias.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="s3">
+      <div class="banner">
+        <div class="bl">Capacidade de Monitorias</div>
+        <div class="br">Volume estimado de entregas manuais</div>
+      </div>
+      <div class="section">
+        <div class="header">
+          <h2>Monitorias de itens não automatizados</h2>
+          <p>
+            25% do tempo útil deve ser destinado a monitorias manuais de itens
+            não automatizados. Com tempo médio de 6m48s por monitoria, este é o
+            potencial de volume.
+          </p>
+        </div>
+        <div class="cards">
+          <div class="card">
+            <div class="card-title">Horas dedicadas</div>
+            <div class="card-value">46h45</div>
+            <div class="card-sub">25% de 187 horas produtivas.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Tempo médio por monitoria</div>
+            <div class="card-value">00:06:48</div>
+            <div class="card-sub">
+              Tempo estimado para uma monitoria de item não automatizado.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Capacidade mensal</div>
+            <div class="card-value">~412</div>
+            <div class="card-sub">
+              Monitorias possíveis dentro do tempo dedicado.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Horas automatizadas</div>
+            <div class="card-value">123h25</div>
+            <div class="card-sub">
+              66% das horas produtivas já automatizadas via Birdie.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="s4">
+      <div class="banner">
+        <div class="bl">Job Description</div>
+        <div class="br">Distribuição das atividades</div>
+      </div>
+      <div class="section">
+        <div class="breakdown">
+          <div class="break-card">
+            <h3>01 - Monitorias manuais</h3>
+            <p>
+              25% do tempo útil = <span class="highlight">46h45</span>. Garantir
+              as monitorias dos itens não automatizados e validar os casos que a
+              Birdie ainda não cobre.
+            </p>
+            <ul>
+              <li>Garantir monitorias dos itens não automatizados.</li>
+              <li>Dedicar 25% das horas úteis a esse trabalho.</li>
+            </ul>
+          </div>
+          <div class="break-card">
+            <h3>02 - Estudo de Negócios</h3>
+            <p>
+              15% do tempo útil = <span class="highlight">28h03</span>. Refletir
+              sobre produto, concorrência, dores e padrões negativos no
+              portfólio.
+            </p>
+            <ul>
+              <li>
+                Comportamento de produtos: medir % de satisfação por produto.
+              </li>
+              <li>
+                Comportamento concorrencial: identificar oportunidades de
+                captura.
+              </li>
+              <li>
+                Comportamentos negativos padrão: exemplos como alta demanda de
+                2ª via de fatura no cartão.
+              </li>
+              <li>
+                Principais dores por produto: pareto de dor e remédios
+                prioritários.
+              </li>
+            </ul>
+          </div>
+          <div class="break-card">
+            <h3>03 - Estudos de Pessoas</h3>
+            <p>
+              15% do tempo útil = <span class="highlight">28h03</span>. Entregar
+              apoio de qualidade para operadores, supervisores e rotinas de
+              desenvolvimento.
+            </p>
+            <ul>
+              <li>
+                LNT: identificar treinamentos necessários e indicadores
+                atacados.
+              </li>
+              <li>Dar feedback aos operadores com base na Birdie.</li>
+              <li>
+                Suporte às equipes e supervisores em ações esporádicas de
+                qualidade.
+              </li>
+              <li>
+                Rotinas: matinal de qualidade, semanal de qualidade e boletim de
+                qualidade.
+              </li>
+              <li>
+                Articular momentos de qualidade e disseminar melhores práticas.
+              </li>
+            </ul>
+          </div>
+          <div class="break-card">
+            <h3>04 - Estudos de Processos</h3>
+            <p>
+              15% do tempo útil = <span class="highlight">28h03</span>. Analisar
+              processos, jornadas e experiências para eliminar atritos e
+              transformar atendimento.
+            </p>
+            <ul>
+              <li>
+                Olhar de qualidade para a esteira (PMC): passo a passo do
+                cliente.
+              </li>
+              <li>Olhar de qualidade na jornada: ponto exato de atrito.</li>
+              <li>
+                Olhar de qualidade no formato de atendimento: cliques e tempo em
+                silêncio.
+              </li>
+              <li>
+                Identificar processos que podem ser eliminados, melhorados ou
+                transformados.
+              </li>
+            </ul>
+          </div>
+          <div class="break-card">
+            <h3>05 - Report Semanal</h3>
+            <p>
+              10% do tempo útil = <span class="highlight">18h42</span>. Tempo
+              administrativo para compartilhar performance e resultados da
+              execução.
+            </p>
+          </div>
+          <div class="break-card">
+            <h3>06 - Report Quinzenal</h3>
+            <p>
+              10% do tempo útil = <span class="highlight">18h42</span>. Tempo
+              administrativo para compartilhar análises mais profundas e
+              decisões de governança.
+            </p>
+          </div>
+        </div>
+        <div class="list-block">
+          <h3>Detalhes essenciais</h3>
+          <ul>
+            <li>
+              Comportamento de produtos: medir satisfação por produto e mapear
+              oportunidades.
+            </li>
+            <li>
+              Comportamento concorrencial: identificar vantagem e foco de
+              atenção.
+            </li>
+            <li>
+              Comportamentos negativos padrão: capturar padrões que derrubam NS.
+            </li>
+            <li>
+              Principais dores por produto: pareto de dor e remédio prioritário.
+            </li>
+            <li>
+              LNT, feedback, suporte e rotinas de qualidade para equipes e
+              supervisores.
+            </li>
+            <li>
+              Processo: analisar jornada, cliques, tempo em silêncio e
+              oportunidades de melhoria.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="s5">
+      <div class="banner">
+        <div class="bl">Resumo de impacto</div>
+        <div class="br">O que esse job description entrega</div>
+      </div>
+      <div class="section">
+        <div class="summary">
+          <div class="summary-box">
+            <h3>Tempo alocado</h3>
+            <p>
+              90% das horas produtivas são distribuídas em atividades
+              estruturadas de monitoria, negócio, pessoas, processo e report.
+            </p>
+            <div class="summary-num">168h18</div>
+          </div>
+          <div class="summary-box">
+            <h3>Espaço para ajustes</h3>
+            <p>
+              Restam 10% das horas produtivas (<span class="highlight"
+                >18h42</span
+              >) para buffer, sincronização ou demandas não planejadas.
+            </p>
+            <div class="summary-num">18h42</div>
+          </div>
+        </div>
+        <div class="list-block">
+          <h3>Principais entregas</h3>
+          <ul>
+            <li>Potencial de ~412 monitorias manuais por monitor ao mês.</li>
+            <li>Estudos de negócio, pessoas e processos com 28h cada.</li>
+            <li>
+              Governança de qualidade com reports semanal e quinzenal claros.
+            </li>
+            <li>
+              Uso da Birdie para automatizar 66% das jornadas de monitoria.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var cur = 0;
+      var slides = document.querySelectorAll(".slide");
+      var dots = document.querySelectorAll(".dot");
+      var counter = document.getElementById("counter");
+      function goTo(n) {
+        slides[cur].classList.remove("active");
+        dots[cur].classList.remove("active");
+        cur = ((n % slides.length) + slides.length) % slides.length;
+        slides[cur].classList.add("active");
+        dots[cur].classList.add("active");
+        counter.textContent = cur + 1 + " / " + slides.length;
+        slides[cur].scrollTop = 0;
+      }
+      function next() {
+        goTo(cur + 1);
+      }
+      function prev() {
+        goTo(cur - 1);
+      }
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight" || e.key === "ArrowDown") next();
+        if (e.key === "ArrowLeft" || e.key === "ArrowUp") prev();
+      });
+    </script>
+  </body>
+</html>
