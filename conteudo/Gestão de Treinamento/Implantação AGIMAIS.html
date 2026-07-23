@@ -1,0 +1,1381 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Treinamento · Clube de Benefícios AGI+</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --azul:#0064f5; --azul-escuro:#000f44; --verde:#77df40; --amarelo:#ffd600;
+      --roxo:#7c3aed; --vermelho:#dc2626;
+      --gray-3:#d1daea; --gray-text:#6b7a99; --body-text:#1a2340;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Inter',sans-serif;
+      background:radial-gradient(1200px 700px at 50% -10%,#0a1c52,#04102f 60%,#020a22);
+      color:var(--azul-escuro);overflow:hidden;height:100vh;
+    }
+
+    /* ── STAGE ── */
+    .stage{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .slide{
+      width:1280px;height:720px;background:#fff;position:absolute;
+      transform-origin:center center;display:none;flex-direction:column;overflow:hidden;
+      border-radius:6px;box-shadow:0 30px 80px rgba(0,0,0,.5);
+    }
+    .slide.active{display:flex}
+
+    /* ── BRAND BAR ── */
+    .brandbar{
+      height:7px;flex:0 0 auto;
+      background:linear-gradient(90deg,var(--azul) 0 55%,var(--verde) 55% 80%,var(--amarelo) 80% 100%);
+    }
+
+    /* ── SLIDE HEADER ── */
+    .shead{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px 48px 10px;border-bottom:1px solid #e8edf6;flex:0 0 auto;gap:16px;
+    }
+    .shead .t .kicker{
+      display:inline-flex;align-items:center;gap:7px;
+      font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--azul);margin-bottom:4px;
+    }
+    .shead .t .kicker .kdot{width:6px;height:6px;border-radius:50%;background:var(--azul)}
+    .shead .t h2{font-size:1.5rem;font-weight:800;color:var(--azul-escuro);line-height:1}
+    .shead .t h2 span{color:var(--azul)}
+    .shead .meta{font-size:.78rem;font-weight:800;color:#33405e;white-space:nowrap}
+
+    /* ── CONTENT AREA ── */
+    .scontent{flex:1;padding:24px 48px 20px;overflow-y:auto;display:flex;flex-direction:column;gap:18px}
+
+    /* ── COVER ── */
+    .cover{
+      background:radial-gradient(900px 520px at 78% 20%,#0a3bd6,#001b86 55%,#000f44);
+      color:#fff;justify-content:center;position:relative;overflow:hidden;
+    }
+    .cover .blob{position:absolute;border-radius:40px}
+    .cover .b1{width:280px;height:280px;right:-60px;top:-60px;background:#0064f5;transform:rotate(18deg);opacity:.35}
+    .cover .b2{width:170px;height:170px;right:120px;bottom:-50px;background:var(--verde);transform:rotate(-12deg);opacity:.28}
+    .cover .b3{width:120px;height:120px;right:340px;top:60px;background:var(--amarelo);transform:rotate(24deg);opacity:.18}
+    .toprow{position:absolute;top:28px;left:70px;right:70px;display:flex;justify-content:space-between;align-items:center}
+    .ckicker{
+      display:inline-flex;align-items:center;gap:7px;
+      background:rgba(255,255,255,.1);border-radius:999px;padding:6px 14px;
+      font-size:.78rem;font-weight:700;color:#fff;
+    }
+    .cover-layout{display:flex;gap:52px;position:relative;z-index:2;height:100%;padding:70px 70px 50px}
+    .cover-left{flex:1;display:flex;flex-direction:column;justify-content:space-between}
+    .cover h1{font-size:3.6rem;font-weight:900;line-height:.98;letter-spacing:-1.5px;max-width:680px}
+    .cover h1 em{font-style:normal;color:var(--verde)}
+    .cover .sub{font-size:1.1rem;font-weight:600;color:#cfe0ff;margin-top:14px;max-width:620px;line-height:1.5}
+    .cover .chips{display:flex;gap:14px;margin-top:28px}
+    .cchip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:14px 18px}
+    .cchip b{display:block;font-size:1.9rem;font-weight:900;color:#fff;line-height:1}
+    .cchip b.g{color:var(--verde)}
+    .cchip b.y{color:var(--amarelo)}
+    .cchip small{font-size:.74rem;font-weight:700;color:#bcd0ff}
+    .cover-right{
+      width:340px;display:flex;flex-direction:column;justify-content:center;gap:16px;
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+      border-radius:18px;padding:24px 22px;
+    }
+    .sum-title{font-size:.9rem;font-weight:900;color:#fff;margin-bottom:6px;letter-spacing:-.3px}
+    .sum-item{font-size:.88rem;font-weight:600;color:#cfe0ff;line-height:1.6}
+    .sum-item strong{color:#fff;font-weight:900}
+    .cover-badge{
+      position:absolute;bottom:36px;right:70px;
+      font-size:.78rem;font-weight:800;color:#001b86;
+      background:var(--verde);padding:7px 16px;border-radius:999px;z-index:2;
+    }
+
+    /* ── SECTION BLOCKS ── */
+    .sec-block{
+      background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;
+      padding:20px 24px;
+    }
+    .sec-block h3{
+      font-size:1.05rem;font-weight:800;color:var(--azul-escuro);
+      margin-bottom:12px;display:flex;align-items:center;gap:10px;
+    }
+    .sec-block h3 .num{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:28px;height:28px;border-radius:50%;
+      background:var(--azul);color:#fff;font-size:.8rem;
+    }
+    .sec-block p, .sec-block ul{font-size:.88rem;line-height:1.7;color:var(--body-text)}
+    .sec-block ul{padding-left:20px;margin-top:8px}
+    .sec-block ul li{margin-bottom:6px}
+    .sec-block strong{font-weight:700;color:var(--azul-escuro)}
+    .sec-block em{font-style:normal;font-weight:600;color:var(--azul)}
+
+    /* ── TWO COLS ── */
+    .two-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .three-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+
+    /* ── ALERT BOX ── */
+    .alert-box{
+      background:#fef2f2;border:2px solid var(--vermelho);border-radius:10px;
+      padding:14px 18px;display:flex;align-items:flex-start;gap:12px;
+    }
+    .alert-box .icon{
+      width:24px;height:24px;border-radius:50%;background:var(--vermelho);
+      color:#fff;display:flex;align-items:center;justify-content:center;
+      font-weight:900;font-size:1rem;flex-shrink:0;
+    }
+    .alert-box .txt{font-size:.85rem;line-height:1.6;color:#7f1d1d;font-weight:600}
+    .alert-box.info{background:#eef2ff;border-color:var(--azul)}
+    .alert-box.info .icon{background:var(--azul)}
+    .alert-box.info .txt{color:#1e3a8a}
+    .alert-box.success{background:#f0fdf4;border-color:var(--verde)}
+    .alert-box.success .icon{background:var(--verde)}
+    .alert-box.success .txt{color:#166534}
+
+    /* ── PLAN CARD ── */
+    .plan-card{
+      background:#fff;border:2px solid #e2e8f0;border-radius:12px;
+      padding:20px;text-align:center;transition:.15s;
+    }
+    .plan-card:hover{border-color:var(--azul);box-shadow:0 4px 12px rgba(0,100,245,.15)}
+    .plan-card .plan-name{
+      font-size:1.1rem;font-weight:800;color:var(--azul-escuro);margin-bottom:8px;
+    }
+    .plan-card .plan-price{
+      font-size:2.2rem;font-weight:900;color:var(--azul);line-height:1;margin-bottom:4px;
+    }
+    .plan-card .plan-period{
+      font-size:.75rem;color:var(--gray-text);font-weight:600;margin-bottom:16px;
+    }
+    .plan-card .plan-credit{
+      background:#f0fdf4;border:1px solid var(--verde);border-radius:8px;
+      padding:8px 12px;font-size:.85rem;font-weight:700;color:#166534;
+      margin-bottom:16px;
+    }
+    .plan-card ul{list-style:none;padding:0;text-align:left}
+    .plan-card li{
+      font-size:.82rem;color:var(--body-text);line-height:1.6;
+      padding:6px 0;border-bottom:1px solid #f1f5f9;
+      display:flex;align-items:center;gap:8px;
+    }
+    .plan-card li:last-child{border-bottom:none}
+    .plan-card li:before{content:'✓';color:var(--verde);font-weight:900;font-size:1rem}
+
+    /* ── COMPARISON TABLE ── */
+    .comp-table{
+      width:100%;border-collapse:collapse;font-size:.85rem;
+      background:#fff;border-radius:10px;overflow:hidden;
+    }
+    .comp-table thead{background:var(--azul-escuro);color:#fff}
+    .comp-table th{padding:12px 16px;text-align:left;font-weight:800;font-size:.8rem}
+    .comp-table td{padding:12px 16px;border-bottom:1px solid #e2e8f0}
+    .comp-table tr:last-child td{border-bottom:none}
+    .comp-table tr:nth-child(even){background:#f8fafc}
+    .comp-table .check{color:var(--verde);font-weight:900;font-size:1.2rem}
+    .comp-table .cross{color:var(--gray-text);font-weight:900;font-size:1.2rem;opacity:.3}
+
+    /* ── FAQ ITEM ── */
+    .faq-item{
+      background:#fff;border:1px solid #e2e8f0;border-radius:10px;
+      padding:18px 22px;
+    }
+    .faq-q{
+      font-size:.95rem;font-weight:800;color:var(--azul-escuro);
+      margin-bottom:8px;display:flex;align-items:center;gap:10px;
+    }
+    .faq-q:before{
+      content:'Q';display:inline-flex;align-items:center;justify-content:center;
+      width:24px;height:24px;border-radius:50%;background:var(--azul);
+      color:#fff;font-size:.75rem;font-weight:900;flex-shrink:0;
+    }
+    .faq-a{font-size:.85rem;line-height:1.7;color:var(--body-text);padding-left:34px}
+
+    /* ── PAGE NUMBER ── */
+    .pageno{
+      position:absolute;bottom:14px;right:22px;
+      font-size:.68rem;font-weight:800;color:#9aa6c0;
+    }
+
+    /* ── NAV ── */
+    .nav{
+      position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+      display:flex;gap:12px;align-items:center;z-index:100;padding:0 8px;
+    }
+    .nav button{
+      background:rgba(255,255,255,.95);border:1px solid rgba(0,0,0,.15);
+      color:#001b86;border-radius:999px;width:46px;height:46px;
+      font-size:1.25rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+      transition:.15s;box-shadow:0 10px 20px rgba(0,0,0,.12);
+    }
+    .nav button:hover{background:#fff;color:#0033b0;border-color:#0033b0}
+    .nav button:disabled{opacity:.3;cursor:not-allowed}
+    .dots{display:flex;gap:8px;align-items:center}
+    .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:.15s}
+    .dot.on{background:var(--verde);width:22px;border-radius:999px}
+
+    /* ── KEYBOARD HINT ── */
+    .kb-hint{
+      position:fixed;bottom:16px;right:24px;
+      font-size:.68rem;font-weight:700;color:rgba(255,255,255,.3);
+      letter-spacing:.06em;
+    }
+
+    /* ── BENEFIT CARD ── */
+    .benefit-card{
+      background:#fff;border:2px solid #e2e8f0;border-radius:12px;
+      padding:18px 20px;display:flex;align-items:flex-start;gap:14px;
+      transition:.15s;
+    }
+    .benefit-card:hover{border-color:var(--azul);box-shadow:0 4px 12px rgba(0,100,245,.1)}
+    .benefit-icon{
+      width:48px;height:48px;border-radius:12px;background:var(--azul);
+      color:#fff;display:flex;align-items:center;justify-content:center;
+      font-size:1.5rem;flex-shrink:0;
+    }
+    .benefit-icon.green{background:var(--verde)}
+    .benefit-icon.purple{background:var(--roxo)}
+    .benefit-icon.yellow{background:var(--amarelo);color:var(--azul-escuro)}
+    .benefit-content h4{
+      font-size:.95rem;font-weight:800;color:var(--azul-escuro);margin-bottom:6px;
+    }
+    .benefit-content p{font-size:.82rem;line-height:1.6;color:var(--body-text)}
+  </style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- ══════════ COVER ══════════ -->
+  <section class="slide active cover" id="s0">
+    <div class="brandbar" style="position:absolute;top:0;left:0;right:0"></div>
+    <div class="toprow">
+      <span class="ckicker">Treinamento Comercial · Clube de Benefícios</span>
+    </div>
+    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+    <div class="cover-layout">
+      <div class="cover-left">
+        <div>
+          <h1>Clube de Benefícios<br><em>AGI+</em></h1>
+          <p class="sub">Tudo o que você precisa saber para vender o programa de membership que protege, cuida e recompensa nossos clientes.</p>
+          <div class="chips">
+            <div class="cchip"><b class="g">3</b><small>Planos disponíveis</small></div>
+            <div class="cchip"><b>8+</b><small>Assistências incluídas</small></div>
+            <div class="cchip"><b class="y">R$150</b><small>Créditos mensais</small></div>
+          </div>
+        </div>
+      </div>
+      <div class="cover-right">
+        <div class="sum-title">O que você vai aprender</div>
+        <div class="sum-item"><strong>O que é o AGI+:</strong> Conceito e proposta de valor</div>
+        <div class="sum-item"><strong>Os 3 Planos:</strong> Básico, Na Medida e Completo</div>
+        <div class="sum-item"><strong>Assistências:</strong> Saúde, Residencial, Pet, Odonto e Funeral</div>
+        <div class="sum-item"><strong>Créditos:</strong> Como funciona o cashback mensal</div>
+        <div class="sum-item"><strong>Argumentos de Venda:</strong> Como vender cada plano</div>
+        <div class="sum-item"><strong>FAQs:</strong> Principais dúvidas dos clientes</div>
+      </div>
+    </div>
+    <span class="cover-badge">Junho 2026</span>
+    <span class="pageno">01 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 1: O QUE É O AGI+ ══════════ -->
+  <section class="slide" id="s1">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 01</div>
+        <h2>O que é o <span>AGI+?</span></h2>
+      </div>
+      <div class="meta">Conceito e Proposta de Valor</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">🎯</span>Definição</h3>
+        <p><strong>AGI+ é um clube de benefícios por assinatura.</strong> Não é um plano de saúde tradicional nem um seguro. É um programa de membership que oferece acesso a diversos serviços e assistências para facilitar o dia a dia do cliente.</p>
+        <p style="margin-top:12px">Pagando um valor mensal fixo e acessível, o cliente tem acesso a:</p>
+        <ul>
+          <li><strong>Telemedicina 24h</strong> com clínico geral (1ª consulta) e especialistas (Encaminhamento)</li>
+          <li><strong>Descontos em consultas médicas</strong> presenciais (a partir de R$ 39,90)</li>
+          <li><strong>Descontos em medicamentos</strong> (até 80% em rede credenciada). Importante: O cliente precisa mencionar CPF e parceria com E-pharma</li>
+          <li><strong>Plano odontológico</strong> com rede nacional</li>
+          <li><strong>Assistência residencial</strong> (chaveiro, encanador, eletricista)</li>
+          <li><strong>Assistência pet</strong> (veterinária de emergência)</li>
+          <li><strong>Assistência funeral</strong> individual até 5k</li>
+          <li><strong>Créditos mensais</strong> para trocar por cupons em parceiros</li>
+        </ul>
+      </div>
+
+      <div class="alert-box success">
+        <div class="icon">💚</div>
+        <div class="txt"><strong>Proposta de Valor:</strong> O AGI+ foi criado para ser <em>acessível, completo e sem burocracia</em>. O cliente se protege, cuida da saúde e ainda recebe créditos de volta todo mês.</div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">✨</span>Diferenciais Competitivos</h3>
+        <ul>
+          <li><strong>Sem limite de idade:</strong> Qualquer pessoa pode assinar</li>
+          <li><strong>Sem fidelidade:</strong> Cliente pode cancelar quando quiser</li>
+          <li><strong>Valor fixo:</strong> Não aumenta com a idade</li>
+          <li><strong>Cashback mensal:</strong> Créditos para usar em parceiros (supermercados, apps, delivery)</li>
+          <li><strong>Abrangência nacional:</strong> Todas as assistências valem em todo o Brasil</li>
+        </ul>
+      </div>
+    </div>
+    <span class="pageno">02 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 2: OS 3 PLANOS ══════════ -->
+  <section class="slide" id="s2">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 02</div>
+        <h2>Os 3 <span>Planos</span></h2>
+      </div>
+      <div class="meta">Básico, Na Medida e Completo</div>
+    </div>
+    <div class="scontent">
+      <div class="three-cols">
+        <!-- Plano Básico -->
+        <div class="plan-card">
+          <div class="plan-name">Básico</div>
+          <div class="plan-price">R$ 39,90</div>
+          <div class="plan-period">/mês</div>
+          <div class="plan-credit">+ R$ 100 em créditos</div>
+          <ul>
+            <li>Telemedicina 24h</li>
+            <li>Consultas a partir de R$ 39,90</li>
+            <li>Desconto em medicamentos</li>
+            <li>Assistência Residencial Plus</li>
+            <li>Assistência Odonto (urgência)</li>
+            <li>Assistência Funeral até 5k</li>
+            <li>Bônus Celular (Vivo/Tim/Claro)</li>
+          </ul>
+        </div>
+
+        <!-- Plano Na Medida -->
+        <div class="plan-card">
+          <div class="plan-name">Na Medida</div>
+          <div class="plan-price">R$ 49,90</div>
+          <div class="plan-period">/mês</div>
+          <div class="plan-credit">+ R$ 120 em créditos</div>
+          <ul>
+            <li>Tudo do Básico +</li>
+            <li>Assistência Pet</li>
+            <li>Concierge Digital</li>
+            <li>Auxílio Digital</li>
+            <li>Telemedicina Veterinária</li>
+            <li>Funeral Pet (2 consultas/ano)</li>
+          </ul>
+        </div>
+
+        <!-- Plano Completo -->
+        <div class="plan-card" style="border-color:var(--azul);border-width:3px">
+          <div class="plan-name" style="color:var(--azul)">Completo ⭐</div>
+          <div class="plan-price">R$ 59,90</div>
+          <div class="plan-period">/mês</div>
+          <div class="plan-credit">+ R$ 150 em créditos</div>
+          <ul>
+            <li>Tudo do Na Medida +</li>
+            <li>Plano Odonto Especial (200+ procedimentos)</li>
+            <li>Assistência Residencial Premium</li>
+            <li>Limpeza de caixa d'água</li>
+            <li>Conserto linha branca</li>
+            <li>Pacote Sênior completo</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert-box info">
+        <div class="icon">💡</div>
+        <div class="txt"><strong>Adequação de planos:</strong> Estamos desenhando a oferta de plano ideal <em>para o cliente</em> de acordo com com sua renda. Ex: Clientes com renda até 1,5 salário, terão a opção do plano 1 e 2.</div>
+      </div>
+    </div>
+    <span class="pageno">03 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 3: COMPARATIVO DE PLANOS ══════════ -->
+  <section class="slide" id="s3">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 03</div>
+        <h2>Comparativo <span>Completo</span></h2>
+      </div>
+      <div class="meta">Tabela de Coberturas</div>
+    </div>
+    <div class="scontent">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th style="width:240px">Assistência / Serviço</th>
+            <th style="text-align:center">Básico<br>(R$ 39,90)</th>
+            <th style="text-align:center">Na Medida<br>(R$ 49,90)</th>
+            <th style="text-align:center">Completo<br>(R$ 59,90)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Assistência Médica</strong></td>
+            <td>Telemedicina (20 especialidades), consultas a partir de R$ 39,90, descontos em exames/farmácias</td>
+            <td>Telemedicina (20 especialidades), consultas a partir de R$ 39,90, descontos em exames/farmácias</td>
+            <td>Telemedicina (20 especialidades), consultas a partir de R$ 39,90, descontos em exames/farmácias</td>
+          </tr>
+          <tr>
+            <td><strong>Assistência Residencial Plus</strong></td>
+            <td>Chaveiro, eletricista, encanador (2x/ano)</td>
+            <td>Chaveiro, eletricista, encanador (2x/ano)</td>
+            <td>Chaveiro, eletricista, encanador (2x/ano)</td>
+          </tr>
+          <tr>
+            <td><strong>Assistência Residencial Premium</strong></td>
+            <td style="text-align:center"><span class="cross">—</span></td>
+            <td style="text-align:center"><span class="cross">—</span></td>
+            <td>Limpeza de caixa d'água, conserto linha branca, pacote sênior (cuidador, adaptação, suporte digital)</td>
+          </tr>
+          <tr>
+            <td><strong>Assistência Odonto (Urgência)</strong></td>
+            <td style="text-align:center"><span class="check">✓</span> Tele urgência 24h</td>
+            <td style="text-align:center"><span class="check">✓</span> Tele urgência 24h</td>
+            <td style="text-align:center"><span class="check">✓</span> Tele urgência 24h</td>
+          </tr>
+          <tr>
+            <td><strong>Plano Odonto Especial</strong></td>
+            <td style="text-align:center"><span class="cross">—</span></td>
+            <td style="text-align:center"><span class="cross">—</span></td>
+            <td style="text-align:center"><span class="check">✓</span> 200 procedimentos + prevenção + raio-X + canal</td>
+          </tr>
+          <tr>
+            <td><strong>Assistência Funeral</strong></td>
+            <td style="text-align:center"><span class="check">✓</span> Até 5k</td>
+            <td style="text-align:center"><span class="check">✓</span> Até 5k</td>
+            <td style="text-align:center"><span class="check">✓</span> Até 5k</td>
+          </tr>
+          <tr>
+            <td><strong>Bônus Celular</strong></td>
+            <td>Vivo/Tim/Claro – R$ 10 em valor percebido (500mb dados/sms/minutos)</td>
+            <td>Vivo/Tim/Claro – R$ 10 em valor percebido (500mb dados/sms/minutos)</td>
+            <td>Vivo/Tim/Claro – R$ 10 em valor percebido (500mb dados/sms/minutos)</td>
+          </tr>
+          <tr>
+            <td><strong>Assistência Pet</strong></td>
+            <td style="text-align:center"><span class="cross">—</span></td>
+            <td>Concierge + Auxílio Digital + Telemedicina Veterinária (1x/ano) + Funeral Pet (2 consultas/ano)</td>
+            <td>Concierge + Auxílio Digital + Telemedicina Veterinária (1x/ano) + Funeral Pet (2 consultas/ano)</td>
+          </tr>
+          <tr>
+            <td><strong>Créditos em Parceiros</strong></td>
+            <td style="text-align:center"><strong>R$ 100</strong></td>
+            <td style="text-align:center"><strong>R$ 120</strong></td>
+            <td style="text-align:center"><strong>R$ 150</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <span class="pageno">04 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 4: ASSISTÊNCIA MÉDICA ══════════ -->
+  <section class="slide" id="s4">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 04</div>
+        <h2>Assistência <span>Médica e Saúde</span></h2>
+      </div>
+      <div class="meta">Telemedicina + Consultas + Medicamentos</div>
+    </div>
+    <div class="scontent">
+      <div class="benefit-card">
+        <div class="benefit-icon">📱</div>
+        <div class="benefit-content">
+          <h4>Telemedicina 24 Horas (DoctorOne)</h4>
+          <p>Atendimento médico virtual com <strong>clínico geral</strong> e <strong>20 especialidades</strong> disponível 24h/dia, 7 dias/semana. Sem limite de consultas. Acesso pelo link oficial: <strong>agibank.doctorone.com/pt</strong></p>
+          <p style="margin-top:8px"><strong>Como funciona:</strong> Cliente acessa o link → Insere CPF → Aguarda o atendimento → Atendido por vídeo → Recebe receita digital e atestado (se necessário)</p>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon green">👨‍⚕️</div>
+        <div class="benefit-content">
+          <h4>Consultas Presenciais com Desconto (helloMed)</h4>
+          <p>Rede credenciada para consultas e exames presenciais com valores reduzidos. <strong>Consultas a partir de R$ 39,90 (Lembre-se: Esse pagamento será feito direto para a clínica onde a consulta está agendada) </strong> e conforme a especialidade e localidade.</p>
+          <p style="margin-top:8px"><strong>Como agendar:</strong> Cliente liga para <strong>4003-8974</strong> (opção 1) → Informa CPF e especialidade desejada → Central retorna em até 2 dias úteis com opções → Cliente recebe guia de autorização → Comparece à clínica com documento e guia</p>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon purple">💊</div>
+        <div class="benefit-content">
+          <h4>Descontos em Medicamentos (ePharma)</h4>
+          <p>Desconto de <strong>até 80%</strong> em medicamentos genéricos, de marca e MIPs em mais de <strong>20 mil farmácias</strong> credenciadas em todo o Brasil.</p>
+          <p style="margin-top:8px"><strong>Como usar:</strong> Cliente vai até farmácia credenciada → Informa que é cliente Agibank-ePharma → Atendente busca pelo CPF → Desconto aplicado automaticamente</p>
+        </div>
+      </div>
+
+      <div class="alert-box info">
+        <div class="icon">⚠</div>
+        <div class="txt"><strong>Importante:</strong> A telemedicina é para orientação e atendimento clínico <em>não emergencial</em>. Em casos de emergência, o cliente deve procurar imediatamente um pronto-socorro.</div>
+      </div>
+    </div>
+    <span class="pageno">05 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 5: ASSISTÊNCIA RESIDENCIAL ══════════ -->
+  <section class="slide" id="s5">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 05</div>
+        <h2>Assistência <span>Residencial</span></h2>
+      </div>
+      <div class="meta">Plus e Premium</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">🏠</span>Assistência Residencial Plus (Todos os Planos)</h3>
+        <p>Cobertura de <strong>mão de obra emergencial</strong> para sua casa. Limite de até <strong>R$ 200 por evento</strong>, com até <strong>2 acionamentos por ano</strong> em cada serviço.</p>
+      </div>
+
+      <div class="two-cols">
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">🔑</div>
+          <div class="benefit-content">
+            <h4>Chaveiro (24h)</h4>
+            <p><strong>Quando acionar:</strong> Você pode pedir este serviço se não conseguir entrar ou sair da sua casa por causa da fechadura ou pode pedir ajuda se uma criança, idoso ou pessoa com deficiência estiver preso em algum cômodo.</p>
+            <p style="margin-top:6px"><strong>O chaveiro pode te ajudar:</strong> Abrir fechaduras de portas ou portões (exceto fechaduras eletrônicas), consertar a fechadura ou trocar o miolo da fechadura, se for necessário, fazer uma nova chave (simples ou tetra) quando não existir nenhuma cópia da chave.</p>
+            <p style="margin-top:6px"><strong>Carência:</strong> 30 dias</p>
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">🚰</div>
+          <div class="benefit-content">
+            <h4>Encanador (24h)</h4>
+            <p><strong>Quando acionar:</strong> Vazamentos urgentes ou entupimentos na residência.</p>
+            <p style="margin-top:6px"><strong>Cobre:</strong> Contenção/reparo em tubulações aparentes, torneiras, sifões, chuveiros, pias, vasos sanitários.</p>
+            <p style="margin-top:6px"><strong>Carência:</strong> 30 dias</p>
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">⚡</div>
+          <div class="benefit-content">
+            <h4>Eletricista (24h)</h4>
+            <p><strong>Quando acionar:</strong> Situações urgentes na parte elétrica da residência.</p>
+            <p style="margin-top:6px"><strong>Cobre:</strong> Troca de tomadas, interruptores, disjuntores, fusíveis, restabelecimento após sobrecarga.</p>
+            <p style="margin-top:6px"><strong>Carência:</strong> 30 dias</p>
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">🪟</div>
+          <div class="benefit-content">
+            <h4>Vidraceiro (24h)</h4>
+            <p><strong>Quando acionar:</strong> Quebra de vidros de portas/janelas externas.</p>
+            <p style="margin-top:6px"><strong>Cobre:</strong> Mão de obra + material (vidro liso/canelado até 3mm) ou tapume emergencial.</p>
+            <p style="margin-top:6px"><strong>Carência:</strong> 30 dias</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert-box">
+        <div class="icon">⚠</div>
+        <div class="txt"><strong>Regra de Ouro:</strong> Todos os serviços cobrem <em>mão de obra</em> até o limite estipulado. Materiais e peças são de responsabilidade do cliente (exceto vidro básico no vidraceiro).</div>
+      </div>
+    </div>
+    <span class="pageno">06 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 6: ASSISTÊNCIA RESIDENCIAL PREMIUM ══════════ -->
+  <section class="slide" id="s6">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 06</div>
+        <h2>Assistência Residencial <span>Premium</span></h2>
+      </div>
+      <div class="meta">Apenas Plano Completo</div>
+    </div>
+    <div class="scontent">
+      <div class="alert-box success">
+        <div class="icon">⭐</div>
+        <div class="txt"><strong>Exclusivo do Plano Completo:</strong> Além dos serviços Plus, o cliente tem acesso a conserto de linha branca, limpeza de caixa d'água e pacote sênior completo.</div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon">🔧</div>
+        <div class="benefit-content">
+          <h4>Conserto de Eletrodomésticos (Linha Branca)</h4>
+          <p><strong>Limite:</strong> Até R$ 300 por evento | <strong>Uso:</strong> 1x por ano | <strong>Carência:</strong> 60 dias</p>
+          <p style="margin-top:8px"><strong>O que cobre:</strong> Mão de obra para conserto de geladeira, freezer, fogão, cooktop, forno elétrico, micro-ondas, air fryer, máquina de lavar, lava e seca, lava-louças.</p>
+          <p style="margin-top:8px"><strong>Regras:</strong> Aparelho com até 6 anos de uso (comprovado por nota fiscal ou nº de série). Cliente compra a peça, plano paga a mão de obra. Agendamento com 24h de antecedência.</p>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon">💧</div>
+        <div class="benefit-content">
+          <h4>Limpeza de Caixa D'água</h4>
+          <p><strong>Limite:</strong> Até R$ 400 por evento | <strong>Uso:</strong> 1x por ano | <strong>Carência:</strong> 90 dias</p>
+          <p style="margin-top:8px"><strong>O que cobre:</strong> Mão de obra para limpeza de até 2 caixas d'água por residência (tamanho máximo: 1.500 litros por caixa). Exclusivo para casas (não atende apartamentos).</p>
+        </div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">👴</span>Pacote Sênior (Plano Completo)</h3>
+        <p>Serviços pensados para o cuidado e bem-estar de pessoas idosas:</p>
+        <ul>
+          <li><strong>Desconto em Medicamentos:</strong> 20% a 80% em farmácias credenciadas (uso ilimitado, sem carência)</li>
+          <li><strong>Cuidador (Reembolso):</strong> Até R$ 250/diária (máximo 3 diárias, 1x/ano) em caso de acidente/doença que exija repouso (carência 90 dias)</li>
+          <li><strong>Suporte Digital Especialista:</strong> Atendimento remoto para configurar celular, instalar apps, dicas anti-fraude (até R$ 200, 2x/ano, carência 30 dias)</li>
+          <li><strong>Adaptação de Ambientes:</strong> Instalação de até 2 barras de apoio, olho mágico, fechadura, fixação de quadros/prateleiras (até R$ 300, 1x/ano, carência 60 dias)</li>
+        </ul>
+      </div>
+    </div>
+    <span class="pageno">07 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 7: ASSISTÊNCIA PET ══════════ -->
+  <section class="slide" id="s7">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 07</div>
+        <h2>Assistência <span>Pet</span></h2>
+      </div>
+      <div class="meta">Planos Na Medida e Completo</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">🐾</span>O que é a Assistência Pet?</h3>
+        <p>Cobertura de custos com assistência médica veterinária para <strong>cães e gatos</strong> em casos de <strong>urgência e emergência</strong>, com atendimento 24 horas por dia. Abrangência nacional.</p>
+        <p style="margin-top:8px"><strong>Carência:</strong> 30 dias para todas as coberturas</p>
+      </div>
+
+      <div class="two-cols">
+        <div class="benefit-card">
+          <div class="benefit-icon green">🏥</div>
+          <div class="benefit-content">
+            <h4>Consulta Veterinária Emergencial</h4>
+            <p><strong>Limite:</strong> Até R$ 150 por evento</p>
+            <p><strong>Uso:</strong> 2x por ano</p>
+            <p style="margin-top:6px">Atendimento emergencial em clínica parceira em caso de acidente ou doença aguda. Reembolso mediante nota fiscal e laudo veterinário.</p>
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon green">🕊️</div>
+          <div class="benefit-content">
+            <h4>Assistência Funeral Pet</h4>
+            <p><strong>Limite:</strong> Até R$ 500</p>
+            <p><strong>Uso:</strong> 1x por ano</p>
+            <p style="margin-top:6px">Organização do funeral (cremação ou enterro), indicação de local para o serviço, reembolso conforme disponibilidade na rede.</p>
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon green">📱</div>
+          <div class="benefit-content">
+            <h4>Tele Consulta Veterinária (24h)</h4>
+            <p><strong>Uso:</strong> Ilimitado</p>
+            <p><strong>Carência:</strong> 24 horas</p>
+            <p style="margin-top:6px">Orientação veterinária online imediata, disponível 24h/dia, 7 dias/semana, por chat ou vídeo chamada.</p>
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon green">🔍</div>
+          <div class="benefit-content">
+            <h4>Serviços de Conveniência</h4>
+            <p><strong>Uso:</strong> Ilimitado</p>
+            <p style="margin-top:6px">Orientação e agendamento em clínicas, indicação de farmácias pets, agendamento com 24h de antecedência. <em>Custos por conta do cliente.</em></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert-box">
+        <div class="icon">🚨</div>
+        <div class="txt"><strong>Exclusões Importantes:</strong> NÃO são cobertas doenças preexistentes, crônicas ou congênitas. Também não cobre tratamentos odontológicos, castração, gravidez/parto, check-up de rotina, vacinas, procedimentos estéticos (tosa, banho).</div>
+      </div>
+
+      <div class="alert-box info">
+        <div class="icon">📞</div>
+        <div class="txt"><strong>Como acionar:</strong> Central 24h: <strong>0800-717-3333</strong> | WhatsApp: (11) 3288-2526. Cliente DEVE ligar antes de ir à clínica. Atendimentos sem aprovação prévia não serão reembolsados.</div>
+      </div>
+    </div>
+    <span class="pageno">08 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 8: ASSISTÊNCIA ODONTO ══════════ -->
+  <section class="slide" id="s8">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 08</div>
+        <h2>Assistência <span>Odontológica</span></h2>
+      </div>
+      <div class="meta">SOS Odonto (Básico e Na Medida)</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">🦷</span>Assistência Odonto (SOS Odonto)</h3>
+        <p>Plano odontológico operado pela <strong>Sempre Odonto</strong> (registro ANS nº 41465-4), com rede credenciada nacional e teleorientação odontológica 24 horas. Disponível nos <strong>Planos Básico e Na Medida</strong>.</p>
+        <p style="margin-top:8px"><strong>Carência:</strong> Não há carência para atendimento de urgência/emergência</p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon purple">📞</div>
+        <div class="benefit-content">
+          <h4>Teleorientação 24 Horas</h4>
+          <p>Atendimento de orientação odontológica disponível 24 horas, exclusivo para usuários ativos. Acionado pela central da Sempre Odonto: <strong>0800-748-7848</strong></p>
+          <p style="margin-top:8px">Serviço pessoal e intransferível ao titular do plano aderido.</p>
+        </div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">✅</span>O que é coberto em urgência e emergência?</h3>
+        <ul>
+          <li>Atendimentos de urgência e emergência por dor (odontalgia) e hemorragias</li>
+          <li>Curativo em hemorragia bucal</li>
+          <li>Tratamento de pulpite/necrose</li>
+          <li>Imobilização dentária temporária</li>
+          <li>Recimentação de peça protética</li>
+          <li>Tratamento de alveolite</li>
+          <li>Colagem de fragmentos</li>
+          <li>Drenagem de abscesso</li>
+          <li>Reimplante de dente avulsionado</li>
+        </ul>
+      </div>
+
+      <div class="alert-box info">
+        <div class="icon">🌐</div>
+        <div class="txt"><strong>Rede Credenciada:</strong> Disponível em <strong>www.sempreodonto.com.br</strong> ou no App Sempre Odonto (iOS e Android). Cliente faz login com CPF e acessa carteirinha digital.</div>
+      </div>
+
+      <div class="alert-box">
+        <div class="icon">❌</div>
+        <div class="txt"><strong>Exclusões:</strong> Procedimentos fora do rol da ANS, tratamentos estéticos, próteses/órteses estéticas, implantes, manutenção e documentação ortodôntica, medicamentos para uso domiciliar.</div>
+      </div>
+    </div>
+    <span class="pageno">09 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 9: PLANO ODONTO ESPECIAL ══════════ -->
+  <section class="slide" id="s9">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 09</div>
+        <h2>Plano Odonto <span>Especial</span></h2>
+      </div>
+      <div class="meta">Apenas Plano Completo</div>
+    </div>
+    <div class="scontent">
+      <div class="alert-box success">
+        <div class="icon">⭐</div>
+        <div class="txt"><strong>Exclusivo do Plano Completo:</strong> Plano odontológico mais completo, com cobertura ampliada para <strong>mais de 200 procedimentos</strong>, incluindo prevenção, raio-X e tratamento de canal.</div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">🦷</span>O que muda da Assistência Odonto para o Plano Especial?</h3>
+        <p>O Plano Especial amplia a cobertura para <strong>mais de 200 procedimentos</strong>, incluindo:</p>
+        <ul>
+          <li><strong>Prevenção:</strong> Limpeza (profilaxia), remoção de tártaro, aplicação de flúor</li>
+          <li><strong>Dentística:</strong> Restaurações (obturações) em resina ou amálgama</li>
+          <li><strong>Endodontia:</strong> Tratamento e retratamento de canal (dentes de 1, 2 ou 3+ raízes)</li>
+          <li><strong>Periodontia:</strong> Tratamento de gengivite e periodontite, raspagem de tártaro</li>
+          <li><strong>Cirurgia:</strong> Extrações de dentes (incluindo sisos inclusos/impactados), biópsias, remoção de cistos</li>
+          <li><strong>Odontopediatria:</strong> Tratamento completo para crianças (coroas de acetato/aço para dentes de leite)</li>
+          <li><strong>Radiologia:</strong> Raio-X periapical, bite-wing, panorâmico</li>
+        </ul>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">💰</span>Procedimentos COM FRANQUIA (Coparticipação)</h3>
+        <p>Para alguns procedimentos, o plano oferece cobertura, mas o cliente paga um valor (franquia) diretamente ao dentista. O valor é tabelado e muito mais barato que o particular:</p>
+        <ul>
+          <li><strong>Radiologia Especial:</strong> Levantamento radiográfico e radiografia panorâmica</li>
+          <li><strong>Próteses Dentárias:</strong> Coroas (metálicas, cerômero, policarbonato), pinos pré-fabricados, núcleos metálicos, recimentação de próteses</li>
+        </ul>
+      </div>
+
+      <div class="alert-box">
+        <div class="icon">❌</div>
+        <div class="txt"><strong>Principais Exclusões:</strong> Implantes dentários, aparelho ortodôntico, estética (clareamento, facetas, lentes de contato), próteses em materiais nobres (ouro, porcelana pura).</div>
+      </div>
+
+      <div class="alert-box info">
+        <div class="icon">📋</div>
+        <div class="txt"><strong>Abrangência:</strong> Nacional. Duração: 12 meses com renovação automática. Sem fidelidade (cliente pode cancelar quando quiser).</div>
+      </div>
+    </div>
+    <span class="pageno">10 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 10: ASSISTÊNCIA FUNERAL ══════════ -->
+  <section class="slide" id="s10">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 10</div>
+        <h2>Assistência <span>Funeral</span></h2>
+      </div>
+      <div class="meta">Todos os Planos</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">🕊️</span>Assistência Funeral e Apoio ao Luto</h3>
+        <p>Apoio completo à família em um momento delicado: assistência funeral individual, vale cesta básica em caso de morte acidental e apoio emocional pós-luto. Prestados pela <strong>Memorial International</strong>. Disponível em todos os planos. Importante: Para essa assistência funcionar, o familiar deve fazer o contato no ato, para que os tramites funerários sejam realizados. Se pagar por conta e pedir reembolso depois, não vai conseguir reembolso.</p>
+        <p style="margin-top:8px"><strong>Limite:</strong> Até R$ 5.000 | <strong>Abrangência:</strong> Nacional</p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon">🕊️</div>
+        <div class="benefit-content">
+          <h4>O que a assistência funeral cobre?</h4>
+          <p>Em caso de falecimento do titular do plano aderido, a assistência organiza e custeia o funeral dentro do limite do plano, incluindo:</p>
+          <ul style="margin-top:8px;padding-left:20px">
+            <li>Taxas e preparação do corpo</li>
+            <li>Sepultamento ou cremação</li>
+            <li>Sala de velório</li>
+            <li>Urna e ornamentação</li>
+            <li>Traslado do corpo no Brasil</li>
+            <li>Apoio para o registro de óbito</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="two-cols">
+        <div class="benefit-card">
+          <div class="benefit-icon green">🛒</div>
+          <div class="benefit-content">
+            <h4>Vale Cesta Básica</h4>
+            <p>Em caso de <strong>morte acidental</strong> do titular, a família tem direito a uma cesta básica no valor de <strong>R$ 300</strong>, que pode ser recebida como cartão benefício (para compra de itens de alimentação) ou como crédito em conta corrente.</p>
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon purple">💚</div>
+          <div class="benefit-content">
+            <h4>Apoio Emocional Pós-Luto</h4>
+            <p>A família tem acesso a acompanhamento com profissionais qualificados, com escuta acolhedora e orientação psicológica para ajudar no processo de luto e no reequilíbrio emocional.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert-box info">
+        <div class="icon">📞</div>
+        <div class="txt"><strong>Como acionar:</strong> Central 24h: <strong>0800 000 5663</strong> (Memorial International). Após o falecimento, um familiar deve entrar em contato. O serviço deve ser feito pela empresa indicada — funerais contratados por fora não são reembolsados.</div>
+      </div>
+
+      <div class="alert-box">
+        <div class="icon">⏰</div>
+        <div class="txt"><strong>Carência:</strong> Embora não haja carência quando o falecimento decorre de acidente pessoal, existe limite de idade que é até 80 anos. A exceção é o suicídio, que tem carência de <strong>24 meses</strong>.</div>
+      </div>
+    </div>
+    <span class="pageno">11 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 11: CRÉDITOS E CASHBACK ══════════ -->
+  <section class="slide" id="s11">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 11</div>
+        <h2>Créditos e <span>Cashback</span></h2>
+      </div>
+      <div class="meta">O Plano se Paga</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">💰</span>Como funcionam os créditos mensais?</h3>
+        <p>Todo mês, o valor da assinatura volta para o cliente em forma de <strong>créditos</strong> que podem ser trocados por <strong>cupons de desconto</strong> em grandes parceiros.</p>
+      </div>
+
+      <div class="three-cols">
+        <div class="plan-card">
+          <div class="plan-name">Básico</div>
+          <div class="plan-price">R$ 100</div>
+          <div class="plan-period">em créditos/mês</div>
+        </div>
+        <div class="plan-card">
+          <div class="plan-name">Na Medida</div>
+          <div class="plan-price">R$ 120</div>
+          <div class="plan-period">em créditos/mês</div>
+        </div>
+        <div class="plan-card" style="border-color:var(--azul);border-width:3px">
+          <div class="plan-name" style="color:var(--azul)">Completo</div>
+          <div class="plan-price">R$ 150</div>
+          <div class="plan-period">em créditos/mês</div>
+        </div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">🎁</span>Onde o cliente pode usar os créditos?</h3>
+        <p>Os créditos podem ser trocados por cupons de desconto em:</p>
+      </div>
+
+      <div class="two-cols">
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">🛒</div>
+          <div class="benefit-content">
+            <h4>Supermercados e Varejo</h4>
+            <p>Cupons de desconto para compras em grandes redes de supermercados e lojas de varejo.</p>
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">🚗</div>
+          <div class="benefit-content">
+            <h4>Transporte e Mobilidade</h4>
+            <p>Descontos em apps de transporte (Uber, 99, etc) e aplicativos de mobilidade urbana.</p>
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">🍔</div>
+          <div class="benefit-content">
+            <h4>Delivery e Alimentação</h4>
+            <p>Cupons para apps de delivery de comida (iFood, Rappi, etc) e redes de fast-food.</p>
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">🎬</div>
+          <div class="benefit-content">
+            <h4>Lazer e Entretenimento</h4>
+            <p>Descontos em cinemas, streaming, eventos e experiências de lazer.</p>
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">🔥</div>
+          <div class="benefit-content">
+            <h4>AppGás</h4>
+            <p>Desconto em gás de cozinha com entrega em casa pelo aplicativo AppGás.</p>
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">📱</div>
+          <div class="benefit-content">
+            <h4>Serviços Diversos</h4>
+            <p>Descontos em serviços de telefonia, internet, academias e muito mais.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert-box success">
+        <div class="icon">💡</div>
+        <div class="txt"><strong>Argumento de Venda:</strong> "Você se protege e o plano praticamente se paga! Os R$ 59,90 do Completo voltam como R$ 150 em créditos para você usar em supermercado, Uber, iFood e muito mais."</div>
+      </div>
+    </div>
+    <span class="pageno">12 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 12: ARGUMENTOS DE VENDA ══════════ -->
+  <section class="slide" id="s12">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 12</div>
+        <h2>Argumentos de <span>Venda</span></h2>
+      </div>
+      <div class="meta">Como Vender Cada Plano</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">🎯</span>Pitch Principal (Use para Todos os Planos).</h3> 
+        <p style="font-size:.95rem;line-height:1.7;font-style:italic;color:var(--azul-escuro)">
+          "O AGI+ é um clube de benefícios que protege você e sua família. Por menos de R$ 2 por dia, você tem acesso a telemedicina 24h, desconto em consultas e medicamentos, plano odontológico, assistência para sua casa e até para o seu pet. E o melhor: todo mês você recebe créditos de volta para usar em supermercado, Uber, iFood e muito mais. É assistência completa que, praticamente, se paga!"
+        </p> Atenção, não é todo mês que o cliente terá descontos nos mesmos parceiros.
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">💬</span>Argumentos Específicos por Plano</h3>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon">1</div>
+        <div class="benefit-content">
+          <h4>Plano Básico (R$ 39,90)</h4>
+          <p><strong>Para quem:</strong> Cliente que quer assistências básicas, com baixo investimento</p>
+          <p style="margin-top:8px"><strong>Argumento:</strong> "Por menos de R$ 40 por mês, você tem telemedicina 24h (nunca mais pagar consulta particular de emergência), desconto em farmácia, socorro para sua casa e ainda recebe R$ 100 em créditos de volta. É um conjunto de assistências, por menos de R$ 1,30 por dia!"</p>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon green">2</div>
+        <div class="benefit-content">
+          <h4>Plano Na Medida (R$ 49,90)</h4>
+          <p><strong>Para quem:</strong> Cliente que tem pet e quer assistência veterinária</p>
+          <p style="margin-top:8px"><strong>Argumento:</strong> "Se você tem cachorro ou gato, esse plano é perfeito. Além de tudo do Básico, você tem assistência veterinária 24h, teleconsulta ilimitada com veterinário e até funeral pet. Uma consulta de emergência no veterinário custa mais de R$ 300 — com o plano, você está protegido. E ainda recebe R$ 120 em créditos mensais!"</p>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon purple">3</div>
+        <div class="benefit-content">
+          <h4>Plano Completo (R$ 59,90) ⭐</h4>
+          <p><strong>Para quem:</strong> Cliente que quer assistência total (o mais vendido)</p>
+          <p style="margin-top:8px"><strong>Argumento:</strong> "Esse é o plano mais completo e o mais vendido. Além de tudo do Na Medida, você ganha um plano odontológico completo (com mais de 200 procedimentos, incluindo limpeza, canal e extração), conserto de eletrodomésticos, limpeza de caixa d'água e pacote sênior. Um único tratamento de canal no particular custa mais de R$ 1.000 — com o plano, você está coberto. E ainda recebe R$ 150 em créditos mensais. É o melhor custo-benefício!"</p>
+        </div>
+      </div>
+    </div>
+    <span class="pageno">13 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 13: CONTORNANDO OBJEÇÕES ══════════ -->
+  <section class="slide" id="s13">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 13</div>
+        <h2>Contornando <span>Objeções</span></h2>
+      </div>
+      <div class="meta">Respostas Prontas</div>
+    </div>
+    <div class="scontent">
+      <div class="faq-item">
+        <div class="faq-q">"Eu já tenho plano de saúde"</div>
+        <div class="faq-a">
+          "Que bom! Mas o AGI+ não é um plano de saúde, é um clube de benefícios que <strong>complementa</strong> o que você já tem. Por exemplo: seu plano de saúde cobre dentista? E se sua geladeira quebrar ou você ficar trancado fora de casa? O AGI+ resolve essas situações por menos de R$ 2 por dia. E você ainda recebe créditos de volta para usar em supermercado e Uber."
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">"Eu não vou ao médico, sou saudável"</div>
+        <div class="faq-a">
+          "Perfeito! Mas o AGI+ não é só para quem está doente. É para quem quer <strong>prevenção e assistência</strong>. Você tem desconto em farmácia (se tomar algum remédio, já economiza), socorro para sua casa 24h (chaveiro, encanador, eletricista), plano odontológico e ainda recebe créditos mensais. Você torce para não usar, mas fica tranquilo sabendo que está protegido."
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">"Tem carência?"</div>
+        <div class="faq-a">
+          "O AGI+ não tem fidelidade, você pode cancelar quando quiser. Algumas assistências têm carência (por exemplo, 30 dias para chaveiro, 60 dias para linha branca), mas a telemedicina e os descontos em farmácia você pode usar assim que o plano estiver ativo. E a assistência odontológica de urgência não tem carência!"
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">"Eu não tenho pet, o plano Na Medida não serve para mim"</div>
+        <div class="faq-a">
+          "Sem problema! Se você não tem pet, o <strong>Plano Básico</strong> (R$ 39,90) ou o <strong>Plano Completo</strong> (R$ 59,90) são perfeitos para você. O Completo é o mais vendido porque tem plano odontológico completo, conserto de eletrodomésticos e pacote sênior. E você recebe R$ 150 em créditos mensais!"
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">"O valor é muito alto"</div>
+        <div class="faq-a">
+          "Eu entendo. Mas vamos fazer as contas: o Plano Completo custa R$ 59,90 por mês, mas você recebe R$ 150 em créditos de volta. Ou seja, você gasta R$ 59,90 e recebe R$ 150 para usar em supermercado, Uber, iFood. Praticamente o plano se paga! E você ainda tem telemedicina, plano odontológico, socorro para casa e muito mais. É menos de R$ 2 por dia para ter assistências completas para seu dia a dia."
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">"Posso colocar minha família?"</div>
+        <div class="faq-a">
+          "A assinatura do AGI+ é individual e vinculada ao seu CPF. Isso garante que você tenha acesso imediato a todas as assistências sem burocracia. Se outra pessoa da família quiser, ela pode assinar o próprio plano também."
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">"Tem limite de idade?"</div>
+        <div class="faq-a">
+          "Não! Qualquer pessoa pode assinar o AGI+, não importa a idade. E o melhor: o valor não aumenta com o tempo. Você paga o mesmo valor sempre."
+        </div>
+      </div>
+    </div>
+    <span class="pageno">14 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 14: REGRAS IMPORTANTES ══════════ -->
+  <section class="slide" id="s14">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 14</div>
+        <h2>Regras <span>Importantes</span></h2>
+      </div>
+      <div class="meta">O que o Cliente Precisa Saber</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">📋</span>Elegibilidade e Uso</h3>
+        <ul>
+          <li><strong>Quem pode assinar:</strong> Qualquer pessoa, sem limite de idade</li>
+          <li><strong>Quem pode usar:</strong> O titular do plano (elegibilidade validada pelo CPF)</li>
+          <li><strong>Dependentes:</strong> Não é possível adicionar dependentes (assinatura individual)</li>
+          <li><strong>Abrangência:</strong> Nacional (todas as assistências valem em todo o Brasil)</li>
+          <li><strong>Vigência:</strong> Contínua enquanto o cliente estiver em dia com o pagamento</li>
+        </ul>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">⏰</span>Carências e Prazos</h3>
+        <ul>
+          <li><strong>Início de vigência:</strong> 24 horas após contratação</li>
+          <li><strong>Sem carência:</strong> Telemedicina, descontos em farmácia, assistência odonto de urgência</li>
+          <li><strong>30 dias:</strong> Chaveiro, encanador, eletricista, vidraceiro, assistência pet, suporte digital</li>
+          <li><strong>60 dias:</strong> Conserto linha branca, adaptação de ambientes</li>
+          <li><strong>90 dias:</strong> Limpeza de caixa d'água, cuidador</li>
+          <li><strong>24 meses:</strong> Assistência funeral em caso de suicídio</li>
+        </ul>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">💳</span>Pagamento e Cancelamento</h3>
+        <ul>
+          <li><strong>Forma de pagamento:</strong> Débito em conta (mensalidade fixa). Nesse momento a oferta está centrada em clientes domiciliados.</li>
+          <li><strong>Inadimplência:</strong> Serviços ficam indisponíveis até regularização</li>
+          <li><strong>Cancelamento:</strong> Sem fidelidade (cliente pode cancelar quando quiser)</li>
+          <li><strong>Reembolso:</strong> Não há reembolso de mensalidades já pagas</li>
+        </ul>
+      </div>
+
+      <div class="alert-box">
+        <div class="icon">⚠</div>
+        <div class="txt"><strong>Regra de Ouro do Acionamento:</strong> Cliente DEVE SEMPRE LIGAR para a central da assistência ANTES de contratar qualquer profissional por conta própria. Serviços feitos sem autorização prévia da central não são reembolsados!</div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">📞</span>Como Acionar as Assistências</h3>
+        <p>Todas as assistências têm canal oficial (telefone ou WhatsApp) informado no <strong>app AGI+</strong>. O cliente deve:</p>
+        <ol style="padding-left:20px;margin-top:8px;font-size:.88rem;line-height:1.7">
+          <li>Abrir o app AGI+</li>
+          <li>Escolher a assistência que precisa</li>
+          <li>Usar o canal oficial indicado no card do serviço</li>
+          <li>Ter em mãos o CPF do titular para confirmar elegibilidade</li>
+        </ol>
+      </div>
+    </div>
+    <span class="pageno">15 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 15: FAQ PARTE 1 ══════════ -->
+  <section class="slide" id="s15">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 15</div>
+        <h2>Perguntas <span>Frequentes</span></h2>
+      </div>
+      <div class="meta">FAQ Parte 1</div>
+    </div>
+    <div class="scontent">
+      <div class="faq-item">
+        <div class="faq-q">O que é o AGI+? Ele é um plano de saúde?</div>
+        <div class="faq-a">
+          Não, o AGI+ não é um plano de saúde tradicional e nem um seguro. Ele é um clube de benefícios por assinatura. Pagando um valor mensal acessível, você tem acesso a diversos serviços para facilitar sua vida, como telemedicina 24h, desconto em consultas médicas presenciais, desconto em medicamentos, plano odontológico, suporte para sua casa e até assistência pet. Tudo sem as burocracias e as altas mensalidades de um plano comum.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Qual a diferença entre a Assistência Odonto e o Plano Odonto?</div>
+        <div class="faq-a">
+          A Assistência Odonto (Planos Básico e Na Medida) serve para socorrer você em emergências rápidas (como teleorientação 24h para dor aguda ou traumas). Já o Plano Odonto Especial (disponível no Plano Completo) oferece tratamentos presenciais em clínicas credenciadas, cobrindo limpeza, raio-x, extrações, tratamento de canal e mais de 200 procedimentos.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Quando minhas assistências começam a valer?</div>
+        <div class="faq-a">
+          Suas assistências passam a valer às 24 horas pós contratação do plano. Algumas coberturas também têm carência específica (por exemplo, 30, 60 ou 90 dias). O detalhe de cada uma está nas Condições Gerais do seu plano.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Preciso pagar e pedir reembolso depois?</div>
+        <div class="faq-a">
+          Não. Na maioria dos casos você não paga nada adiantado: o serviço é prestado diretamente pela rede de parceiros, dentro dos limites do seu plano. O reembolso é tratado em casos de exceção e só ocorre em situações específicas, sempre com aprovação prévia da central. Se o valor do serviço ultrapassar o limite do plano, a diferença é paga por você diretamente ao prestador.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">As assistências valem em todo o Brasil?</div>
+        <div class="faq-a">
+          Sim, a abrangência é nacional. Em alguns serviços, o prazo de atendimento pode variar entre capitais e interior, e a disponibilidade depende de haver prestador na sua região.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Posso usar quantas vezes quiser?</div>
+        <div class="faq-a">
+          Cada serviço tem um número de acionamentos e um limite financeiro por evento e por período. Por exemplo: chaveiro, encanador, eletricista e vidraceiro têm limite de R$ 200 por evento, com até 2 acionamentos por ano. Confira o limite de cada serviço no app AGI+ ou nas Condições Gerais.
+        </div>
+      </div>
+    </div>
+    <span class="pageno">16 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 16: FAQ PARTE 2 ══════════ -->
+  <section class="slide" id="s16">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 16</div>
+        <h2>Perguntas <span>Frequentes</span></h2>
+      </div>
+      <div class="meta">FAQ Parte 2</div>
+    </div>
+    <div class="scontent">
+      <div class="faq-item">
+        <div class="faq-q">Como funcionam os créditos que eu recebo todo mês?</div>
+        <div class="faq-a">
+          Todo mês, o valor da sua assinatura volta para você em forma de créditos (de R$ 100 a R$ 150, dependendo do seu plano). Você pode trocar esses créditos por cupons de desconto em grandes parceiros, como supermercados, aplicativos de transporte, delivery de comida, lazer e serviços. Ou seja, você se protege e o plano praticamente se paga.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Como faço para usar a telemedicina e os descontos em farmácia?</div>
+        <div class="faq-a">
+          É muito fácil. Assim que a sua assinatura estiver ativa, você usa tudo pelo celular. Para a telemedicina, basta acessar nosso portal (agibank.doctorone.com/pt) e, em média, em 30 segundos um clínico geral atende você. Para os descontos em medicamentos (que chegam a até 80%), basta apresentar seu CPF nas farmácias credenciadas ou consultar as ofertas direto no aplicativo.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">A assistência para a minha casa cobre o quê?</div>
+        <div class="faq-a">
+          Todos os planos oferecem o socorro residencial básico (Plus), que inclui chaveiro, encanador, eletricista e vidraceiro 24h para emergências (com cobertura da mão de obra até R$ 200 por evento, 2x/ano). Se você escolher o Plano Completo, também terá cobertura para conserto de eletrodomésticos (geladeira, fogão, máquina de lavar), limpeza de caixa d'água e serviços de adaptação e suporte para a melhor idade.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Posso colocar dependentes na minha assinatura?</div>
+        <div class="faq-a">
+          Não. A assinatura do AGI+ é individual e vinculada ao seu CPF. Isso garante que você tenha acesso imediato a todas as suas assistências de saúde, odontológicas e residenciais sem burocracia.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Existe carência ou tempo mínimo de permanência?</div>
+        <div class="faq-a">
+          O AGI+ não tem fidelidade. Você pode cancelar sua assinatura quando quiser. Algumas assistências têm carência (30, 60 ou 90 dias), mas a telemedicina, descontos em farmácia e assistência odonto de urgência você pode usar assim que o plano estiver ativo (24 horas após contratação).
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Mudei de endereço. Preciso avisar?</div>
+        <div class="faq-a">
+          Sim. Mantenha seus dados atualizados no app do Agibank para que todas as assistências tenham as informações de endereço correto.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">O que acontece se eu atrasar a mensalidade?</div>
+        <div class="faq-a">
+          O plano contratado fica vigente enquanto você estiver em dia com o pagamento. Em caso de inadimplência, os serviços ficarão indisponíveis até a regularização, conforme as regras de cada cobertura.
+        </div>
+      </div>
+    </div>
+    <span class="pageno">17 · 18</span>
+  </section>
+
+  <!-- ══════════ SLIDE 17: ENCERRAMENTO ══════════ -->
+  <section class="slide" id="s17">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Encerramento</div>
+        <h2>Você está <span>Pronto!</span></h2>
+      </div>
+      <div class="meta">Próximos Passos</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">✅</span>O que você aprendeu hoje</h3>
+        <ul>
+          <li><strong>Conceito:</strong> AGI+ é um clube de benefícios por assinatura, não é plano de saúde</li>
+          <li><strong>3 Planos:</strong> Básico (R$ 39,90), Na Medida (R$ 49,90) e Completo (R$ 59,90)</li>
+          <li><strong>Assistências:</strong> Médica, Residencial, Pet, Odonto, Funeral e Créditos</li>
+          <li><strong>Cashback:</strong> Cliente recebe de R$ 100 a R$ 150 em créditos mensais</li>
+          <li><strong>Argumentos:</strong> Como vender cada plano e contornar objeções</li>
+          <li><strong>Regras:</strong> Carências, limites, acionamentos e elegibilidade</li>
+          <li><strong>FAQs:</strong> Principais dúvidas dos clientes</li>
+        </ul>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">🎯</span>Dicas Finais de Venda</h3>
+        <ul>
+          <li><strong>Foque no custo-benefício:</strong> "Você paga R$ 59,90 e recebe R$ 150 em créditos de volta"</li>
+          <li><strong>Use exemplos práticos:</strong> "Um tratamento de canal no particular custa mais de R$ 1.000"</li>
+          <li><strong>Seja transparente:</strong> Explique carências e limites para evitar frustrações</li>
+          <li><strong>Reforce as assistências:</strong> "Você torce para não usar, mas fica tranquilo sabendo que poderá contar com as assistências."</li>
+          <li><strong>Ofereça o Completo:</strong> É o mais vendido e tem o melhor custo-benefício</li>
+        </ul>
+      </div>
+
+      <div class="alert-box success">
+        <div class="icon">💚</div>
+        <div class="txt"><strong>Lembre-se:</strong> O AGI+ foi criado para ser <em>acessível, completo e sem burocracia</em>. Estamos oferecendo assistência, cuidado e economia para o cliente. Em toda ocasião, seja confiante e mostre o valor do produto!</div>
+      </div>
+
+      <div class="sec-block" style="text-align:center;padding:32px 24px">
+        <h3 style="font-size:1.8rem;color:var(--azul);margin-bottom:16px">Parabéns! 🎉</h3>
+        <p style="font-size:1.1rem;color:var(--body-text);font-weight:600">Você concluiu o treinamento do Clube de Benefícios AGI+.</p>
+        <p style="font-size:.9rem;color:var(--gray-text);margin-top:8px">Agora é hora de colocar em prática e vender muito!</p>
+      </div>
+    </div>
+    <span class="pageno">18 · 18</span>
+  </section>
+
+</div><!-- end stage -->
+
+<!-- NAV -->
+<div class="nav">
+  <button id="prev">‹</button>
+  <div class="dots">
+    <span class="dot on" data-i="0"></span>
+    <span class="dot" data-i="1"></span>
+    <span class="dot" data-i="2"></span>
+    <span class="dot" data-i="3"></span>
+    <span class="dot" data-i="4"></span>
+    <span class="dot" data-i="5"></span>
+    <span class="dot" data-i="6"></span>
+    <span class="dot" data-i="7"></span>
+    <span class="dot" data-i="8"></span>
+    <span class="dot" data-i="9"></span>
+    <span class="dot" data-i="10"></span>
+    <span class="dot" data-i="11"></span>
+    <span class="dot" data-i="12"></span>
+    <span class="dot" data-i="13"></span>
+    <span class="dot" data-i="14"></span>
+    <span class="dot" data-i="15"></span>
+    <span class="dot" data-i="16"></span>
+    <span class="dot" data-i="17"></span>
+  </div>
+  <button id="next">›</button>
+</div>
+<div class="kb-hint">← → NAVEGAR</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const dots=[...document.querySelectorAll('.dot')];
+  let cur=0;
+  
+  function fit(){
+    const s=Math.min(window.innerWidth/1280,window.innerHeight/720);
+    slides.forEach(el=>el.style.transform=`scale(${s})`);
+  }
+  
+  function show(i){
+    cur=(i+slides.length)%slides.length;
+    slides.forEach((el,k)=>el.classList.toggle('active',k===cur));
+    dots.forEach((d,k)=>d.classList.toggle('on',k===cur));
+  }
+  
+  document.getElementById('next').onclick=()=>show(cur+1);
+  document.getElementById('prev').onclick=()=>show(cur-1);
+  dots.forEach(d=>d.onclick=()=>show(+d.dataset.i));
+  
+  window.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' ')show(cur+1);
+    if(e.key==='ArrowLeft')show(cur-1);
+  });
+  
+  window.addEventListener('resize',fit);
+  fit();show(0);
+</script>
+</body>
+</html>
