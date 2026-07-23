@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Simulador Estratégico Cross Selling - AGI</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+:root{
+    --agi-blue:#0026d9;
+    --agi-dark:#001a99;
+    --bg:#f3f4f6;
+    --card:#ffffff;
+    --text:#1f2937;
+    --muted:#6b7280;
+    --green:#16a34a;
+    --red:#ef4444;
+    --orange:#f97316;
+    --shadow:0 4px 10px rgba(0,0,0,.08);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+    background:#e5e7eb;
+    color:var(--text);
+}
+
+.top-header{
+    background:linear-gradient(90deg,var(--agi-dark),var(--agi-blue));
+    color:white;
+    padding:18px 28px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.title{
+    font-size:24px;
+    font-weight:800;
+}
+
+.subtitle{
+    font-size:13px;
+    color:#c7d2fe;
+    margin-top:5px;
+}
+
+.main{
+    padding:22px;
+}
+
+.grid-top{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:16px;
+    margin-bottom:22px;
+}
+
+.card{
+    background:var(--card);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:18px;
+}
+
+.kpi-title{
+    font-size:11px;
+    color:var(--muted);
+    text-transform:uppercase;
+    margin-bottom:10px;
+    font-weight:700;
+}
+
+.kpi-value{
+    font-size:32px;
+    font-weight:800;
+}
+
+.green{
+    color:var(--green);
+}
+
+.red{
+    color:var(--red);
+}
+
+.orange{
+    color:var(--orange);
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:420px 1fr;
+    gap:20px;
+}
+
+.panel{
+    background:white;
+    border-radius:16px;
+    box-shadow:var(--shadow);
+    padding:22px;
+}
+
+.section-title{
+    font-size:18px;
+    font-weight:800;
+    margin-bottom:18px;
+}
+
+.input-group{
+    margin-bottom:16px;
+}
+
+.input-group label{
+    display:block;
+    font-size:12px;
+    font-weight:700;
+    color:var(--muted);
+    margin-bottom:6px;
+}
+
+input, select{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #d1d5db;
+    font-size:14px;
+}
+
+.range{
+    width:100%;
+}
+
+.grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.grid-3{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+button{
+    border:none;
+    background:var(--agi-blue);
+    color:white;
+    padding:12px 18px;
+    border-radius:10px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:.92;
+}
+
+.chart-box{
+    height:340px;
+    margin-top:10px;
+}
+
+.table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:16px;
+}
+
+.table th{
+    background:#f8fafc;
+    padding:12px;
+    font-size:12px;
+    text-transform:uppercase;
+    color:var(--muted);
+    text-align:left;
+}
+
+.table td{
+    padding:12px;
+    border-bottom:1px solid #e5e7eb;
+    font-size:14px;
+}
+
+.badge{
+    display:inline-block;
+    padding:5px 10px;
+    border-radius:999px;
+    background:#dbeafe;
+    color:#1d4ed8;
+    font-size:11px;
+    font-weight:700;
+}
+
+.insight{
+    background:#0f172a;
+    color:white;
+    border-radius:14px;
+    padding:18px;
+    margin-top:18px;
+    line-height:1.7;
+    font-size:14px;
+}
+
+.specs{
+    display:none;
+    margin-top:20px;
+}
+
+.specs pre{
+    white-space:pre-wrap;
+    background:#111827;
+    color:#d1fae5;
+    padding:20px;
+    border-radius:12px;
+    overflow:auto;
+    line-height:1.7;
+}
+
+.rv-table input{
+    width:100%;
+}
+
+@media(max-width:1200px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .grid-top{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="top-header">
+    <div>
+        <div class="title">Simulador Estratégico — Cross Selling</div>
+        <div class="subtitle">Planejamento Operacional • Impacto TMA • NS • RV • ROI</div>
+    </div>
+
+    <button onclick="toggleSpecs()">Especificações Matemáticas</button>
+</div>
+
+<div class="main">
+
+    <!-- KPIs -->
+    <div class="grid-top">
+
+        <div class="card">
+            <div class="kpi-title">TMO Atual</div>
+            <div class="kpi-value" id="tmoAtualKpi">00:16:49</div>
+        </div>
+
+        <div class="card">
+            <div class="kpi-title">TMO Projetado</div>
+            <div class="kpi-value orange" id="tmoProjetadoKpi">00:17:10</div>
+        </div>
+
+        <div class="card">
+            <div class="kpi-title">NS Projetado</div>
+            <div class="kpi-value green" id="nsProjetadoKpi">83%</div>
+        </div>
+
+        <div class="card">
+            <div class="kpi-title">Receita Estimada</div>
+            <div class="kpi-value green" id="receitaKpi">R$ 0</div>
+        </div>
+
+        <div class="card">
+            <div class="kpi-title">ROI Estimado</div>
+            <div class="kpi-value" id="roiKpi">0x</div>
+        </div>
+
+    </div>
+
+    <div class="layout">
+
+        <!-- LEFT -->
+        <div class="panel">
+
+            <div class="section-title">Parâmetros Operacionais</div>
+
+            <div class="input-group">
+                <label>Headcount Bruto</label>
+                <input type="number" id="hcTotal" value="515">
+            </div>
+
+            <div class="input-group">
+                <label>Operadores Vendendo</label>
+                <input type="range" class="range" id="hcVendedorRange" min="1" max="515" value="50">
+                <input type="number" id="hcVendedor" value="50">
+            </div>
+
+            <div class="grid-2">
+
+                <div class="input-group">
+                    <label>TMO Atual (segundos)</label>
+                    <input type="number" id="tmoAtual" value="1009">
+                </div>
+
+                <div class="input-group">
+                    <label>NS Atual (%)</label>
+                    <input type="number" id="nsAtual" value="84">
+                </div>
+
+            </div>
+
+            <div class="grid-2">
+
+                <div class="input-group">
+                    <label>Tempo Médio Oferta (segundos)</label>
+                    <input type="number" id="tempoOferta" value="205">
+                </div>
+
+                <div class="input-group">
+                    <label>Taxa de Oferta (%)</label>
+                    <input type="number" id="taxaOferta" value="35">
+                </div>
+
+            </div>
+
+            <div class="grid-2">
+
+                <div class="input-group">
+                    <label>Conversão (%)</label>
+                    <input type="number" id="conversao" value="7">
+                </div>
+
+                <div class="input-group">
+                    <label>Atendidas/mês</label>
+                    <input type="number" id="atendidas" value="354700">
+                </div>
+
+            </div>
+
+            <div class="section-title" style="margin-top:25px;">Mix de Produtos</div>
+
+            <div class="grid-3">
+
+                <div class="input-group">
+                    <label>Básico (%)</label>
+                    <input type="number" id="mixBasico" value="40">
+                </div>
+
+                <div class="input-group">
+                    <label>Na Medida (%)</label>
+                    <input type="number" id="mixMedida" value="35">
+                </div>
+
+                <div class="input-group">
+                    <label>Completo (%)</label>
+                    <input type="number" id="mixCompleto" value="25">
+                </div>
+
+            </div>
+
+            <button style="width:100%;margin-top:18px;" onclick="simular()">
+                Atualizar Simulação
+            </button>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="panel">
+
+            <div class="section-title">
+                Curva de Impacto TMA x NS
+            </div>
+
+            <div class="chart-box">
+                <canvas id="chart"></canvas>
+            </div>
+
+            <div class="section-title" style="margin-top:25px;">
+                Estrutura Dinâmica de RV
+            </div>
+
+            <table class="table rv-table" id="rvTable">
+                <thead>
+                    <tr>
+                        <th>Faixa Inicial</th>
+                        <th>Faixa Final</th>
+                        <th>RV</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td><input value="0"></td>
+                        <td><input value="50"></td>
+                        <td><input value="0.25"></td>
+                    </tr>
+
+                    <tr>
+                        <td><input value="51"></td>
+                        <td><input value="100"></td>
+                        <td><input value="0.50"></td>
+                    </tr>
+
+                    <tr>
+                        <td><input value="101"></td>
+                        <td><input value="150"></td>
+                        <td><input value="0.75"></td>
+                    </tr>
+
+                    <tr>
+                        <td><input value="151"></td>
+                        <td><input value="200"></td>
+                        <td><input value="1.00"></td>
+                    </tr>
+
+                    <tr>
+                        <td><input value="201"></td>
+                        <td><input value="999999"></td>
+                        <td><input value="1.10"></td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <button style="margin-top:15px;" onclick="addFaixa()">
+                + Nova Faixa RV
+            </button>
+
+            <div class="grid-3" style="margin-top:25px;">
+
+                <div class="card">
+                    <div class="kpi-title">Piso RV</div>
+                    <div class="kpi-value green" id="pisoRv">
+                        R$ 0
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="kpi-title">Médio RV</div>
+                    <div class="kpi-value orange" id="medioRv">
+                        R$ 0
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="kpi-title">Teto RV</div>
+                    <div class="kpi-value red" id="tetoRv">
+                        R$ 0
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="insight" id="parecer">
+                Aguardando simulação...
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SPECS -->
+    <div class="specs" id="specs">
+
+<pre>
+
+MEMÓRIA DE CÁLCULO — SIMULADOR CROSS SELLING
+
+1. IMPACTO TMA
+
+TMA Projetado =
+TMA Atual +
+[(HC Vendendo ÷ HC Total)
+× Taxa Oferta
+× Tempo Médio Oferta]
+
+Onde:
+- HC Vendendo = operadores realizando oferta
+- HC Total = headcount bruto total
+- Taxa Oferta = % das chamadas elegíveis
+- Tempo Médio Oferta = duração da venda
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+2. IMPACTO NS
+
+Modelo baseado em:
+- regressão histórica real
+- elasticidade operacional TMA x NS
+
+Histórico utilizado:
+
+82% → 13:25
+82% → 13:52
+90% → 14:02
+81% → 13:49
+85% → 15:10
+73% → 15:56
+75% → 16:57
+84% → 17:23
+84% → 16:49
+
+O modelo estima:
+quanto maior o TMA,
+maior a tendência de degradação do NS.
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+3. RECEITA
+
+Receita Média =
+(% Básico × 39,90)
++
+(% Na Medida × 49,90)
++
+(% Completo × 59,90)
+
+Receita Total =
+Volume de Vendas × Receita Média
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+4. RV
+
+Cada faixa possui:
+- volume mínimo
+- volume máximo
+- valor RV unitário
+
+RV Operador =
+Vendas × valor da faixa
+
+RV Total =
+RV Operador × quantidade vendedores
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+5. ROI
+
+ROI =
+Receita Total ÷ Custo Total RV
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+6. PREVISÃO DE VENDAS
+
+Vendas Previstas =
+Atendidas × Conversão %
+
+</pre>
+
+    </div>
+
+</div>
+
+<script>
+
+const historicalTMA = [805,832,842,829,910,956,1017,1043,1009];
+const historicalNS = [82,82,90,81,85,73,75,84,84];
+
+let chart;
+
+function secondsToTime(sec){
+
+    sec = Math.round(sec);
+
+    let m = Math.floor(sec / 60);
+    let s = sec % 60;
+
+    return `00:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function moeda(v){
+    return v.toLocaleString('pt-BR',{
+        style:'currency',
+        currency:'BRL'
+    });
+}
+
+function addFaixa(){
+
+    const tbody = document.querySelector("#rvTable tbody");
+
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+        <td><input value="0"></td>
+        <td><input value="0"></td>
+        <td><input value="0"></td>
+    `;
+
+    tbody.appendChild(tr);
+}
+
+function toggleSpecs(){
+
+    const div = document.getElementById("specs");
+
+    div.style.display =
+        div.style.display === "block"
+        ? "none"
+        : "block";
+}
+
+function linearRegression(x,y){
+
+    const n = x.length;
+
+    let sumX=0,sumY=0,sumXY=0,sumXX=0;
+
+    for(let i=0;i<n;i++){
+        sumX += x[i];
+        sumY += y[i];
+        sumXY += x[i]*y[i];
+        sumXX += x[i]*x[i];
+    }
+
+    const slope =
+        (n*sumXY - sumX*sumY) /
+        (n*sumXX - sumX*sumX);
+
+    const intercept =
+        (sumY - slope*sumX)/n;
+
+    return {slope,intercept};
+}
+
+function getRv(vendas){
+
+    const rows = document.querySelectorAll("#rvTable tbody tr");
+
+    let valor = 0;
+
+    rows.forEach(r=>{
+
+        const ini = Number(r.cells[0].querySelector("input").value);
+        const fim = Number(r.cells[1].querySelector("input").value);
+        const rv = Number(r.cells[2].querySelector("input").value);
+
+        if(vendas >= ini && vendas <= fim){
+            valor = rv;
+        }
+    });
+
+    return valor;
+}
+
+function simular(){
+
+    const hcTotal = Number(document.getElementById("hcTotal").value);
+    const hcVend = Number(document.getElementById("hcVendedor").value);
+    const tmoAtual = Number(document.getElementById("tmoAtual").value);
+    const nsAtual = Number(document.getElementById("nsAtual").value);
+
+    const tempoOferta = Number(document.getElementById("tempoOferta").value);
+
+    const taxaOferta =
+        Number(document.getElementById("taxaOferta").value)/100;
+
+    const conversao =
+        Number(document.getElementById("conversao").value)/100;
+
+    const atendidas =
+        Number(document.getElementById("atendidas").value);
+
+    const mixBasico =
+        Number(document.getElementById("mixBasico").value)/100;
+
+    const mixMedida =
+        Number(document.getElementById("mixMedida").value)/100;
+
+    const mixCompleto =
+        Number(document.getElementById("mixCompleto").value)/100;
+
+    // impacto TMA
+    const impacto =
+        (hcVend/hcTotal) *
+        taxaOferta *
+        tempoOferta;
+
+    const tmoProjetado =
+        tmoAtual + impacto;
+
+    // regressão NS
+    const reg =
+        linearRegression(historicalTMA,historicalNS);
+
+    let nsProjetado =
+        reg.slope * tmoProjetado +
+        reg.intercept;
+
+    if(nsProjetado < 0) nsProjetado = 0;
+
+    // vendas
+    const vendas =
+        atendidas * conversao;
+
+    // receita media
+    const receitaMedia =
+        (39.9 * mixBasico) +
+        (49.9 * mixMedida) +
+        (59.9 * mixCompleto);
+
+    const receitaTotal =
+        vendas * receitaMedia;
+
+    // RV
+    const vendasPorOperador =
+        vendas / hcVend;
+
+    const rvUnit =
+        getRv(vendasPorOperador);
+
+    const rvOperador =
+        vendasPorOperador * rvUnit;
+
+    const rvTotal =
+        rvOperador * hcVend;
+
+    const piso = rvTotal * .8;
+    const teto = rvTotal * 1.2;
+
+    const roi =
+        receitaTotal / rvTotal;
+
+    // KPIs
+    document.getElementById("tmoAtualKpi")
+        .innerHTML = secondsToTime(tmoAtual);
+
+    document.getElementById("tmoProjetadoKpi")
+        .innerHTML = secondsToTime(tmoProjetado);
+
+    document.getElementById("nsProjetadoKpi")
+        .innerHTML = nsProjetado.toFixed(1)+"%";
+
+    document.getElementById("receitaKpi")
+        .innerHTML = moeda(receitaTotal);
+
+    document.getElementById("roiKpi")
+        .innerHTML = roi.toFixed(1)+"x";
+
+    document.getElementById("pisoRv")
+        .innerHTML = moeda(piso);
+
+    document.getElementById("medioRv")
+        .innerHTML = moeda(rvTotal);
+
+    document.getElementById("tetoRv")
+        .innerHTML = moeda(teto);
+
+    // parecer
+    document.getElementById("parecer")
+        .innerHTML = `
+        <strong>Parecer Executivo:</strong><br><br>
+
+        Com <strong>${hcVend} operadores</strong> realizando cross selling,
+        taxa de oferta de <strong>${(taxaOferta*100).toFixed(0)}%</strong>
+        e tempo médio adicional de
+        <strong>${tempoOferta}s</strong>,
+        o TMO projetado sobe para
+        <strong>${secondsToTime(tmoProjetado)}</strong>.
+
+        Baseado na curva histórica da operação,
+        o NS tende a variar para
+        <strong>${nsProjetado.toFixed(1)}%</strong>.
+
+        A operação pode gerar aproximadamente
+        <strong>${Math.round(vendas).toLocaleString('pt-BR')} vendas/mês</strong>,
+        com receita estimada de
+        <strong>${moeda(receitaTotal)}</strong>.
+
+        O orçamento previsto de RV varia entre
+        <strong>${moeda(piso)}</strong> e
+        <strong>${moeda(teto)}</strong>,
+        com ROI operacional estimado em
+        <strong>${roi.toFixed(1)}x</strong>.
+        `;
+
+    renderChart(tmoProjetado,nsProjetado);
+}
+
+function renderChart(tmoProjetado,nsProjetado){
+
+    const ctx = document.getElementById("chart");
+
+    if(chart) chart.destroy();
+
+    chart = new Chart(ctx,{
+        type:'scatter',
+        data:{
+            datasets:[
+                {
+                    label:'Histórico Real',
+                    data:historicalTMA.map((t,i)=>({
+                        x:t,
+                        y:historicalNS[i]
+                    })),
+                    backgroundColor:'#2563eb',
+                    pointRadius:6
+                },
+                {
+                    label:'Projeção Atual',
+                    data:[{
+                        x:tmoProjetado,
+                        y:nsProjetado
+                    }],
+                    backgroundColor:'#ef4444',
+                    pointRadius:10
+                }
+            ]
+        },
+
+        options:{
+            responsive:true,
+
+            plugins:{
+                legend:{
+                    position:'top'
+                }
+            },
+
+            scales:{
+                x:{
+                    title:{
+                        display:true,
+                        text:'TMA (segundos)'
+                    }
+                },
+
+                y:{
+                    title:{
+                        display:true,
+                        text:'NS (%)'
+                    },
+
+                    min:60,
+                    max:100
+                }
+            }
+        }
+    });
+}
+
+document.getElementById("hcVendedorRange")
+.addEventListener("input",e=>{
+
+    document.getElementById("hcVendedor")
+        .value = e.target.value;
+});
+
+document.getElementById("hcVendedor")
+.addEventListener("input",e=>{
+
+    document.getElementById("hcVendedorRange")
+        .value = e.target.value;
+});
+
+simular();
+
+</script>
+
+</body>
+</html>
