@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agibank | Análise Erro App — Estudo Executivo</title>
+<style>
+:root{
+  --azul:#0064f5;--azul-escuro:#000f44;--verde:#77df40;--branco:#fff;
+  --cinza:#f5f5f5;--texto:#101828;--muted:#667085;--borda:#dce7f5;
+  --shadow:0 12px 36px rgba(0,15,68,.11);--radius:14px;
+  --red:#ef4444;--orange:#f59e0b;--amber:#fbbf24;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;scroll-behavior:smooth}
+body{font-family:Inter,"Segoe UI",system-ui,sans-serif;background:linear-gradient(180deg,#fff 0%,#f0f6ff 100%);color:var(--texto);-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer}
+
+/* NAV */
+.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-bottom:1px solid #e5edf8}
+.top-inner{max-width:1300px;margin:auto;padding:8px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-logo{width:128px;height:37px;display:block;object-fit:contain;flex:none;background:transparent}
+.brand-text strong{display:block;font-size:13px;font-weight:900;color:var(--azul-escuro)}
+.brand-text small{display:block;font-size:10px;color:var(--muted)}
+.nav{display:flex;gap:5px;flex-wrap:wrap}
+.nav button{border:1px solid var(--borda);border-radius:999px;background:#fff;color:var(--azul-escuro);font-weight:800;padding:5px 12px;font-size:11px;transition:.18s}
+.nav button:hover{background:#f0f6ff;border-color:#b0cef5}
+.nav button.active{background:var(--azul);border-color:var(--azul);color:#fff;box-shadow:0 2px 8px rgba(0,100,245,.22)}
+
+/* PAGES */
+.page{display:none;animation:fadeIn .35s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.container{max-width:1300px;margin:0 auto;padding:10px 16px 40px}
+
+/* HERO */
+.hero{border-radius:16px;background:linear-gradient(125deg,#00114d 0%,#001a6e 40%,#000f44 72%,#012080 100%);color:#fff;padding:22px 28px 18px;margin:10px 0 14px;box-shadow:0 14px 40px rgba(0,15,68,.26);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(119,223,64,.20),transparent 70%);pointer-events:none}
+.hero-inner{position:relative;z-index:2}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:var(--verde);background:rgba(119,223,64,.10);border:1px solid rgba(119,223,64,.28);padding:4px 10px;border-radius:999px;margin-bottom:10px}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--verde);box-shadow:0 0 7px var(--verde)}
+.hero h1{font-size:22px;font-weight:950;letter-spacing:-.7px;line-height:1.1;margin-bottom:8px}
+.hero h1 .g{background:linear-gradient(90deg,var(--verde),#a6f573);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:12px;color:#c5d5f5;line-height:1.5;max-width:720px}
+.hero-stats{display:flex;gap:24px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.10)}
+.hstat b{display:block;font-size:20px;font-weight:950;letter-spacing:-.8px;line-height:1}
+.hstat b.g{background:linear-gradient(90deg,var(--verde),#a6f573);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hstat span{font-size:10px;color:#94a9d6;font-weight:700}
+
+/* STAT BAND */
+.stat-band{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:0 0 20px}
+.stat-box{background:#fff;border:1px solid #e5edf8;border-radius:12px;padding:14px 16px;box-shadow:0 3px 12px rgba(0,15,68,.05);border-top:3px solid var(--azul);transition:.2s}
+.stat-box:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,15,68,.09)}
+.stat-box.red{border-top-color:var(--red)}
+.stat-box.orange{border-top-color:var(--orange)}
+.stat-box.green{border-top-color:var(--verde)}
+.stat-box.amber{border-top-color:var(--amber)}
+.stat-box .num{font-size:24px;font-weight:950;letter-spacing:-.8px;color:var(--azul-escuro);line-height:1}
+.stat-box.green .num{background:linear-gradient(90deg,#16a34a,#22c55e);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-box.red .num{color:var(--red)}
+.stat-box .cap{font-size:11px;color:#667085;font-weight:700;margin-top:6px;line-height:1.3}
+.stat-box .sub{font-size:10px;color:#94a3b8;margin-top:3px}
+
+/* SECTION HEAD */
+.sec-head{margin:28px 0 14px}
+.sec-head .kicker{font-size:10px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:var(--azul)}
+.sec-head h2{font-size:18px;color:var(--azul-escuro);letter-spacing:-.5px;margin:3px 0 5px;font-weight:950}
+.sec-head p{font-size:12.5px;color:#667085;line-height:1.5}
+
+
+/* VARIAÇÃO CARDS */
+.var-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.var-card{background:#fff;border:1px solid #e5edf8;border-radius:12px;padding:13px;box-shadow:0 3px 10px rgba(0,15,68,.05)}
+.var-card .vt{font-size:11px;font-weight:800;color:var(--azul-escuro);margin-bottom:6px}
+.var-card .vval{font-size:17px;font-weight:950;line-height:1;margin-bottom:3px}
+.var-card .vval span{font-size:10px;font-weight:850;line-height:1.15;display:inline-block;margin-left:4px;vertical-align:middle}
+.var-card .vval.up{color:#16a34a}
+.var-card .vval.down{color:var(--red)}
+.var-card .vval.neutral{color:var(--muted)}
+.var-card .vsub{font-size:10px;color:var(--muted)}
+.var-card .valert{display:inline-block;margin-top:5px;font-size:9px;font-weight:900;border-radius:4px;padding:2px 6px}
+.var-card .valert.crit{background:#fee2e2;color:#991b1b}
+.var-card .valert.watch{background:#fef3c7;color:#92400e}
+.var-card .valert.ok{background:#dcfce7;color:#166534}
+
+/* PARETO CHART */
+.chart-wrap{background:#fff;border:1px solid #e5edf8;border-radius:14px;padding:20px;box-shadow:var(--shadow);margin-bottom:20px}
+.chart-title{font-size:13px;font-weight:900;color:var(--azul-escuro);margin-bottom:4px}
+.chart-sub{font-size:11px;color:var(--muted);margin-bottom:16px}
+canvas.pareto{width:100%;height:300px}
+
+/* TOP 10 TABLE */
+.top10-wrap{background:#fff;border:1px solid #e5edf8;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:20px}
+.top10-wrap table{width:100%;border-collapse:collapse;font-size:12px}
+.top10-wrap thead th{background:#000f44;color:#fff;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:10px 13px;text-align:left;white-space:nowrap}
+.top10-wrap tbody tr:nth-child(even){background:#f8fbff}
+.top10-wrap tbody tr:hover{background:#eef5ff}
+.top10-wrap tbody td{padding:10px 13px;vertical-align:middle;border-bottom:1px solid #f0f4f8;color:var(--texto)}
+.rank-badge{width:24px;height:24px;border-radius:50%;background:var(--azul);color:#fff;font-size:10px;font-weight:900;display:inline-flex;align-items:center;justify-content:center}
+.rank-badge.c1{background:#dc2626}
+.rank-badge.c2{background:#ea580c}
+.rank-badge.c3{background:#0064f5}
+.criticidade{display:inline-block;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:900}
+.crit-critico{background:#fee2e2;color:#991b1b}
+.crit-relevante{background:#fef3c7;color:#92400e}
+.crit-monitorar{background:#f0fdf4;color:#166534}
+.bar-mini{display:flex;align-items:center;gap:5px}
+.bar-mini .bm{height:6px;border-radius:3px;background:var(--azul);min-width:2px}
+.bar-mini .bm.red{background:var(--red)}
+.bar-mini span{font-size:11px;font-weight:700}
+.alerta-dup{background:#fff7ed;border:1px solid #fbbf24;border-radius:8px;padding:8px 12px;font-size:11px;color:#78350f;margin-bottom:14px;display:flex;gap:8px;align-items:flex-start}
+
+/* JORNADA */
+.jornada-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.jorn-card{background:#fff;border:1px solid #e5edf8;border-radius:12px;padding:14px;box-shadow:0 3px 10px rgba(0,15,68,.05);border-left:4px solid var(--azul)}
+.jorn-card.red{border-left-color:var(--red)}
+.jorn-card.orange{border-left-color:var(--orange)}
+.jorn-card.green{border-left-color:var(--verde)}
+.jorn-card .jt{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--azul);margin-bottom:4px}
+.jorn-card.red .jt{color:var(--red)}
+.jorn-card.orange .jt{color:var(--orange)}
+.jorn-card h4{font-size:13px;font-weight:900;color:var(--azul-escuro);margin-bottom:6px}
+.jorn-card .jp{font-size:11px;color:#475569;line-height:1.45;margin-bottom:8px}
+.jorn-nums{display:flex;gap:12px;margin-top:8px;padding-top:8px;border-top:1px solid #f0f4f8}
+.jorn-nums .jn b{display:block;font-size:14px;font-weight:950;color:var(--azul-escuro)}
+.jorn-nums .jn span{font-size:9px;color:var(--muted);font-weight:700}
+.jorn-tag{display:inline-block;padding:3px 7px;border-radius:5px;font-size:10px;font-weight:900;margin-top:5px}
+.jtag-alto{background:#fee2e2;color:#991b1b}
+.jtag-medio{background:#fef3c7;color:#92400e}
+.jtag-baixo{background:#f0fdf4;color:#166534}
+
+/* BIRDIE */
+.birdie-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:24px}
+.birdie-card{background:#fff;border:1px solid #e5edf8;border-radius:12px;padding:14px;box-shadow:0 3px 10px rgba(0,15,68,.05)}
+.birdie-card .bt{font-size:11px;font-weight:900;color:var(--azul-escuro);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.birdie-card .bt .btag{font-size:9px;font-weight:900;padding:2px 6px;border-radius:4px}
+.btag-falha{background:#fee2e2;color:#991b1b}
+.btag-bloqueio{background:#fef3c7;color:#92400e}
+.btag-duvida{background:#eff6ff;color:#1d4ed8}
+.birdie-card ul{list-style:none;padding:0}
+.birdie-card ul li{font-size:11px;color:#475569;line-height:1.45;padding:4px 0;border-bottom:1px solid #f5f5f5;display:flex;gap:7px}
+.birdie-card ul li::before{content:"›";color:var(--azul);font-weight:900;flex:none}
+.birdie-card ul li:last-child{border-bottom:none}
+.birdie-limit{font-size:10px;color:#94a3b8;font-style:italic;margin-top:6px}
+
+/* SINTOMAS X CAUSAS */
+.sx-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:24px}
+.sx-card{background:#fff;border:1px solid #e5edf8;border-radius:12px;padding:14px;box-shadow:0 3px 10px rgba(0,15,68,.05)}
+.sx-card h4{font-size:12px;font-weight:900;color:var(--azul-escuro);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #f0f4f8}
+.sx-row{margin-bottom:10px}
+.sx-label{font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;display:block}
+.sx-label.s{color:var(--red)}
+.sx-label.c{color:var(--orange)}
+.sx-label.h{color:#7c3aed}
+.sx-label.d{color:#0891b2}
+.sx-val{font-size:11.5px;color:#334155;line-height:1.45}
+
+/* MATRIZ PRIORIZAÇÃO */
+.matriz{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.mz-col{background:#fff;border:1px solid #e5edf8;border-radius:12px;overflow:hidden;box-shadow:0 3px 10px rgba(0,15,68,.05)}
+.mz-head{padding:10px 13px;font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#fff}
+.mz-head.critico{background:var(--red)}
+.mz-head.relevante{background:var(--orange)}
+.mz-head.monitorar{background:#0891b2}
+.mz-head.baixo{background:#94a3b8}
+.mz-body{padding:10px}
+.mz-item{font-size:11px;color:var(--texto);padding:5px 0;border-bottom:1px solid #f5f5f5;display:flex;gap:5px;align-items:flex-start;line-height:1.35}
+.mz-item::before{content:"•";flex:none;font-weight:900;margin-top:1px}
+.mz-col.critico .mz-item::before{color:var(--red)}
+.mz-col.relevante .mz-item::before{color:var(--orange)}
+.mz-col.monitorar .mz-item::before{color:#0891b2}
+.mz-item:last-child{border-bottom:none}
+
+/* PLANO DE AÇÃO */
+.plano-item{background:#fff;border:1px solid #e5edf8;border-radius:14px;overflow:hidden;box-shadow:0 3px 10px rgba(0,15,68,.05);margin-bottom:14px}
+.plano-head{display:grid;grid-template-columns:auto 1fr;gap:0;background:#f8fbff;border-bottom:1px solid #e5edf8}
+.plano-rank{background:var(--azul-escuro);color:#fff;padding:0 16px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:950;min-width:52px}
+.plano-rank.r1{background:#dc2626}
+.plano-rank.r2{background:#ea580c}
+.plano-rank.r3{background:var(--azul)}
+.plano-info{padding:10px 14px}
+.plano-info h4{font-size:13px;font-weight:900;color:var(--azul-escuro);margin-bottom:4px}
+.plano-info .pi-meta{display:flex;gap:10px;flex-wrap:wrap}
+.pi-chip{font-size:10px;font-weight:800;padding:2px 7px;border-radius:5px;background:#f0f4f8;color:#475569}
+.pi-chip.crit{background:#fee2e2;color:#991b1b}
+.pi-chip.green{background:#dcfce7;color:#166534}
+.plano-body{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid #f0f4f8}
+.plano-col{padding:12px 14px;border-right:1px solid #f0f4f8}
+.plano-col:last-child{border-right:none}
+.plano-col .pc-h{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;padding-bottom:5px;border-bottom:1.5px solid}
+.plano-col:nth-child(1) .pc-h{color:#dc2626;border-color:#fca5a5}
+.plano-col:nth-child(2) .pc-h{color:#ea580c;border-color:#fdba74}
+.plano-col:nth-child(3) .pc-h{color:#0064f5;border-color:#bfdbfe}
+.plano-col ul{list-style:none;padding:0}
+.plano-col ul li{font-size:11px;color:#334155;line-height:1.45;padding:3px 0;display:flex;gap:6px}
+.plano-col ul li::before{content:"→";flex:none;color:#94a3b8;font-size:10px;margin-top:2px}
+
+/* GATILHOS */
+.gatilho-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.gat-card{background:#fff;border:1px solid #e5edf8;border-radius:12px;padding:14px;box-shadow:0 3px 10px rgba(0,15,68,.05);border-top:3px solid var(--azul)}
+.gat-card.w{border-top-color:#22c55e}
+.gat-card.s{border-top-color:var(--orange)}
+.gat-card.p{border-top-color:var(--azul)}
+.gat-card h4{font-size:12px;font-weight:900;color:var(--azul-escuro);margin-bottom:6px}
+.gat-card .gc-tema{font-size:10px;font-weight:900;color:var(--muted);margin-bottom:8px}
+.gat-row{margin-bottom:7px}
+.gat-row .gr-l{font-size:10px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:var(--azul);margin-bottom:2px}
+.gat-row .gr-v{font-size:11px;color:#334155;line-height:1.4}
+.canal-tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:900;background:#eff6ff;color:#1d4ed8;margin-bottom:4px}
+
+/* FOOTER NOTE */
+.footer-note{background:#f8fbff;border:1px solid #e5edf8;border-radius:10px;padding:12px 16px;font-size:11px;color:#667085;line-height:1.5;margin-top:8px}
+.footer-note strong{color:var(--azul-escuro)}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .stat-band{grid-template-columns:repeat(3,1fr)!important}
+  .var-grid{grid-template-columns:repeat(2,1fr)!important}
+  .jornada-grid,.gatilho-grid{grid-template-columns:repeat(2,1fr)!important}
+  .plano-body{grid-template-columns:1fr!important}
+  .plano-col{border-right:none!important;border-bottom:1px solid #f0f4f8}
+  .plano-col:last-child{border-bottom:none}
+}
+@media(max-width:760px){
+  .stat-band{grid-template-columns:1fr 1fr!important}
+  .jornada-grid,.birdie-grid,.sx-grid,.matriz,.gatilho-grid{grid-template-columns:1fr!important}
+  .hero h1{font-size:18px}
+  .top10-wrap{overflow-x:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <img class="brand-logo" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22829%22%20height%3D%22239%22%20viewBox%3D%220%200%20829%20239%22%20fill%3D%22none%22%3E%3Cg%20clip-path%3D%22url(%23clip0_231_831)%22%3E%3Cpath%20d%3D%22M262.484%2051.3111L262.454%2069.6176C251.799%2054.993%20236.46%2048.5276%20216.554%2048.5276C198.57%2048.5276%20184.487%2054.9194%20171.748%2068.1448C159.01%2081.3849%20152.833%2096.9815%20152.833%20116.334C152.833%20135.686%20159.512%20151.444%20172.251%20164.773C184.989%20178.101%20198.57%20184.272%20216.554%20184.272C232.692%20184.272%20252.538%20178.44%20262.469%20166.216C262.883%20187.115%20254.489%20200.782%20237.613%20207.026C218.047%20214.287%20193.235%20207.615%20182.078%20192.475L161.404%20213.094C175.398%20229.545%20197.727%20239%20220.456%20239C259.706%20239%20291.493%20218.808%20291.493%20160.929V51.2964H262.484V51.3111ZM251.253%20146.275C243.406%20154.213%20233.549%20158.175%20221.682%20158.175C209.816%20158.175%20199.959%20154.213%20192.112%20146.275C184.265%20138.351%20180.334%20128.381%20180.334%20116.363C180.334%20104.345%20184.265%2094.3747%20192.112%2086.4365C199.959%2078.513%20209.816%2074.5513%20221.682%2074.5513C233.549%2074.5513%20243.406%2078.513%20251.253%2086.4365C259.1%2094.36%20263.031%20104.331%20263.031%20116.363C263.031%20128.396%20259.1%20138.351%20251.253%20146.275Z%22%20fill%3D%22%230068FF%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M109.637%2051.3112V69.8681C99.1147%2055.5381%2084.0562%2048.3657%2064.4756%2048.3657C46.6831%2048.3657%2031.4915%2054.9195%2018.9008%2068.0124C6.29535%2081.1052%200%2097.2173%200%20116.334C0%20135.45%206.29535%20151.341%2018.9008%20164.523C31.5063%20177.704%2046.6979%20184.287%2064.4756%20184.287C80.1992%20184.287%2099.6024%20178.646%20109.637%20166.216V181.459H138.675V51.3112H109.637ZM98.3906%20146.26C90.5288%20154.184%2080.672%20158.145%2068.7907%20158.145C56.9093%20158.145%2047.0525%20154.184%2039.1907%20146.26C31.3289%20138.337%2027.3981%20128.351%2027.3981%20116.334C27.3981%20104.316%2031.3289%2094.3454%2039.1907%2086.4072C47.0525%2078.4837%2056.9093%2074.522%2068.7907%2074.522C80.672%2074.522%2090.5288%2078.4837%2098.3906%2086.4072C106.252%2094.3307%20110.183%20104.301%20110.183%20116.334C110.183%20128.351%20106.238%20138.337%2098.3906%20146.26Z%22%20fill%3D%22%230068FF%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M322.57%2037.526C332.959%2037.526%20341.382%2029.1313%20341.382%2018.763C341.382%208.39475%20332.959%200%20322.57%200C312.182%200%20303.773%208.39475%20303.773%2018.763C303.773%2029.1313%20312.182%2037.526%20322.57%2037.526Z%22%20fill%3D%22%2300CD5C%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M337.082%2051.0752H308.044V181.223H337.082V51.0752Z%22%20fill%3D%22%230068FF%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M472.993%20126.569C472.993%20161.43%20447.708%20184.037%20416.749%20184.037C397.375%20184.037%20382.242%20175.082%20373.272%20160.958H372.799V182.858H360.741V9.51416H373.272V91.0022H373.745C383.203%2075.9358%20399.266%2067.217%20417.221%2067.217C450.073%2067.217%20472.993%2093.3586%20472.993%20126.569ZM460.225%20126.805C460.225%2097.8358%20440.142%2079.2348%20415.803%2079.2348C391.464%2079.2348%20372.799%20100.192%20372.799%20126.805C372.799%20153.418%20392.882%20172.255%20416.039%20172.255C442.27%20172.255%20460.225%20152.475%20460.225%20126.805Z%22%20fill%3D%22%230068FF%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M593.979%2068.395V182.858H582.156V160.958H581.683C572.699%20175.082%20557.581%20184.036%20538.207%20184.036C507.248%20184.036%20481.963%20161.429%20481.963%20126.569C481.963%2091.7089%20504.883%2067.2168%20537.734%2067.2168C555.689%2067.2168%20571.768%2075.9356%20581.211%2091.0019H581.683V68.395H593.979ZM582.171%20126.805C582.171%20100.192%20564.216%2079.2345%20539.168%2079.2345C514.119%2079.2345%20494.746%2097.8355%20494.746%20126.805C494.746%20152.475%20512.701%20172.254%20538.931%20172.254C562.073%20172.254%20582.171%20153.889%20582.171%20126.805Z%22%20fill%3D%22%230068FF%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M713.073%20115.023V182.844H700.541V116.658C700.541%2086.746%20687.552%2078.9698%20671.473%2078.9698C646.189%2078.9698%20629.416%2097.5708%20629.416%20126.069V182.829H616.884V68.366H629.416V90.7372H629.652C639.347%2075.6709%20655.646%2067.1877%20674.311%2067.1877C697.246%2067.2172%20713.073%2080.8697%20713.073%20115.023Z%22%20fill%3D%22%230068FF%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M784.923%20116.672L828.872%20182.858H814.463L776.41%20126.569H775.938L747.579%20157.659V182.858H735.047V9.51416H747.579V139.986H747.815L813.045%2068.3952H828.872L784.923%20116.672Z%22%20fill%3D%22%230068FF%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3Cdefs%3E%3CclipPath%20id%3D%22clip0_231_831%22%3E%3Crect%20width%3D%22828.872%22%20height%3D%22239%22%20fill%3D%22white%22%3E%3C%2Frect%3E%3C%2FclipPath%3E%3C%2Fdefs%3E%3C%2Fsvg%3E" alt="Agibank">
+      <div class="brand-text">
+        <small>Análise Erro App — Estudo Executivo Mai/Jun 2026</small>
+      </div>
+    </div>
+    <nav class="nav">
+      <button class="active" onclick="setPage('visao')">Visão Geral</button>
+      <button onclick="setPage('pareto')">Pareto</button>
+      <button onclick="setPage('top10')">Top 10 + Jornada</button>
+      <button onclick="setPage('plano')">Plano de Ação</button>
+    </nav>
+  </div>
+</div>
+
+<!-- ===================== PAGE 1: VISÃO GERAL ===================== -->
+<div class="page active" id="page-visao">
+<div class="container">
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">Análise Executiva — Erro App</div>
+      <h1>Diagnóstico de <span class="g">Contatos Erro App</span><br>Bimestre Mai–Jun 2026</h1>
+      <p>Estudo baseado nas abas "Erro no APP" e "Análise destrinchada erro no AP" — modelo de dados Agibank. Identifica os principais ofensores, taxas de rechamada, variações mensais e oportunidades prioritárias de redução de contato.</p>
+      <div class="hero-stats">
+        <div class="hstat"><b>14.843</b><span>Chamadas Erro App — Mai+Jun</span></div>
+        <div class="hstat"><b>3.103</b><span>Rechamadas totais estimadas</span></div>
+        <div class="hstat"><b class="g">20,9%</b><span>Taxa de rechamada geral</span></div>
+        <div class="hstat"><b>9.927</b><span>Chamadas temas priorizados</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIG NUMBERS -->
+  <div class="stat-band">
+    <div class="stat-box">
+      <div class="num">14.843</div>
+      <div class="cap">Total chamadas Erro App<br>Mai+Jun 2026</div>
+      <div class="sub">Fonte: aba "Erro no APP" — Total Geral</div>
+    </div>
+    <div class="stat-box red">
+      <div class="num">7.796</div>
+      <div class="cap">Chamadas em Maio<br>Mês base do período</div>
+      <div class="sub"><Mai>
+      <2026></2026></div>
+    </div>
+    <div class="stat-box orange">
+      <div class="num">7.047</div>
+      <div class="cap">Chamadas em Junho<br>↓ 9,6% vs maio</div>
+      <div class="sub">Jun/2026 — redução geral</div>
+    </div>
+    <div class="stat-box amber">
+      <div class="num">3.103</div>
+      <div class="cap">Rechamadas totais<br>Taxa média: 20,9%</div>
+      <div class="sub">Calculado sobre vol. chamadas × taxa</div>
+    </div>
+    <div class="stat-box green">
+      <div class="num">4.608</div>
+      <div class="cap">Chamadas — Acesso ao App<br>Top ofensor priorizado</div>
+      <div class="sub">31,0% dos temas priorizados</div>
+    </div>
+  </div>
+
+  <!-- VARIAÇÕES MAI→JUN -->
+  <div class="sec-head">
+    <div class="kicker">Variação Mensal</div>
+    <h2>Destaques de Movimento — Maio para Junho</h2>
+    <p>Temas que mais variaram entre os meses. Os percentuais indicam variação no volume de chamadas/casos de maio para junho; crescimentos acima de 50% exigem investigação imediata de causa.</p>
+  </div>
+
+  <div class="var-grid">
+    <div class="var-card">
+      <div class="vt">Desvincular Aparelho</div>
+      <div class="vval up">+295% <span>(crescimento de chamadas)</span></div>
+      <div class="vsub">101 → 399 chamadas</div>
+      <span class="valert crit">Alerta Crítico</span>
+    </div>
+    <div class="var-card">
+      <div class="vt">Atualização Cadastral</div>
+      <div class="vval up">+128% <span>(crescimento de chamadas)</span></div>
+      <div class="vsub">365 → 834 chamadas</div>
+      <span class="valert crit">Alerta Crítico</span>
+    </div>
+    <div class="var-card">
+      <div class="vt">Liberar Transações</div>
+      <div class="vval up">+32% <span>(crescimento de chamadas)</span></div>
+      <div class="vsub">636 → 841 chamadas</div>
+      <span class="valert watch">Monitorar</span>
+    </div>
+    <div class="var-card">
+      <div class="vt">Alterar Senha do App</div>
+      <div class="vval down">−23% <span>(redução de chamadas)</span></div>
+      <div class="vsub">347 → 267 chamadas</div>
+      <span class="valert ok">Redução</span>
+    </div>
+    <div class="var-card">
+      <div class="vt">Acesso ao App</div>
+      <div class="vval down">−12% <span>(redução de chamadas)</span></div>
+      <div class="vsub">2.456 → 2.152 chamadas</div>
+      <span class="valert ok">Redução</span>
+    </div>
+    <div class="var-card">
+      <div class="vt">Recebimento / Validacao Token</div>
+      <div class="vval down">−25% <span>(redução de chamadas)</span></div>
+      <div class="vsub">340 → 254 chamadas</div>
+      <span class="valert ok">Redução</span>
+    </div>
+    <div class="var-card">
+      <div class="vt">Cadastro/Excl. Chave Pix</div>
+      <div class="vval down">−13% <span>(redução de chamadas)</span></div>
+      <div class="vsub">222 → 194 chamadas</div>
+      <span class="valert ok">Leve redução</span>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <strong>Fontes:</strong> Aba "Erro no APP" (volume por categoria, mai×jun, total geral) e aba "Análise destrinchada erro no AP" (taxa de rechamada, % representatividade, ranking, descrição Birdie). Período: bimestre maio–junho 2026. Rechamadas totais estimadas a partir de vol. chamadas × taxa de rechamada por categoria. Categorias com volume zero ("2ª Via de Boleto", "7º dia") excluídas da análise quantitativa.
+  </div>
+
+</div>
+</div>
+
+<!-- ===================== PAGE 2: PARETO ===================== -->
+<div class="page" id="page-pareto">
+<div class="container">
+
+  <div class="sec-head">
+    <div class="kicker">Análise de Pareto</div>
+    <h2>Concentração de Volume e Rechamadas</h2>
+    <p>Dois Paretos distintos dos temas priorizados. Linha vermelha = % acumulado.</p>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="chart-title">Pareto A — Volume de Chamadas por Tema (temas priorizados)</div>
+    <div class="chart-sub">Bimestre Mai+Jun 2026 · Total temas priorizados: 9.927 chamadas</div>
+    <canvas id="chartVol" height="320"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="chart-title">Pareto B — Volume de Rechamadas por Tema (temas priorizados)</div>
+    <div class="chart-sub">Bimestre Mai+Jun 2026 · Total rechamadas temas priorizados: ~2.045</div>
+    <canvas id="chartRech" height="320"></canvas>
+  </div>
+
+  <div class="footer-note">
+    <strong>Nota metodológica:</strong> Pareto A ordena por volume de chamadas (chamadas atendidas). Pareto B ordena por volume de rechamadas (retorno em até 48h). Temas com volume zero omitidos. Taxa de rechamada (%) calculada como rechamadas/chamadas por categoria conforme aba "Análise destrinchada erro no AP".
+  </div>
+
+</div>
+</div>
+
+<!-- ===================== PAGE 3: TOP 10 + JORNADA ===================== -->
+<div class="page" id="page-top10">
+<div class="container">
+
+  <div class="sec-head">
+    <div class="kicker">Top 10 de Ataque</div>
+    <h2>Tabela Priorizada - Temas Priorizados</h2>
+    <p>Ranking por combinação de volume, rechamada e impacto na jornada. Criticidade classificada em Crítico / Relevante / Monitorar.</p>
+  </div>
+
+  <div class="top10-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tema</th>
+          <th>Vol. Chamadas</th>
+          <th>Vol. Rechamadas</th>
+          <th>Taxa Rechamada</th>
+          <th>% Repres. Chamadas</th>
+          <th>% Repres. Rechamadas</th>
+          <th>Variação Jun/Mai</th>
+          <th>Criticidade</th>
+          <th>Birdie</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="rank-badge c1">1</span></td>
+          <td><strong>Acesso ao App</strong></td>
+          <td><div class="bar-mini"><div class="bm" style="width:80px"></div><span>4.608</span></div></td>
+          <td><div class="bar-mini"><div class="bm red" style="width:70px"></div><span>886</span></div></td>
+          <td><strong>26,5%</strong></td>
+          <td>31,3%</td>
+          <td>28,6%</td>
+          <td style="color:var(--verde);font-weight:800">▼ −12%</td>
+          <td><span class="criticidade crit-critico">Crítico</span></td>
+          <td>✅ Completo</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge c1">2</span></td>
+          <td><strong>Liberar Transações</strong></td>
+          <td><div class="bar-mini"><div class="bm" style="width:28px"></div><span>1.477</span></div></td>
+          <td><div class="bar-mini"><div class="bm red" style="width:29px"></div><span>384</span></div></td>
+          <td><strong>28,6%</strong></td>
+          <td>10,0%</td>
+          <td>12,4%</td>
+          <td style="color:var(--red);font-weight:800">▲ +32%</td>
+          <td><span class="criticidade crit-critico">Crítico</span></td>
+          <td>✅ Completo</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge c1">3</span></td>
+          <td><strong>Atualização Cadastral</strong></td>
+          <td><div class="bar-mini"><div class="bm" style="width:23px"></div><span>1.199</span></div></td>
+          <td><div class="bar-mini"><div class="bm red" style="width:25px"></div><span>330</span></div></td>
+          <td><strong>30,7%</strong></td>
+          <td>8,2%</td>
+          <td>10,6%</td>
+          <td style="color:var(--red);font-weight:800">▲ +128%</td>
+          <td><span class="criticidade crit-critico">Crítico</span></td>
+          <td>✅ Completo</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge c2">4</span></td>
+          <td>Alterar Senha do App</td>
+          <td><div class="bar-mini"><div class="bm" style="width:12px"></div><span>614</span></div></td>
+          <td><div class="bar-mini"><div class="bm red" style="width:7px"></div><span>85</span></div></td>
+          <td><strong>17,6%</strong></td>
+          <td>4,2%</td>
+          <td>2,7%</td>
+          <td style="color:var(--verde);font-weight:800">▼ −23%</td>
+          <td><span class="criticidade crit-relevante">Relevante</span></td>
+          <td>✅ Completo</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge c2">5</span></td>
+          <td>Desvincular Aparelho <span style="font-size:10px;color:var(--red);font-weight:900">🚨 +295%</span></td>
+          <td><div class="bar-mini"><div class="bm" style="width:10px"></div><span>500</span></div></td>
+          <td><div class="bar-mini"><div class="bm red" style="width:6px"></div><span>78</span></div></td>
+          <td><strong>19,3%</strong></td>
+          <td>3,4%</td>
+          <td>2,5%</td>
+          <td style="color:var(--red);font-weight:800">▲ +295%</td>
+          <td><span class="criticidade crit-relevante">Relevante</span></td>
+          <td>✅ Completo</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge c2">6</span></td>
+          <td>Cadastro/Exclusão Chave Pix</td>
+          <td><div class="bar-mini"><div class="bm" style="width:8px"></div><span>416</span></div></td>
+          <td><div class="bar-mini"><div class="bm red" style="width:6px"></div><span>79</span></div></td>
+          <td><strong>21,2%</strong></td>
+          <td>2,8%</td>
+          <td>2,5%</td>
+          <td style="color:var(--verde);font-weight:800">▼ −13%</td>
+          <td><span class="criticidade crit-relevante">Relevante</span></td>
+          <td>⚠️ Incompleto</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge c2">7</span></td>
+          <td><strong>Recebimento / Validacao Token</strong></td>
+          <td><div class="bar-mini"><div class="bm" style="width:11px"></div><span>594</span></div></td>
+          <td><div class="bar-mini"><div class="bm red" style="width:9px"></div><span>122</span></div></td>
+          <td><strong>20,5%</strong></td>
+          <td>4,0%</td>
+          <td>3,9%</td>
+          <td style="color:var(--verde);font-weight:800">&#9660; -25%</td>
+          <td><span class="criticidade crit-relevante">Relevante</span></td>
+          <td>&#9989; Completo</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge c3">8</span></td>
+          <td>Realizar TED</td>
+          <td><div class="bar-mini"><div class="bm" style="width:2px"></div><span>93</span></div></td>
+          <td><div class="bar-mini"><div class="bm red" style="width:2px"></div><span>24</span></div></td>
+          <td><strong>30,0%</strong></td>
+          <td>0,6%</td>
+          <td>0,8%</td>
+          <td style="color:var(--verde);font-weight:800">▼ −59%</td>
+          <td><span class="criticidade crit-monitorar">Monitorar</span></td>
+          <td>✅ Completo</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge c3">9</span></td>
+          <td>Pagar Fatura / Boleto</td>
+          <td><div class="bar-mini"><div class="bm" style="width:1px"></div><span>69</span></div></td>
+          <td><div class="bar-mini"><div class="bm red" style="width:2px"></div><span>20</span></div></td>
+          <td><strong style="color:var(--red)">35,1%</strong></td>
+          <td>0,5%</td>
+          <td>0,6%</td>
+          <td style="color:var(--verde);font-weight:800">▼ −59%</td>
+          <td><span class="criticidade crit-monitorar">Monitorar</span></td>
+          <td>✅ Completo</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- JORNADA -->
+  <div class="sec-head">
+    <div class="kicker">Mapa de Jornada</div>
+    <h2>Etapas Impactadas — Onde a Jornada Quebra</h2>
+    <p>Agrupamento dos temas do Top 10 por etapa da jornada do cliente.</p>
+  </div>
+
+  <div class="jornada-grid">
+    <div class="jorn-card red">
+      <div class="jt">Etapa crítica</div>
+      <h4>Login / Autenticação / Acesso</h4>
+      <p class="jp">Maior volume do estudo. Cliente não consegue entrar no app: senha incorreta, biometria falha, câmera trava, reconhecimento facial não concluído, SMS não chega. Jornada quebra antes de qualquer ação financeira.</p>
+      <p class="jp"><strong>Temas:</strong> Acesso ao App · Alterar Senha do App · Login - Falha de Comunicação</p>
+      <div class="jorn-nums">
+        <div class="jn"><b>5.298</b><span>Chamadas</span></div>
+        <div class="jn"><b>981</b><span>Rechamadas</span></div>
+        <div class="jn"><b>~18,5%</b><span>Taxa</span></div>
+      </div>
+      <span class="jorn-tag jtag-alto">Risco rechamada: Alto</span>
+    </div>
+    <div class="jorn-card red">
+      <div class="jt">Etapa crítica</div>
+      <h4>Segurança / Bloqueio / Transações</h4>
+      <p class="jp">Conta bloqueada ou transações impedidas por segurança/antifraude. Cliente não entende o motivo do bloqueio, não tem visibilidade do status e depende do atendimento para liberar movimentações.</p>
+      <p class="jp"><strong>Temas:</strong> Liberar Transações</p>
+      <div class="jorn-nums">
+        <div class="jn"><b>1.477</b><span>Chamadas</span></div>
+        <div class="jn"><b>384</b><span>Rechamadas</span></div>
+        <div class="jn"><b>28,6%</b><span>Taxa</span></div>
+      </div>
+      <span class="jorn-tag jtag-alto">Risco rechamada: Alto</span>
+    </div>
+    <div class="jorn-card orange">
+      <div class="jt">Etapa relevante</div>
+      <h4>Cadastro e Dados Pessoais</h4>
+      <p class="jp">Atualização de telefone, e-mail, endereço ou documentos trava no envio de fotos, reconhecimento facial ou código para número antigo. Cliente não tem clareza se a solicitação foi concluída ou está em análise.</p>
+      <p class="jp"><strong>Temas:</strong> Atualização Cadastral · Cadastro/Exclusão Chave Pix</p>
+      <div class="jorn-nums">
+        <div class="jn"><b>1.615</b><span>Chamadas</span></div>
+        <div class="jn"><b>409</b><span>Rechamadas</span></div>
+        <div class="jn"><b>25,3%</b><span>Taxa</span></div>
+      </div>
+      <span class="jorn-tag jtag-alto">Risco rechamada: Alto (+128% em jun)</span>
+    </div>
+    <div class="jorn-card orange">
+      <div class="jt">Etapa relevante</div>
+      <h4>Dispositivo / Desvínculo de Aparelho</h4>
+      <p class="jp">Troca de celular ou reinstalação impede acesso. Novo aparelho não autorizado, biometria falha no fluxo de desvínculo, SMS não chega, conta vinculada ao aparelho antigo. Crescimento de 295% em junho é alerta crítico.</p>
+      <p class="jp"><strong>Temas:</strong> Desvincular Aparelho</p>
+      <div class="jorn-nums">
+        <div class="jn"><b>500</b><span>Chamadas</span></div>
+        <div class="jn"><b>78</b><span>Rechamadas</span></div>
+        <div class="jn"><b>19,3%</b><span>Taxa</span></div>
+      </div>
+      <span class="jorn-tag jtag-alto">🚨 +295% em junho</span>
+    </div>
+    <div class="jorn-card">
+      <div class="jt">Etapa relevante</div>
+      <h4>Segurança / Validação de Token</h4>
+      <p class="jp">SMS/token não chega ou chega para número desatualizado. Cliente bloqueado antes de concluir qualquer fluxo. Categoria de token tratada de forma consolidada para orientar analise e acao.</p>
+      <p class="jp"><strong>Temas:</strong> Recebimento / Validacao Token</p>
+      <div class="jorn-nums">
+        <div class="jn"><b>594</b><span>Chamadas</span></div>
+        <div class="jn"><b>122</b><span>Rechamadas</span></div>
+        <div class="jn"><b>~20,5%</b><span>Taxa (unificado)</span></div>
+      </div>
+      <span class="jorn-tag jtag-medio">Risco rechamada: Médio-Alto</span>
+    </div>
+    <div class="jorn-card">
+      <div class="jt">Monitorar</div>
+      <h4>Transações Financeiras e Pagamentos</h4>
+      <p class="jp">TED pendente sem status claro. Pagamento não finaliza ou código de barras não funciona. Maior taxa de rechamada do Top 10 (35,1% para Pagar Fatura) apesar do baixo volume — cliente retorna sem confirmação.</p>
+      <p class="jp"><strong>Temas:</strong> Realizar TED · Pagar Fatura / Boleto</p>
+      <div class="jorn-nums">
+        <div class="jn"><b>162</b><span>Chamadas</span></div>
+        <div class="jn"><b>44</b><span>Rechamadas</span></div>
+        <div class="jn"><b>~27%</b><span>Taxa média</span></div>
+      </div>
+      <span class="jorn-tag jtag-medio">Rechamada alta em baixo volume</span>
+    </div>
+  </div>
+
+  <!-- BIRDIE -->
+  <div class="sec-head">
+    <div class="kicker">Voz do Cliente</div>
+    <h2>O Que o Cliente Está Dizendo — Birdie</h2>
+    <p>Padrões de relatos extraídos da coluna "descrição Birdie" da aba "Análise destrinchada". Sem invenção de frases — uso apenas dos registros presentes na base.</p>
+  </div>
+
+  <div class="birdie-grid">
+    <div class="birdie-card">
+      <div class="bt">Acesso ao App <span class="btag btag-falha">Falha técnica</span></div>
+      <ul>
+        <li>Cliente tenta acessar, mas o app trava, não abre ou não conclui etapas como selfie, câmera ou validação</li>
+        <li>Conta aparece vinculada a outro aparelho, mesmo após orientação anterior de desvinculação</li>
+        <li>Senha apontada como incorreta e fluxo de redefinição exige reconhecimento facial que falha ou trava</li>
+        <li>Perda de autonomia para acessar conta, consultar informações ou movimentar valores</li>
+        <li>Risco de rechamada: <strong>alto</strong> — cliente retorna enquanto não consegue entrar</li>
+      </ul>
+    </div>
+    <div class="birdie-card">
+      <div class="bt">Liberar Transações <span class="btag btag-bloqueio">Bloqueio</span></div>
+      <ul>
+        <li>App bloqueia ou não permite liberar transações, impedindo movimentações financeiras</li>
+        <li>Jornada quebra na etapa de segurança/validação, antes da conclusão da movimentação</li>
+        <li>Fatores associados: validação cadastral, vínculo de aparelho, senha/biometria, bloqueio preventivo ou análise pendente</li>
+        <li>Perda de autonomia para usar a conta e dependência do atendimento para entender o bloqueio</li>
+        <li>Risco de rechamada: <strong>alto</strong></li>
+      </ul>
+    </div>
+    <div class="birdie-card">
+      <div class="bt">Atualização Cadastral <span class="btag btag-falha">Falha de fluxo</span></div>
+      <ul>
+        <li>Dificuldade para atualizar telefone, e-mail, endereço ou documentos pelo app</li>
+        <li>Jornada quebra no envio de foto/documento, reconhecimento facial ou validação por SMS</li>
+        <li>Código enviado para telefone antigo impede a conclusão</li>
+        <li>Documentos não aceitos, app travado, necessidade de envio via WhatsApp</li>
+        <li>Cliente não sabe se a atualização foi concluída ou está em análise</li>
+      </ul>
+    </div>
+    <div class="birdie-card">
+      <div class="bt">Alterar Senha do App <span class="btag btag-falha">Falha de fluxo</span></div>
+      <ul>
+        <li>SMS/token não chega ou vai para dado desatualizado</li>
+        <li>Reconhecimento facial trava ou câmera/selfie falha na etapa de validação</li>
+        <li>Senha nova não aceita após tentativa de redefinição</li>
+        <li>Acesso bloqueado — cliente precisa abrir chamado, aguardar prazo ou ir à loja</li>
+        <li>Risco de rechamada: <strong>alto</strong> pela falta de clareza sobre próximo passo</li>
+      </ul>
+    </div>
+    <div class="birdie-card">
+      <div class="bt">Desvincular Aparelho <span class="btag btag-bloqueio">Bloqueio + falha</span></div>
+      <ul>
+        <li>Troca de celular ou reinstalação impede acesso ao app</li>
+        <li>Aparelho novo não autorizado e biometria/selfie falha no fluxo de desvínculo</li>
+        <li>SMS de verificação não chega — dependência de canais assistidos para liberar</li>
+        <li>Cliente com dinheiro ou benefício disponível mas sem acesso à conta</li>
+        <li>Múltiplas tentativas, prazos e direcionamentos para loja sem resolução imediata</li>
+      </ul>
+    </div>
+    <div class="birdie-card">
+      <div class="bt">Recebimento / Validação Token <span class="btag btag-duvida">Token</span></div>
+      <ul>
+        <li>SMS/token não chega, chega com atraso ou não é reconhecido pelo sistema</li>
+        <li>Token enviado para número desatualizado — cliente não consegue receber</li>
+        <li>Código digitado mas sistema não valida ou apresenta erro</li>
+        <li>Jornada quebra antes da conclusão de qualquer fluxo (acesso, contratação, solicitação)</li>
+        <li>Risco de rechamada: <strong>alto</strong> — cliente retorna enquanto não valida</li>
+      </ul>
+    </div>
+    <div class="birdie-card">
+      <div class="bt">Realizar TED <span class="btag btag-duvida">Incerteza</span></div>
+      <ul>
+        <li>TED pendente ou sem finalização — valor debitado sem confirmação visível no destino</li>
+        <li>Falta de clareza sobre prazo ou status da transação</li>
+        <li>Cliente não sabe se deve aguardar, refazer, cancelar ou abrir chamado</li>
+        <li>Perda de confiança na operação financeira — risco de rechamada: alto</li>
+      </ul>
+    </div>
+    <div class="birdie-card">
+      <div class="bt">Pagar Fatura / Boleto <span class="btag btag-falha">Falha + incerteza</span></div>
+      <ul>
+        <li>Dificuldade para pagar ou gerar boleto / segunda via pelo app</li>
+        <li>Código de barras não funciona ou pagamento não finaliza com mensagem de erro</li>
+        <li>Falta de clareza se operação foi concluída — risco de atraso no pagamento</li>
+        <li>Atendimento orienta novas tentativas, segunda via ou aguardo do prazo de compensação</li>
+        <li>Esforço do cliente: médio a alto — risco de rechamada: médio a alto</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alerta-dup" style="background:#f0fdf4;border-color:#86efac">
+    <span>ℹ️</span>
+    <span><strong>Limitação — Cadastro/Exclusão Chave Pix:</strong> A coluna "descrição Birdie" para este tema está <strong>incompleta ou ausente</strong> na base. A análise qualitativa deste tema depende de enriquecimento futuro. A classificação atual baseia-se em volume e taxa de rechamada (hipótese: dificuldade no fluxo de cadastro/exclusão de chave, possivelmente ligada a validação de identidade ou token).</span>
+  </div>
+
+  <!-- SINTOMAS x CAUSAS -->
+  <div class="sec-head">
+    <div class="kicker">Diagnóstico</div>
+    <h2>Sintomas × Causas Prováveis — Top 5</h2>
+    <p>Separação clara entre o que o cliente percebe, o que pode estar causando e o que precisa ser investigado.</p>
+  </div>
+
+  <div class="sx-grid">
+    <div class="sx-card">
+      <h4>Acesso ao App / Alterar Senha</h4>
+      <div class="sx-row">
+        <span class="sx-label s">Sintoma</span>
+        <span class="sx-val">App não abre, trava na biometria, senha "incorreta", reconhecimento facial falha</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label c">Causa provável</span>
+        <span class="sx-val">Fluxo de biometria/câmera com falha técnica; dependência de dado cadastral desatualizado (telefone/e-mail) para redefinição</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label h">Hipótese</span>
+        <span class="sx-val">Alta interdependência entre desvínculo de aparelho e acesso — o crescimento de Desvincular em jun pode explicar parte da rechamada em Acesso</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label d">Evidência necessária</span>
+        <span class="sx-val">Logs de erro de biometria; taxa de abandono no fluxo de redefinição de senha; % de clientes com dado desatualizado</span>
+      </div>
+    </div>
+    <div class="sx-card">
+      <h4>Liberar Transações</h4>
+      <div class="sx-row">
+        <span class="sx-label s">Sintoma</span>
+        <span class="sx-val">Conta bloqueada — cliente não consegue fazer nenhuma movimentação e não sabe o motivo</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label c">Causa provável</span>
+        <span class="sx-val">Bloqueio antifraude/segurança sem notificação proativa; cadastro desatualizado impedindo validação; regra de negócio opaca</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label h">Hipótese</span>
+        <span class="sx-val">O aumento de +32% em junho pode estar relacionado ao aumento simultâneo de Atualização Cadastral (+128%) — dado desatualizado → bloqueio</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label d">Evidência necessária</span>
+        <span class="sx-val">Motivo de bloqueio por categoria; % de clientes com dado desatualizado ativo no momento do bloqueio</span>
+      </div>
+    </div>
+    <div class="sx-card">
+      <h4>Atualização Cadastral</h4>
+      <div class="sx-row">
+        <span class="sx-label s">Sintoma</span>
+        <span class="sx-val">Não consegue atualizar telefone/e-mail/endereço; código vai para número antigo; status "em análise" sem prazo claro</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label c">Causa provável</span>
+        <span class="sx-val">Fluxo de atualização dependente de dado já desatualizado (circular); documentos com validação rígida; ausência de status claro pós-envio</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label h">Hipótese</span>
+        <span class="sx-val">O crescimento de +128% em junho pode indicar campanha, mudança de regra ou incidente de sistema — investigar se houve evento técnico em junho</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label d">Evidência necessária</span>
+        <span class="sx-val">Taxa de conclusão do fluxo de atualização no app; incidentes de sistema em junho; análise de solicitações abertas vs. concluídas</span>
+      </div>
+    </div>
+    <div class="sx-card">
+      <h4>Desvincular Aparelho</h4>
+      <div class="sx-row">
+        <span class="sx-label s">Sintoma</span>
+        <span class="sx-val">Novo celular não autorizado; biometria falha no desvínculo; SMS não chega; precisa ir à loja</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label c">Causa provável</span>
+        <span class="sx-val">Fluxo de desvínculo dependente de biometria no aparelho antigo; dados desatualizados bloqueando SMS; processo sem alternativa assíncrona</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label h">Hipótese</span>
+        <span class="sx-val">Crescimento de 295% em junho é anomalia. Pode indicar incidente técnico, mudança de comportamento (troca de aparelhos em massa) ou nova regra de segurança</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label d">Evidência necessária</span>
+        <span class="sx-val">Volume de solicitações de desvínculo por canal; incidente técnico em junho; logs de falha no fluxo de autorização de dispositivo</span>
+      </div>
+    </div>
+    <div class="sx-card">
+      <h4>Recebimento / Validação Token</h4>
+      <div class="sx-row">
+        <span class="sx-label s">Sintoma</span>
+        <span class="sx-val">SMS não chega, chega com atraso, não é aceito ou vai para número desatualizado</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label c">Causa provável</span>
+        <span class="sx-val">Dado cadastral desatualizado (telefone antigo); falha de entrega de SMS; token com tempo de expiração curto; sem canal alternativo de validação</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label h">Hipótese</span>
+        <span class="sx-val">Tema transversal — afeta múltiplos fluxos (acesso, cadastro, transações). Resolver dado desatualizado pode reduzir volume em várias categorias simultaneamente</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label d">Evidência necessária</span>
+        <span class="sx-val">% de falhas de entrega SMS por operadora; % de clientes com telefone desatualizado; logs de expiração de token</span>
+      </div>
+    </div>
+    <div class="sx-card">
+      <h4>Pagar Fatura / Boleto — Realizar TED</h4>
+      <div class="sx-row">
+        <span class="sx-label s">Sintoma</span>
+        <span class="sx-val">Pagamento não finaliza; TED pendente; cliente sem confirmação de sucesso; risco de atraso</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label c">Causa provável</span>
+        <span class="sx-val">Ausência de status claro no app pós-transação; timeout sem feedback; boleto com código inválido ou expirado</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label h">Hipótese</span>
+        <span class="sx-val">Alta taxa de rechamada (35,1%) apesar de baixo volume indica que o fluxo de confirmação pós-transação é deficiente — cliente não consegue confirmar sem ligar</span>
+      </div>
+      <div class="sx-row">
+        <span class="sx-label d">Evidência necessária</span>
+        <span class="sx-val">% de transações com status "pendente" por mais de 2h; screen de confirmação pós-pagamento; logs de timeout</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ===================== PAGE 4: PLANO DE AÇÃO ===================== -->
+<div class="page" id="page-plano">
+<div class="container">
+
+  <!-- MATRIZ PRIORIZAÇÃO -->
+  <div class="sec-head">
+    <div class="kicker">Priorização</div>
+    <h2>Matriz de Criticidade</h2>
+    <p>Classificação por volume, taxa de rechamada, impacto na jornada e capacidade de redução de contato.</p>
+  </div>
+
+  <div class="matriz">
+    <div class="mz-col critico">
+      <div class="mz-head critico">Crítico</div>
+      <div class="mz-body">
+        <div class="mz-item">Acesso ao App (4.608 — 886 rechamadas)</div>
+        <div class="mz-item">Liberar Transações (1.477 — 384 rechamadas)</div>
+        <div class="mz-item">Atualização Cadastral (1.199 — 330 rechamadas · +128% jun)</div>
+      </div>
+    </div>
+    <div class="mz-col relevante">
+      <div class="mz-head relevante">Relevante</div>
+      <div class="mz-body">
+        <div class="mz-item">Desvincular Aparelho (+295% jun — alerta crítico de crescimento)</div>
+        <div class="mz-item">Alterar Senha do App (614 chamadas — em redução)</div>
+        <div class="mz-item">Cadastro/Excl. Chave Pix (416 — Birdie incompleto)</div>
+        <div class="mz-item">Recebimento / Validacao Token (594 - unificado)</div>
+      </div>
+    </div>
+    <div class="mz-col monitorar">
+      <div class="mz-head monitorar">Monitorar</div>
+      <div class="mz-body">
+        <div class="mz-item">Pagar Fatura/Boleto (69 — taxa 35,1%)</div>
+        <div class="mz-item">Realizar TED (93 — taxa 30%)</div>
+      </div>
+    </div>
+    <div class="mz-col baixo">
+      <div class="mz-head baixo">Baixa Prioridade</div>
+      <div class="mz-body">
+        <div class="mz-item">Visualizar Cartão (47 chamadas)</div>
+        <div class="mz-item">Login - Falha de Comunicação (76)</div>
+        <div class="mz-item">Abertura de Conta (60)</div>
+        <div class="mz-item">Gerar Extrato · Desbloquear Cartão · Demais</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLANO DE AÇÃO -->
+  <div class="sec-head">
+    <div class="kicker">Plano de Ação</div>
+    <h2>Ações em 3 Camadas — Top 5 Prioritários</h2>
+    <p>Imediata (script/FAQ/orientação) · Tática (app/comunicação) · Estrutural (fluxo/regra/automação)</p>
+  </div>
+
+  <div class="plano-item">
+    <div class="plano-head">
+      <div class="plano-rank r1">1</div>
+      <div class="plano-info">
+        <h4>Acesso ao App</h4>
+        <div class="pi-meta">
+          <span class="pi-chip crit">Crítico</span>
+          <span class="pi-chip">4.608 chamadas</span>
+          <span class="pi-chip">886 rechamadas</span>
+          <span class="pi-chip">Taxa: 26,5%</span>
+          <span class="pi-chip green">Birdie: Completo</span>
+        </div>
+      </div>
+    </div>
+    <div class="plano-body">
+      <div class="plano-col">
+        <div class="pc-h">Imediata</div>
+        <ul>
+          <li>Padronizar script de atendimento com checklist de diagnóstico (biometria? SMS? aparelho vinculado?)</li>
+          <li>FAQ no chatbot: "não consigo entrar no app" → árvore de decisão (senha / biometria / aparelho)</li>
+          <li>Orientar atendentes a registrar se o erro é de biometria, senha ou vínculo de aparelho</li>
+          <li>Reduzir improcedência com diagnóstico correto na 1ª chamada</li>
+        </ul>
+      </div>
+      <div class="plano-col">
+        <div class="pc-h">Tática</div>
+        <ul>
+          <li>Mensagem proativa no app quando biometria falha mais de 2x: "Dificuldade? Veja como redefinir"</li>
+          <li>Push quando conta vinculada a outro aparelho: orientar fluxo de desvínculo antes de ligar</li>
+          <li>SMS de orientação pós-tentativa de acesso com falha (3+ tentativas)</li>
+          <li>Tutorial em vídeo curto no fluxo de redefinição de senha</li>
+        </ul>
+      </div>
+      <div class="plano-col">
+        <div class="pc-h">Estrutural</div>
+        <ul>
+          <li>Revisar fluxo de biometria — oferecer alternativa de validação quando câmera falha</li>
+          <li>Permitir redefinição de senha sem depender de biometria (fallback por e-mail ou token)</li>
+          <li>Criar monitoramento de erros de acesso em tempo real por tipo de falha</li>
+          <li>Desacoplar fluxo de redefinição de senha da obrigatoriedade de dado atualizado</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="plano-item">
+    <div class="plano-head">
+      <div class="plano-rank r1">2</div>
+      <div class="plano-info">
+        <h4>Liberar Transações</h4>
+        <div class="pi-meta">
+          <span class="pi-chip crit">Crítico</span>
+          <span class="pi-chip">1.477 chamadas</span>
+          <span class="pi-chip">384 rechamadas</span>
+          <span class="pi-chip">Taxa: 28,6%</span>
+          <span class="pi-chip">+32% em jun</span>
+        </div>
+      </div>
+    </div>
+    <div class="plano-body">
+      <div class="plano-col">
+        <div class="pc-h">Imediata</div>
+        <ul>
+          <li>Script: explicar ao cliente o motivo do bloqueio no 1º contato (não deixar sem informação)</li>
+          <li>Orientar atendentes a registrar o tipo de bloqueio (antifraude / cadastral / análise / segurança)</li>
+          <li>FAQ WhatsApp: "por que não consigo fazer transações?" com tipos de bloqueio</li>
+        </ul>
+      </div>
+      <div class="plano-col">
+        <div class="pc-h">Tática</div>
+        <ul>
+          <li>Push/SMS proativo quando bloqueio é aplicado: "Sua conta foi bloqueada temporariamente. [Motivo]. Saiba como regularizar."</li>
+          <li>Status visível no app: "Transações bloqueadas — clique para entender o motivo"</li>
+          <li>Criar régua de comunicação pós-desbloqueio para confirmar liberação</li>
+        </ul>
+      </div>
+      <div class="plano-col">
+        <div class="pc-h">Estrutural</div>
+        <ul>
+          <li>Investigar correlação entre dado desatualizado e bloqueio — resolver cadastro resolve bloqueio?</li>
+          <li>Criar log de motivo de bloqueio acessível ao cliente no app</li>
+          <li>Automatizar desbloqueio quando cliente atualiza dado pendente</li>
+          <li>Revisar regras de bloqueio preventivo para reduzir falsos positivos</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="plano-item">
+    <div class="plano-head">
+      <div class="plano-rank r1">3</div>
+      <div class="plano-info">
+        <h4>Atualização Cadastral</h4>
+        <div class="pi-meta">
+          <span class="pi-chip crit">Crítico</span>
+          <span class="pi-chip">1.199 chamadas</span>
+          <span class="pi-chip">330 rechamadas</span>
+          <span class="pi-chip">Taxa: 30,7%</span>
+          <span class="pi-chip crit">+128% em jun — investigar</span>
+        </div>
+      </div>
+    </div>
+    <div class="plano-body">
+      <div class="plano-col">
+        <div class="pc-h">Imediata</div>
+        <ul>
+          <li>Script: orientar envio de documentos via WhatsApp oficial quando app trava</li>
+          <li>Informar prazo claro de análise na 1ª chamada (evitar rechamada por dúvida de status)</li>
+          <li>Registrar tipo de dado que o cliente tenta atualizar (telefone / e-mail / endereço / doc)</li>
+        </ul>
+      </div>
+      <div class="plano-col">
+        <div class="pc-h">Tática</div>
+        <ul>
+          <li>SMS/WhatsApp com prazo e status após abertura de solicitação de atualização cadastral</li>
+          <li>Trigger de push quando atualização é concluída: "Seus dados foram atualizados com sucesso"</li>
+          <li>Investigar aumento de +128% em junho — verificar se houve incidente ou mudança de regra</li>
+        </ul>
+      </div>
+      <div class="plano-col">
+        <div class="pc-h">Estrutural</div>
+        <ul>
+          <li>Redesenhar fluxo de atualização: não depender de dado desatualizado para validar novo dado</li>
+          <li>Oferecer alternativa de atualização por reconhecimento facial + biometria sem necessidade de SMS</li>
+          <li>Criar painel de status de solicitação visível ao cliente no app (sem precisar ligar)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="plano-item">
+    <div class="plano-head">
+      <div class="plano-rank r2">4</div>
+      <div class="plano-info">
+        <h4>Desvincular Aparelho</h4>
+        <div class="pi-meta">
+          <span class="pi-chip">Relevante → Crítico em crescimento</span>
+          <span class="pi-chip">500 chamadas</span>
+          <span class="pi-chip crit">+295% jun — alerta máximo</span>
+        </div>
+      </div>
+    </div>
+    <div class="plano-body">
+      <div class="plano-col">
+        <div class="pc-h">Imediata</div>
+        <ul>
+          <li>Investigar causa do crescimento de 295% em junho — incidente técnico? mudança de regra?</li>
+          <li>Script específico para desvínculo com checklist completo (app antigo acessível? dados atualizados?)</li>
+          <li>Registrar motivo de falha no desvínculo em todos os atendimentos</li>
+        </ul>
+      </div>
+      <div class="plano-col">
+        <div class="pc-h">Tática</div>
+        <ul>
+          <li>Tutorial passo a passo de desvínculo no app e WhatsApp</li>
+          <li>Push quando aparelho novo detectado: "Autorize seu novo dispositivo aqui"</li>
+          <li>SMS com link direto para o fluxo de desvínculo quando cliente liga com este tema</li>
+        </ul>
+      </div>
+      <div class="plano-col">
+        <div class="pc-h">Estrutural</div>
+        <ul>
+          <li>Criar fluxo de desvínculo que não dependa do aparelho antigo</li>
+          <li>Oferecer alternativa de validação por e-mail quando SMS falha</li>
+          <li>Criar monitoramento de falhas no fluxo de autorização de dispositivo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="plano-item">
+    <div class="plano-head">
+      <div class="plano-rank r2">5</div>
+      <div class="plano-info">
+        <h4>Validação de Token / SMS (unificado)</h4>
+        <div class="pi-meta">
+          <span class="pi-chip">Relevante — transversal</span>
+          <span class="pi-chip">594 chamadas (unificado)</span>
+          <span class="pi-chip">122 rechamadas</span>
+          <span class="pi-chip crit">Categoria consolidada na analise</span>
+        </div>
+      </div>
+    </div>
+    <div class="plano-body">
+      <div class="plano-col">
+        <div class="pc-h">Imediata</div>
+        <ul>
+          <li>Manter a categoria consolidada na base como "Recebimento / Validacao Token"</li>
+          <li>Script: verificar se dado está atualizado antes de tentar reenviar token</li>
+          <li>Orientar atendentes a registrar se o problema é "não chega", "expirado" ou "número errado"</li>
+        </ul>
+      </div>
+      <div class="plano-col">
+        <div class="pc-h">Tática</div>
+        <ul>
+          <li>Oferecer canal alternativo no próprio app quando SMS falha (e-mail, push, ligação)</li>
+          <li>Aumentar tempo de expiração do token quando há histórico de falha de entrega</li>
+          <li>Trigger de orientação: "Não recebeu o código? Veja como atualizar seu telefone"</li>
+        </ul>
+      </div>
+      <div class="plano-col">
+        <div class="pc-h">Estrutural</div>
+        <ul>
+          <li>Criar segundo fator alternativo ao SMS (app authenticator ou e-mail)</li>
+          <li>Monitorar taxa de entrega de SMS por operadora em tempo real</li>
+          <li>Resolver dado desatualizado como alavanca: elimina falha de token em múltiplos fluxos</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- GATILHOS -->
+  <div class="sec-head">
+    <div class="kicker">Comunicação Ativa</div>
+    <h2>Gatilhos de Comunicação Sugeridos</h2>
+    <p>Momentos, canais e mensagens para reduzir rechamada e retrabalho antes que o cliente precise ligar.</p>
+  </div>
+
+  <div class="gatilho-grid">
+    <div class="gat-card w">
+      <div class="gc-tema">Acesso ao App / Senha</div>
+      <h4>Falha de autenticação detectada</h4>
+      <div class="gat-row">
+        <div class="gr-l">Momento</div>
+        <div class="gr-v">3ª tentativa de acesso com falha ou biometria rejeitada</div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Canal</div>
+        <div class="gr-v"><span class="canal-tag">Push</span> <span class="canal-tag">SMS</span></div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Mensagem sugerida</div>
+        <div class="gr-v">"Dificuldade para entrar? Veja como redefinir senha ou liberar seu acesso sem precisar ligar."</div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Objetivo</div>
+        <div class="gr-v">Reduzir chamada de acesso em até 30%</div>
+      </div>
+    </div>
+    <div class="gat-card s">
+      <div class="gc-tema">Liberar Transações</div>
+      <h4>Bloqueio de transações aplicado</h4>
+      <div class="gat-row">
+        <div class="gr-l">Momento</div>
+        <div class="gr-v">Imediatamente após bloqueio ser ativado no sistema</div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Canal</div>
+        <div class="gr-v"><span class="canal-tag">Push</span> <span class="canal-tag">WhatsApp</span></div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Mensagem sugerida</div>
+        <div class="gr-v">"Suas transações foram bloqueadas temporariamente por segurança. [Motivo]. Saiba como regularizar agora."</div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Objetivo</div>
+        <div class="gr-v">Evitar chamada de dúvida — cliente já sabe o motivo</div>
+      </div>
+    </div>
+    <div class="gat-card p">
+      <div class="gc-tema">Atualização Cadastral</div>
+      <h4>Solicitação de atualização aberta</h4>
+      <div class="gat-row">
+        <div class="gr-l">Momento</div>
+        <div class="gr-v">Após abertura de solicitação e no momento da conclusão</div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Canal</div>
+        <div class="gr-v"><span class="canal-tag">SMS</span> <span class="canal-tag">E-mail</span></div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Mensagem sugerida</div>
+        <div class="gr-v">"Recebemos sua solicitação de atualização cadastral. Prazo de análise: até X dias úteis. Avisaremos quando concluído."</div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Objetivo</div>
+        <div class="gr-v">Eliminar rechamada de status — cliente não liga para saber se foi concluído</div>
+      </div>
+    </div>
+    <div class="gat-card">
+      <div class="gc-tema">Desvincular Aparelho</div>
+      <h4>Novo dispositivo detectado</h4>
+      <div class="gat-row">
+        <div class="gr-l">Momento</div>
+        <div class="gr-v">Quando cliente tenta logar em aparelho não autorizado</div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Canal</div>
+        <div class="gr-v"><span class="canal-tag">Push</span> <span class="canal-tag">SMS</span></div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Mensagem sugerida</div>
+        <div class="gr-v">"Detectamos acesso de um novo dispositivo. Para autorizar, siga o passo a passo aqui."</div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Objetivo</div>
+        <div class="gr-v">Reduzir chamada de desvínculo — cliente resolve pelo app</div>
+      </div>
+    </div>
+    <div class="gat-card w">
+      <div class="gc-tema">Validação de Token</div>
+      <h4>SMS não entregue em 2 min</h4>
+      <div class="gat-row">
+        <div class="gr-l">Momento</div>
+        <div class="gr-v">2 minutos após envio de token sem confirmação de entrega</div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Canal</div>
+        <div class="gr-v"><span class="canal-tag">Push</span> <span class="canal-tag">E-mail</span></div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Mensagem sugerida</div>
+        <div class="gr-v">"Não recebeu o código? Clique para reenviar por e-mail ou atualizar seu número cadastrado."</div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Objetivo</div>
+        <div class="gr-v">Evitar chamada por token não recebido</div>
+      </div>
+    </div>
+    <div class="gat-card s">
+      <div class="gc-tema">TED / Pagar Fatura</div>
+      <h4>Transação sem confirmação</h4>
+      <div class="gat-row">
+        <div class="gr-l">Momento</div>
+        <div class="gr-v">2h após transação com status "pendente" ou sem comprovante</div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Canal</div>
+        <div class="gr-v"><span class="canal-tag">Push</span> <span class="canal-tag">SMS</span></div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Mensagem sugerida</div>
+        <div class="gr-v">"Sua TED está em processamento. Previsão de crédito: até [prazo]. Consulte o comprovante no app."</div>
+      </div>
+      <div class="gat-row">
+        <div class="gr-l">Objetivo</div>
+        <div class="gr-v">Reduzir rechamada por incerteza pós-transação (taxa 35%)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRÓXIMOS PASSOS -->
+  <div class="sec-head">
+    <div class="kicker">Próximos Passos</div>
+    <h2>Recomendações Finais e Ações Imediatas</h2>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px">
+    <div style="background:#fff;border:1px solid #e5edf8;border-radius:12px;padding:16px;box-shadow:0 3px 10px rgba(0,15,68,.05)">
+      <div style="font-size:11px;font-weight:900;color:var(--red);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Urgente — Esta semana</div>
+      <ul style="list-style:none;padding:0">
+        <li style="font-size:12px;color:#334155;padding:5px 0;border-bottom:1px solid #f5f5f5;display:flex;gap:7px"><span style="color:var(--red);font-weight:900">1.</span>Investigar crescimento de +295% em Desvincular Aparelho em junho — causa raiz</li>
+        <li style="font-size:12px;color:#334155;padding:5px 0;border-bottom:1px solid #f5f5f5;display:flex;gap:7px"><span style="color:var(--red);font-weight:900">2.</span>Investigar crescimento de +128% em Atualização Cadastral em junho — incidente?</li>
+        <li style="font-size:12px;color:#334155;padding:5px 0;border-bottom:1px solid #f5f5f5;display:flex;gap:7px"><span style="color:var(--red);font-weight:900">3.</span>Acompanhar falhas de token como categoria consolidada</li>
+        <li style="font-size:12px;color:#334155;padding:5px 0;display:flex;gap:7px"><span style="color:var(--red);font-weight:900">4.</span>Enriquecer descrição Birdie para Cadastro/Exclusão Chave Pix</li>
+      </ul>
+    </div>
+    <div style="background:#fff;border:1px solid #e5edf8;border-radius:12px;padding:16px;box-shadow:0 3px 10px rgba(0,15,68,.05)">
+      <div style="font-size:11px;font-weight:900;color:var(--orange);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Tático — Próximas 2 semanas</div>
+      <ul style="list-style:none;padding:0">
+        <li style="font-size:12px;color:#334155;padding:5px 0;border-bottom:1px solid #f5f5f5;display:flex;gap:7px"><span style="color:var(--orange);font-weight:900">5.</span>Ativar gatilhos de push/SMS para bloqueio de transações e falha de acesso</li>
+        <li style="font-size:12px;color:#334155;padding:5px 0;border-bottom:1px solid #f5f5f5;display:flex;gap:7px"><span style="color:var(--orange);font-weight:900">6.</span>Criar FAQ no chatbot cobrindo os 5 temas críticos com árvore de decisão</li>
+        <li style="font-size:12px;color:#334155;padding:5px 0;border-bottom:1px solid #f5f5f5;display:flex;gap:7px"><span style="color:var(--orange);font-weight:900">7.</span>Padronizar scripts de atendimento com tipos de erro (biometria / senha / aparelho / token)</li>
+        <li style="font-size:12px;color:#334155;padding:5px 0;display:flex;gap:7px"><span style="color:var(--orange);font-weight:900">8.</span>Criar indicador de taxa de rechamada por tema no painel de gestão</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <strong>Fontes e premissas:</strong> Análise baseada exclusivamente nas abas "Erro no APP" e "Análise destrinchada erro no AP" da planilha "Modelo de dados 2.0.xlsx". Período: bimestre maio–junho 2026. Nenhum número foi inventado. Inferências e hipóteses sinalizam como tais. Rechamadas totais calculadas a partir de volume × taxa por categoria. Birdie de "Cadastro/Exclusão Chave Pix" identificado como incompleto — análise qualitativa deste tema é hipótese. Categoria "Recebimento / Validacao Token" tratada de forma consolidada na analise.
+  </div>
+
+</div>
+</div>
+
+<script>
+// ─── PAGE NAV ───────────────────────────────────────────────────
+function setPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const idx = {visao:0,pareto:1,top10:2,plano:3}[id];
+  document.querySelectorAll('.nav button')[idx].classList.add('active');
+  if(id==='pareto') setTimeout(drawCharts,100);
+}
+
+// ─── PARETO CHARTS ──────────────────────────────────────────────
+const DATA_VOL = [
+  {label:'Acesso ao App',val:4608},
+  {label:'Liberar Transações',val:1477},
+  {label:'Atu. Cadastral',val:1199},
+  {label:'Alterar Senha App',val:614},
+  {label:'Desvincular Aparelho',val:500},
+  {label:'Cad./Excl. Pix',val:416},
+  {label:'Recebimento / Val Token',val:594},
+  {label:'Realizar TED',val:93},
+  {label:'Pagar Fatura/Boleto',val:69},
+  {label:'Login - Falha',val:76},
+];
+
+const DATA_RECH = [
+  {label:'Acesso ao App',val:886},
+  {label:'Liberar Transações',val:384},
+  {label:'Atu. Cadastral',val:330},
+  {label:'Recebimento / Val Token',val:122},
+  {label:'Cad./Excl. Pix',val:79},
+  {label:'Desvincular Aparelho',val:78},
+  {label:'Alterar Senha App',val:85},
+  {label:'Realizar TED',val:24},
+  {label:'Pagar Fatura/Boleto',val:20},
+];
+
+function drawPareto(canvasId, rawData, colorFn) {
+  const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio||1;
+  const W = canvas.parentElement.clientWidth - 40;
+  const H = 300;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W+'px';
+  canvas.style.height = H+'px';
+  ctx.scale(dpr,dpr);
+
+  const PAD = {l:52, r:52, t:16, b:80};
+  const IW = W - PAD.l - PAD.r;
+  const IH = H - PAD.t - PAD.b;
+
+  // sort desc
+  const data = [...rawData].sort((a,b)=>b.val-a.val);
+  const total = data.reduce((s,d)=>s+d.val,0);
+  const n = data.length;
+  const bw = IW/n - 4;
+
+  // grid
+  ctx.strokeStyle='#f0f4f8';ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const y = PAD.t + IH - (IH*i/4);
+    ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+IW,y);ctx.stroke();
+    ctx.fillStyle='#94a3b8';ctx.font='9px Inter,sans-serif';ctx.textAlign='right';
+    ctx.fillText(Math.round(data[0].val*i/4*(n/1)).toLocaleString('pt-BR'),PAD.l-4,y+3);
+  }
+
+  // bars
+  let cumPct=0;
+  const pts=[];
+  data.forEach((d,i)=>{
+    const bh = (d.val/data[0].val)*IH;
+    const x = PAD.l + i*(IW/n) + 2;
+    const y = PAD.t + IH - bh;
+    ctx.fillStyle = colorFn(i,d);
+    ctx.beginPath();
+    const r=4;
+    ctx.moveTo(x+r,y);ctx.lineTo(x+bw-r,y);
+    ctx.quadraticCurveTo(x+bw,y,x+bw,y+r);
+    ctx.lineTo(x+bw,y+bh);ctx.lineTo(x,y+bh);ctx.lineTo(x,y+r);
+    ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();ctx.fill();
+
+    // value label
+    ctx.fillStyle='#475569';ctx.font='bold 9px Inter,sans-serif';ctx.textAlign='center';
+    ctx.fillText(d.val.toLocaleString('pt-BR'), x+bw/2, y-3);
+
+    cumPct += d.val/total;
+    pts.push({x:x+bw/2, y:PAD.t+IH-(cumPct*IH)});
+
+    // x label
+    const lx = x+bw/2;
+    const ly = PAD.t+IH+12;
+    ctx.save();ctx.translate(lx,ly);ctx.rotate(-Math.PI/4);
+    ctx.fillStyle='#475569';ctx.font='9px Inter,sans-serif';ctx.textAlign='right';
+    const lbl = d.label;
+    ctx.fillText(lbl,0,0);
+    ctx.restore();
+  });
+
+  // pareto line (% cumulative)
+  ctx.strokeStyle='#ef4444';ctx.lineWidth=2;ctx.setLineDash([]);
+  ctx.beginPath();
+  pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+  ctx.stroke();
+
+  // dots
+  pts.forEach(p=>{
+    ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);
+    ctx.fillStyle='#ef4444';ctx.fill();
+    ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();
+  });
+
+  // right axis (% cumulative)
+  ctx.fillStyle='#94a3b8';ctx.font='9px Inter,sans-serif';ctx.textAlign='left';
+  for(let i=0;i<=4;i++){
+    const y=PAD.t+IH-(IH*i/4);
+    ctx.fillText((i*25)+'%', PAD.l+IW+4, y+3);
+  }
+
+  // legend
+  ctx.fillStyle='#64748b';ctx.font='10px Inter,sans-serif';ctx.textAlign='left';
+  ctx.fillRect(PAD.l,H-14,10,8);ctx.fillStyle='#0064f5';ctx.fillRect(PAD.l,H-14,10,8);
+  ctx.fillStyle='#64748b';ctx.fillText('Volume',PAD.l+13,H-7);
+  ctx.beginPath();ctx.strokeStyle='#ef4444';ctx.lineWidth=2;
+  ctx.moveTo(PAD.l+70,H-10);ctx.lineTo(PAD.l+80,H-10);ctx.stroke();
+  ctx.beginPath();ctx.arc(PAD.l+75,H-10,2.5,0,Math.PI*2);ctx.fillStyle='#ef4444';ctx.fill();
+  ctx.fillStyle='#64748b';ctx.fillText('% Acumulado',PAD.l+84,H-7);
+}
+
+function colorVol(i,d){
+  if(i===0)return'#dc2626';
+  if(i<=2)return'#ea580c';
+  if(i<=6)return'#0064f5';
+  return'#60a5fa';
+}
+function colorRech(i,d){
+  if(i===0)return'#dc2626';
+  if(i<=2)return'#ea580c';
+  if(i<=5)return'#7c3aed';
+  return'#a78bfa';
+}
+
+let chartsDrawn=false;
+function drawCharts(){
+  if(chartsDrawn)return;
+  chartsDrawn=true;
+  drawPareto('chartVol',DATA_VOL,colorVol);
+  drawPareto('chartRech',DATA_RECH,colorRech);
+}
+</script>
+</body>
+</html>
