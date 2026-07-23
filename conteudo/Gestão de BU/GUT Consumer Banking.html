@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Matriz GUT — BU Atendimento</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600;700&display=swap');
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Barlow',sans-serif; background:#fff; color:#1A2340; font-size:14px; }
+  .page { max-width:900px; margin:0 auto; padding:40px 32px 60px; }
+  @media print {
+    body { background:#fff; }
+    .no-print { display:none; }
+    .page { padding:20px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div style="background:#000F44;border-radius:14px;padding:24px 28px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;">
+    <div>
+      <div style="background:#78DF40;color:#000F44;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;padding:3px 14px 3px 10px;clip-path:polygon(0 0,93% 0,100% 50%,93% 100%,0 100%);display:inline-block;margin-bottom:8px;">Grupo de Trabalho</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#fff;letter-spacing:.02em;">Matriz de Dores — <span style="color:#78DF40;">GUT</span></div>
+      <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:3px;">BU Atendimento · 08 de maio de 2026</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:11px;color:rgba(255,255,255,.35);margin-bottom:4px;">Total de dores</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:900;color:#78DF40;line-height:1;">5</div>
+    </div>
+  </div>
+
+  <!-- SUMMARY TABLE -->
+  <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#000F44;margin-bottom:14px;">📊 Tabela Resumo — Ordenada por GUT</h2>
+  <table style="width:100%;border-collapse:collapse;margin-bottom:36px;font-size:13px;">
+    <thead>
+      <tr style="background:#000F44;color:#fff;">
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">#</th>
+        <th style="padding:10px 12px;text-align:left;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">Dor</th>
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">G</th>
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">U</th>
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">T</th>
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">GUT</th>
+        <th style="padding:10px 12px;text-align:center;font-weight:700;letter-spacing:.06em;font-size:11px;text-transform:uppercase;">Nível</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">1</td>
+        <td style="font-weight:700;color:#000F44;">Erro no APP</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">
+          <span style="background:#D63031;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">125</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#D63031;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Crítico</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">2</td>
+        <td style="font-weight:700;color:#000F44;">Acesso App</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">
+          <span style="background:#D63031;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">125</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#D63031;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Crítico</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">3</td>
+        <td style="font-weight:700;color:#000F44;">Área PIX</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">
+          <span style="background:#D63031;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">100</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#D63031;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Crítico</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">4</td>
+        <td style="font-weight:700;color:#000F44;">Melhorias App</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">
+          <span style="background:#D63031;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">100</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#D63031;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Crítico</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #D1DAEA;">
+        <td style="text-align:center;font-weight:800;color:#000F44;">5</td>
+        <td style="font-weight:700;color:#000F44;">Bloqueio de conta</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">
+          <span style="background:#D63031;color:#000F44;font-weight:900;padding:3px 10px;border-radius:20px;font-size:13px;">75</span>
+        </td>
+        <td style="text-align:center;"><span style="background:#D63031;color:#1a1a1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">Crítico</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- DETAIL CARDS -->
+  <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#000F44;margin-bottom:16px;">📋 Detalhamento por Dor</h2>
+  
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#D63031;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">Erro no APP</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#D63031;font-weight:700;">125</span> · G:5 U:5 T:5 · Crítico</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">Falta de mapeamento dos erros assim como orientação adequada para a operação.</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Mapa de erros e tipos de erros no App</li><li style="margin-bottom:4px;color:#445;">10º Lugar em volume de rechamada com 2,7%</li><li style="margin-bottom:4px;color:#445;">14,1% de índice de rechamada - Fonte Comitê clientes</li><li style="margin-bottom:4px;color:#445;">TOP motivos reclamados no RA (183 Jan-Abr) - Fonte Comitê clientes</li><li style="margin-bottom:4px;color:#445;">TOP 7 no volume de tabulações (+21k 2026) - Fonte Painel de filas</li></ul>
+        </div>
+      </div>
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#D63031;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">Acesso App</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#D63031;font-weight:700;">125</span> · G:5 U:5 T:5 · Crítico</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">Nesse item entra fricção no acesso ao APP. Pode ser por erro ou por jornada no onboarding. Nesse sentido "garantir que o cliente tenha acesso a sua conta" fica impactado.</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Média 9 mil casos por mês</li></ul>
+        </div>
+      </div>
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#D63031;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">Área PIX</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#D63031;font-weight:700;">100</span> · G:5 U:4 T:5 · Crítico</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">Existe fricção do cliente na área PIX em diversos pontos da jornada. Fonte dos dados: Painel de filas</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Transação não autorizada com 13.748 casos em 2026</li><li style="margin-bottom:4px;color:#445;">Compensação de Pix com 11.132 casos em 2026</li><li style="margin-bottom:4px;color:#445;">Vítima de golpe com 10.092 casos em 2026</li><li style="margin-bottom:4px;color:#445;">Dificuldade em transferir com 4.040 casos em 2026</li><li style="margin-bottom:4px;color:#445;">Dificuldade no Cadastro de chaves com 2.641 casos em 2026</li></ul>
+        </div>
+      </div>
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#D63031;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">Melhorias App</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#D63031;font-weight:700;">100</span> · G:5 U:5 T:4 · Crítico</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">Processos realizados manualmente pela equipe de atendimento por indisponibiidade no App.</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Contactless (300 casos/mês)</li><li style="margin-bottom:4px;color:#445;">Cópia de Contrato e DED (6.000 casos/mês)</li><li style="margin-bottom:4px;color:#445;">Emissão de boletos: antecipação de parcelas (20.000 casos/mês) </li><li style="margin-bottom:4px;color:#445;">Contestação de compras (900 casos/mês)</li><li style="margin-bottom:4px;color:#445;">Cancelamento Débito Automático (70 casos/mês)</li><li style="margin-bottom:4px;color:#445;">Alteração de Dados Cadastrais (e-mail e telefone) - 4.000 casos/mês</li><li style="margin-bottom:4px;color:#445;">Extrato mais de 90 dias (500 casos/mês)</li><li style="margin-bottom:4px;color:#445;">Antecipação de Compras Parceladas (300 casos/mês)</li></ul>
+        </div>
+      </div>
+      <div style="border:1.5px solid #D1DAEA;border-radius:12px;overflow:hidden;margin-bottom:16px;break-inside:avoid;">
+        <div style="background:#000F44;padding:12px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="background:#D63031;color:#000F44;font-size:22px;font-weight:900;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</div>
+          <div style="flex:1;">
+            <div style="color:#fff;font-size:16px;font-weight:800;">Bloqueio de conta</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">GUT Score: <span style="color:#D63031;font-weight:700;">75</span> · G:5 U:5 T:3 · Crítico</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;background:#fff;">
+          <p style="font-size:13px;color:#6B7A99;margin-bottom:10px;line-height:1.6;">Situações de perda de acesso a conta. Poca informação para esclarecimentos na central. Fonte dos dados: Painel de filas</p>
+          <ul style="padding-left:18px;font-size:13px;line-height:1.6;"><li style="margin-bottom:4px;color:#445;">Prevenção com 855 casos em 2026</li><li style="margin-bottom:4px;color:#445;">Bloqueio de saldo com 855 casos em 2026</li><li style="margin-bottom:4px;color:#445;">Contas com status inativa mas, com recebimento de saldo (77) -100 casos mês</li></ul>
+        </div>
+      </div>
+
+  <!-- FOOTER -->
+  <div style="border-top:1px solid #D1DAEA;padding-top:16px;margin-top:8px;display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-size:11px;color:#8899BB;font-weight:600;">BU Atendimento · Metodologia GUT</span>
+    <span style="font-size:11px;color:#8899BB;">GUT = Gravidade × Urgência × Tendência</span>
+  </div>
+
+  <div class="no-print" style="text-align:center;margin-top:32px;">
+    <button onclick="window.print()" style="background:#000F44;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;">🖨 Imprimir / Salvar como PDF</button>
+  </div>
+
+</div>
+</body>
+</html>
