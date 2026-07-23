@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ata de Reunião Oficial</title>
+    <style>
+        /* Configurações Gerais e Tipografia */
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        /* Container simulando a folha A4 */
+        .page {
+            background-color: #ffffff;
+            max-width: 210mm; /* Largura A4 */
+            margin: 0 auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            min-height: 297mm; /* Altura A4 */
+        }
+
+        /* =========================================
+           CABEÇALHO E LOGO AGI
+           ========================================= */
+        header {
+            background-color: #0A1B54; 
+            color: #ffffff;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            border-bottom: 4px solid #0056b3;
+        }
+
+        .logo-box {
+            background-color: #f4f6f9; 
+            padding: 4px 14px 8px 14px; 
+            border-radius: 12px; 
+            margin-right: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+            font-size: 36px;
+            font-weight: 900; 
+            letter-spacing: -1.5px;
+            color: #4285F4; 
+            line-height: 1;
+        }
+
+        .logo-i {
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo-i::after {
+            content: '';
+            position: absolute;
+            top: 0.12em; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0.22em;
+            height: 0.22em;
+            background-color: #34A853; 
+            border-radius: 50%;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* =========================================
+           CONTEÚDO PRINCIPAL
+           ========================================= */
+        .content {
+            padding: 30px;
+            flex-grow: 1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .meta-table th { font-size: 14px; }
+        .meta-table td { text-align: center; font-size: 16px; }
+
+        .main-table th { font-size: 13px; }
+        
+        .col-pauta { width: 50%; text-align: justify; vertical-align: top; }
+        .col-deliberacao { width: 10%; text-align: center; vertical-align: middle; font-weight: bold; }
+        .col-responsavel { width: 20%; text-align: center; vertical-align: middle; font-weight: bold; }
+        .col-retorna { width: 10%; text-align: center; vertical-align: middle; }
+        .col-anexo { width: 10%; text-align: center; vertical-align: middle; }
+
+        .pauta-title {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            text-align: center;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .col-pauta p { margin-top: 0; margin-bottom: 8px; }
+        .col-pauta ul, .col-pauta ol { margin-top: 0; margin-bottom: 10px; padding-left: 20px; }
+        .col-pauta li { margin-bottom: 4px; }
+        .destaque { font-weight: bold; color: #0A1B54; }
+
+        .attendance-section { margin-top: 30px; }
+        .attendance-text { text-align: center; font-style: italic; margin-bottom: 15px; }
+        .attendance-table th { background-color: #e6e6e6; }
+        .attendance-table td { text-align: center; padding: 5px; }
+        .col-member { width: 70%; text-align: left !important; padding-left: 15px !important; }
+        .col-status { width: 30%; }
+
+        /* =========================================
+           RODAPÉ
+           ========================================= */
+        footer {
+            background-color: #0A1B54;
+            color: #ffffff;
+            padding: 10px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+        }
+
+        .confidencial-badge {
+            background-color: #0d4a22;
+            color: #4ade80;
+            padding: 3px 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-radius: 3px;
+        }
+
+        /* =========================================
+           CONFIGURAÇÕES DE IMPRESSÃO (PDF)
+           ========================================= */
+        @media print {
+            body { background-color: #ffffff; padding: 0; margin: 0; }
+            .page { box-shadow: none; max-width: 100%; width: 100%; min-height: auto; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            tr { page-break-inside: avoid; }
+            thead { display: table-header-group; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page">
+        <!-- CABEÇALHO -->
+        <header>
+            <div class="logo-box">
+                <span class="logo-text">ag<span class="logo-i">i</span></span>
+            </div>
+            <div class="header-title">ATA DE REUNIÃO OFICIAL</div>
+        </header>
+
+        <!-- CONTEÚDO -->
+        <div class="content">
+            
+            <table class="meta-table">
+                <tr><th colspan="2">Assunto</th></tr>
+                <tr><td colspan="2">REUNIÃO DO COMITÊ CLIENTES</td></tr>
+                <tr><th>Data</th><th>Número da Ata</th></tr>
+                <tr><td>01/07/2026 15:00</td><td>03/2026</td></tr>
+            </table>
+
+            <table class="main-table">
+                <thead>
+                    <tr>
+                        <th>PAUTA</th>
+                        <th>Deliberação</th>
+                        <th>Responsável</th>
+                        <th>Retorna a Pauta</th>
+                        <th>Anexo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td class="col-pauta">
+                            <span class="pauta-title">Nova Jornada de seguros loja</span>
+                            <p><strong>Matheus</strong> comenta uma deliberação em Direx com o mesmo objetivo e proposta do comitê para o assunto. O foco é alavancar nossos indicadores de seguros.</p>
+                            <p><strong>Vinicius Aloe</strong> pergunta se tem alguma tela vinculada. <strong>Matheus</strong> confirma que não é um produto vinculado. Na tela deixamos de forma explícita.</p>
+                            <p><strong>Equipe de canais secundários (Regulatórios)</strong> comenta que bio não tem sido suficiente para regulatórios. <strong>Matheus</strong> comenta as ações baseadas em Qualidade de venda justamente pensando na queda de reclamações procedentes. Isso está endereçado no Agiturbo.</p>
+                            
+                            <p class="destaque">Considerações equipe de compliance:</p>
+                            <ul>
+                                <li>Oferta do seguro no mesmo contexto da originação do crédito, pode caracterizar vinculação indireta.</li>
+                            </ul>
+
+                            <p class="destaque">Considerações Jurídico:</p>
+                            <ul>
+                                <li>A oferta do seguro não pode ser realizada de forma obrigatória;</li>
+                                <li>Risco de possível interpretação de vínculo entre os produtos (crédito e seguro), ao ofertar o seguro durante a originação do crédito.</li>
+                            </ul>
+
+                            <p class="destaque">Mitigadores das ressalvas de Compliance e Jurídico:</p>
+                            <ol>
+                                <li><strong>Oferta:</strong> totalmente não vinculada ao Crédito.</li>
+                                <li><strong>Configuração do Produto:</strong> etapa exclusiva ao produto de seguridade.</li>
+                                <li><strong>Formalização:</strong> Biometria segregada para cada produto.</li>
+                            </ol>
+
+                            <p><strong>1ª Deliberativo jornada de seguros APP.</strong><br>
+                            Esta abordagem seguirá a mesma premissa de validações da jornada na loja, porém no APP.</p>
+                        </td>
+                        <td class="col-deliberacao">Aprovado</td>
+                        <td class="col-responsavel">Barbara Monteiro Bivar de Oliveira</td>
+                        <td class="col-retorna">Não</td>
+                        <td class="col-anexo">Sim</td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-pauta">
+                            <span class="pauta-title">Ajustes e roadmap Membership / Agi+</span>
+                            <p><strong>Matheus</strong> comenta que já temos +300k de arrecadação. Endossa como prioridade para Cia e reforça a descontinuação do PU (Proteção Urbana). <strong>Molon</strong> comenta que em breve começaremos a oferta para clientes não domiciliados.</p>
+                            <ol>
+                                <li>Teremos um ajuste no fluxo contábil e desenvolvimento das regras de comissionamento.</li>
+                                <li>Aguardaremos a publicação do App Agi+ na Play Store (Android).</li>
+                                <li>Entrega da fase 2 prevista para o dia 08/07.</li>
+                            </ol>
+
+                            <p class="destaque">Considerações equipe de compliance:</p>
+                            <ul>
+                                <li>Menção ao vínculo com a SAD (clientes novos). Experiência em produção: 08/07. (Risco Médio)</li>
+                                <li>Termo de cancelamento de Seguro Mensal avulso ao termo de adesão. Data implantação: 08/07</li>
+                            </ul>
+
+                            <p class="destaque">Considerações Jurídico:</p>
+                            <ul>
+                                <li>Vínculo com a SAD (clientes novos). Experiência em produção: 08/07. (Risco Médio)</li>
+                                <li>Termo de cancelamento de Seguro Mensal avulso ao termo de adesão. Data implantação: 08/07</li>
+                            </ul>
+                        </td>
+                        <td class="col-deliberacao">Aprovado</td>
+                        <td class="col-responsavel">Lucas Molon Meucci</td>
+                        <td class="col-retorna">Sim</td>
+                        <td class="col-anexo">Sim</td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-pauta">
+                            <span class="pauta-title">Ajustes na fila TED manual</span>
+                            <p><strong>Viviane</strong> explica as regras de fazer a solicitação de TED até as 15 da tarde para fazer a TED manual no dia. Falando de dados, o fluxo é relativamente grande de solicitações desse motivo. Tem gerado atrito expressivo e é um processo manual tanto em operações, backoffice e fraudes.</p>
+                            <p>Para deliberação, um paliativo do prazo das 15 ser válido por 48h. Alteração do fluxo para nascer o atendimento direto no interno (sem uma triagem no N1). Aqui tiramos um step na jornada.</p>
+                            <p>Vivi comenta os pareceres de jurídico e compliance. Basicamente bastante controle de rastreabilidade nas transações.</p>
+
+                            <p class="destaque">Considerações equipe de compliance e Jurídico:</p>
+                            <ul>
+                                <li>Necessidade de manutenção da adequação dos controles internos aplicáveis à operação;</li>
+                                <li>Padronizar o checklist de validação documental para todos os times envolvidos;</li>
+                                <li>Implementar monitoramento transacional e alertas para padrões atípicos de TED manual;</li>
+                                <li>Criar procedimentos operacionais padronizados;</li>
+                                <li>Criação de indicadores de uso do fluxo de TED manual e monitoramento do volume por loja e regional.</li>
+                            </ul>
+                        </td>
+                        <td class="col-deliberacao">Aprovado</td>
+                        <td class="col-responsavel">Renan Santiago</td>
+                        <td class="col-retorna">Não</td>
+                        <td class="col-anexo">Sim</td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-pauta">
+                            <span class="pauta-title">Bloqueio de cashout</span>
+                            <p><strong>Lilian</strong> comenta sobre a preocupação com o fluxo de atualização. Mas, foi explicado as diferenças. A jornada do cliente vai ser transparente quando estiver bloqueado.</p>
+                        </td>
+                        <td class="col-deliberacao">Ciência<br><span style="font-size: 10px; font-weight: normal;">(Informativo)</span></td>
+                        <td class="col-responsavel">Renan Santiago</td>
+                        <td class="col-retorna">Não</td>
+                        <td class="col-anexo">Sim</td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-pauta">
+                            <span class="pauta-title">Rechamada</span>
+                            <p><strong>Renan</strong> comenta os resultados. Taxa de rechamada em Jun/2026: 16,49% representando uma variação de +0,59p.p versus maio, porém dentro da Meta (<23,0%). Sendo pilares estruturais de impacto (Volume x Taxa). Foco prioritário de atuação.</p>
+                            
+                            <ul>
+                                <li><strong>1. Antecipação de Parcelas:</strong> Vol. Rechamada: 1.650 | Taxa Junho: 20,61% | Taxa Maio: 20,36%</li>
+                                <li><strong>2. Pix:</strong> Vol. Rechamada: 1.606 | Taxa Junho: 20,74% | Taxa Maio: 18,35%</li>
+                                <li><strong>3. Cancelamento de Optante:</strong> Vol. Rechamada: 1.383 | Taxa Junho: 17,32% | Taxa Maio: 20,98%</li>
+                                <li><strong>4. Erro App:</strong> Vol. Rechamada: 1.375 | Taxa Junho: 26,13% | Taxa Maio: 25,43%</li>
+                            </ul>
+
+                            <p>Entrando em PIX, Renan explica as reuniões de trabalho entre as BU's. <strong>Brum</strong> compartilha a sinergia entre as BU's e as ações oriundas disso. Comenta as matrizes de decisão para dar condição do operador trabalhar com instrução definitiva. Comenta sobre a autogestão da contestação MED.</p>
+                            <p><strong>Matheus</strong> comenta que a única situação melhor mapeada é Exceder o PIX. Acredita que tem situações onde o celular do cliente tem limitações, exemplo não conseguir fazer bio e fazer o pix. Vale fazer uma análise de qual etapa está morrendo mais.</p>
+                            <p><strong>Vinicius Aloe</strong> menciona que só precisamos ver que jornadas são essas porque é descentralizado. Matheus reforça que vale investigar esse tipo de situação de compatibilidade com celular. Vinicius Aloe menciona que tem dado para isso e endereça com o Lucas Brum para detalhar isso.</p>
+                            <p><strong>Glauber</strong> menciona para os lideres de BU, um acompanhamento de ponta a ponta para o que está na responsabilidade de cada um num modelo mais equânime.</p>
+                            <p><strong>Vinicius Aloe</strong> menciona que está capacitando a equipe também para conhecer todo ferramental para mapear essas coisas considerando o conhecimento mais técnico para dar suporte.</p>
+                        </td>
+                        <td class="col-deliberacao">Ciência<br><span style="font-size: 10px; font-weight: normal;">(Informativo)</span></td>
+                        <td class="col-responsavel">Renan Santiago</td>
+                        <td class="col-retorna">Não</td>
+                        <td class="col-anexo">Sim</td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-pauta">
+                            <span class="pauta-title">Nova Jornada de PID Atendimento</span>
+                            <p><strong>Jordana</strong> comenta sobre novo fluxo de PID no atendimento. Com essa melhoria estamos trazendo visibilidade para o operador sobre qual pontos de dados vamos passar. Mostramos as telas do operador, sobre como vai ficar a informação.</p>
+                        </td>
+                        <td class="col-deliberacao">Ciência<br><span style="font-size: 10px; font-weight: normal;">(Informativo)</span></td>
+                        <td class="col-responsavel">Renan Santiago</td>
+                        <td class="col-retorna">Não</td>
+                        <td class="col-anexo">Sim</td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-pauta">
+                            <span class="pauta-title">Novo processo de comunicação pós atendimento Cliente</span>
+                            <p><strong>Viviane</strong> apresenta o processo de comunicação pós atendimento. Explica que tínhamos um alto volume de rechamadas do cliente perguntando sobre os chamados.</p>
+                            <p><strong>Matheus</strong> comenta que é legal trazer a abertura do resultado do tema pós implantação.</p>
+                        </td>
+                        <td class="col-deliberacao">Ciência<br><span style="font-size: 10px; font-weight: normal;">(Informativo)</span></td>
+                        <td class="col-responsavel">Renan Santiago</td>
+                        <td class="col-retorna">Não</td>
+                        <td class="col-anexo">Sim</td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-pauta">
+                            <span class="pauta-title">IA em 100% do Atendimento chat Experiência do cliente</span>
+                            <p><strong>Renan</strong> comenta iniciativas de IA no atendimento. Explica como funciona o fluxo. O Assistente Virtual é capaz de (Habilidades Core):</p>
+                            <ul style="list-style-type: none; padding-left: 0;">
+                                <li>✅ Identificar origem do contato, cliente e histórico</li>
+                                <li>✅ Fazer triagem inteligente para o Concierge</li>
+                                <li>✅ Tirar dúvidas informativas de forma autônoma</li>
+                            </ul>
+                            <p><strong>Matheus</strong> comenta o avanço. Finalmente acabamos com a árvore.</p>
+                        </td>
+                        <td class="col-deliberacao">Ciência<br><span style="font-size: 10px; font-weight: normal;">(Informativo)</span></td>
+                        <td class="col-responsavel">Renan Santiago</td>
+                        <td class="col-retorna">Não</td>
+                        <td class="col-anexo">Sim</td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-pauta">
+                            <span class="pauta-title">NUVIDIO Vídeo Chamadas Inteligentes</span>
+                            <p>Operamos com 22 PAs dedicadas a Cíveis e Fraudes, com um custo operacional de R$ 1,96 Milhão/ano. É um processo altamente manual e repetitivo, baseado em leitura de roteiros e validação visual humana, o que gera gargalos severos de escala e altos custos operacionais.</p>
+                            
+                            <p class="destaque">A solução prática: IA e Vídeo para validar identidade sem interação humana.</p>
+                            <ul style="list-style-type: none; padding-left: 0;">
+                                <li>✓ A solução recebe os dados de originação do contrato automaticamente.</li>
+                                <li>✓ A IA guia o cliente e interpreta a intenção dentro do contexto da jornada.</li>
+                                <li>✓ O fluxo de validação (liveness/documento) é automatizado em segundos.</li>
+                            </ul>
+
+                            <p class="destaque">Próximos passos (Evolução Controlada):</p>
+                            <ul>
+                                <li>Ampliação para casos Cíveis reais da operação.</li>
+                                <li>Ajuste fino contra falsos positivos.</li>
+                                <li>Nova bateria antes do cliente final.</li>
+                            </ul>
+                            <p>📅 <strong>Próximo Marco:</strong> Início dos testes em 06/07</p>
+                        </td>
+                        <td class="col-deliberacao">Ciência<br><span style="font-size: 10px; font-weight: normal;">(Informativo)</span></td>
+                        <td class="col-responsavel">Renan Santiago</td>
+                        <td class="col-retorna">Não</td>
+                        <td class="col-anexo">Sim</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <!-- Seção de Presenças -->
+            <div class="attendance-section">
+                <p class="attendance-text">Nada mais havendo a tratar, e dando concordância ao supra, assinam os votantes:</p>
+                
+                <!-- Tabela de Votantes -->
+                <table class="attendance-table">
+                    <thead>
+                        <tr><th colspan="2">Membros votantes</th></tr>
+                        <tr><th class="col-member" style="text-align: center !important;">Membros votantes</th><th class="col-status">Participação</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="col-member">Thalita Dias Cesario</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Matheus Girardi</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Daniel Farias</td><td>Ausente (férias)</td></tr>
+                    </tbody>
+                </table>
+
+                <!-- Tabela de Participantes -->
+                <table class="attendance-table" style="margin-top: 20px;">
+                    <thead>
+                        <tr><th colspan="2">Participantes</th></tr>
+                        <tr><th class="col-member" style="text-align: center !important;">Nome</th><th class="col-status">Participação</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="col-member">Ana Claudia Batista dos Santos</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Andressa Kaory Aparecida Tamura Lima</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Barbara Pederiva</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Daniel Antonio Pires</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Fabio Aurelio Zani</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Fabricio Ribeiro Vieira</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Graziele de Freitas Soares Martins</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Hellen de Freitas Nunes</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Jesse Oliveira de Castro</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Jordana Souto Ritter</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Leonardo Jose Mazzante Mendes</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Lilian de Mauro Giraldelli Peppe</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Lucas Duarte Brum</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Lucas Molon Meucci</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Lucio Ceccarelli Wengrover</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Marcello Winik Dubeux</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Marcelo Canan Meine</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Marco Antonio Vanoni Filho</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Marcus Vinicius Xavier</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Natalia Zancan Mariano</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Rafael de Oliveira Morais</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Rafael Eiti Kurita</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Rafael Salerno de Oliveira</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Renan Ramos Santiago</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Renan Ramos Santiago</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Rodrigo Yuji Maruyama</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Rubiele Liandra Tartas</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Thalita Dias Cesario</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Thiago Cubas Ribeiro</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Thiago Venancio Perrud</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Tiago Apolonio Boaventura</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Vinicius Birkeland Aloe</td><td>Presente</td></tr>
+                        <tr><td class="col-member">Viviane Sanches Avelar</td><td>Presente</td></tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <!-- RODAPÉ -->
+        <footer>
+            <div class="confidencial-badge">CONFIDENCIAL</div>
+            <div>Ata de Reunião Oficial - 01/07/2026</div>
+        </footer>
+    </div>
+
+</body>
+</html>
