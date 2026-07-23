@@ -1,0 +1,1259 @@
+
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Treinamento · Produto de Investimento Agibank</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+<style>
+:root{
+  --azul:#0066FF;
+  --azul-escuro:#000f44;
+  --verde:#4CAF50;
+  --amarelo:#FFC107;
+  --vermelho:#F44336;
+  --roxo:#764ba2;
+  --gray:#6b7a99;
+  --body:#1a2340;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:radial-gradient(1200px 700px at 50% -10%,#0a1c52,#04102f 60%,#020a22);
+  overflow:hidden;
+  height:100vh;
+}
+
+.stage{
+  width:100vw;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.slide{
+  width:1280px;
+  height:720px;
+  background:#fff;
+  border-radius:8px;
+  overflow:hidden;
+  display:none;
+  flex-direction:column;
+  position:absolute;
+  transform-origin:center center;
+  box-shadow:0 30px 80px rgba(0,0,0,.45);
+}
+
+.slide.active{display:flex}
+
+.brandbar{
+  height:7px;
+  background:linear-gradient(90deg,var(--azul) 0 55%,var(--verde) 55% 80%,var(--amarelo) 80% 100%);
+}
+
+.cover{
+  background:radial-gradient(900px 520px at 78% 20%,#0066FF,#001b86 55%,#000f44);
+  color:#fff;
+  position:relative;
+}
+
+.cover-layout{
+  display:flex;
+  gap:50px;
+  padding:70px;
+  height:100%;
+}
+
+.cover h1{
+  font-size:3.5rem;
+  font-weight:900;
+  line-height:.95;
+}
+
+.cover h1 em{
+  color:var(--verde);
+  font-style:normal;
+}
+
+.cover .sub{
+  margin-top:18px;
+  color:#d7e6ff;
+  font-size:1.08rem;
+  line-height:1.6;
+  max-width:640px;
+}
+
+.chips{
+  display:flex;
+  gap:16px;
+  margin-top:28px;
+}
+
+.cchip{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:14px;
+  padding:16px 20px;
+}
+
+.cchip b{
+  display:block;
+  font-size:1.9rem;
+  font-weight:900;
+}
+
+.cchip small{
+  color:#cfe0ff;
+  font-weight:700;
+}
+
+.cover-right{
+  width:340px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:18px;
+  padding:24px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:14px;
+}
+
+.sum-title{
+  font-size:1rem;
+  font-weight:900;
+}
+
+.sum-item{
+  color:#dbe8ff;
+  line-height:1.6;
+  font-size:.9rem;
+}
+
+.sum-item strong{color:#fff}
+
+.cover-badge{
+  position:absolute;
+  bottom:35px;
+  right:70px;
+  background:var(--verde);
+  color:#00235c;
+  padding:8px 18px;
+  border-radius:999px;
+  font-weight:900;
+}
+
+.shead{
+  padding:18px 48px 12px;
+  border-bottom:1px solid #e8edf6;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.kicker{
+  font-size:9px;
+  font-weight:900;
+  text-transform:uppercase;
+  color:var(--azul);
+  letter-spacing:.16em;
+}
+
+.shead h2{
+  font-size:1.7rem;
+  color:var(--azul-escuro);
+  margin-top:3px;
+}
+
+.shead h2 span{color:var(--azul)}
+
+.meta{
+  font-size:.8rem;
+  font-weight:800;
+  color:#506080;
+}
+
+.scontent{
+  padding:24px 48px 30px;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  flex:1;
+}
+
+.scontent::-webkit-scrollbar{width:8px}
+.scontent::-webkit-scrollbar-thumb{background:#cad5ea;border-radius:10px}
+
+.sec-block{
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:12px;
+  padding:20px 24px;
+}
+
+.sec-block h3{
+  font-size:1rem;
+  font-weight:900;
+  margin-bottom:12px;
+  color:var(--azul-escuro);
+}
+
+.sec-block p,
+.sec-block li{
+  color:var(--body);
+  line-height:1.7;
+  font-size:.9rem;
+}
+
+.sec-block ul{
+  padding-left:18px;
+  margin-top:8px;
+}
+
+.two-cols{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.three-cols{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:16px;
+}
+
+.alert{
+  border-radius:12px;
+  padding:16px 18px;
+  font-size:.88rem;
+  line-height:1.7;
+  font-weight:600;
+}
+
+.alert.info{
+  background:#e8f1ff;
+  border:2px solid var(--azul);
+  color:#0d47a1;
+}
+
+.alert.warn{
+  background:#fff4e5;
+  border:2px solid var(--amarelo);
+  color:#9a5a00;
+}
+
+.alert.ok{
+  background:#e8f7ea;
+  border:2px solid var(--verde);
+  color:#146b28;
+}
+
+details{
+  border:2px solid var(--azul);
+  border-radius:10px;
+  overflow:hidden;
+  background:#fff;
+  margin-bottom: 8px;
+}
+
+summary{
+  background:var(--azul);
+  color:#fff;
+  padding:16px 20px;
+  cursor:pointer;
+  font-weight:800;
+  list-style:none;
+}
+
+summary::-webkit-details-marker{display:none}
+
+.details-body{
+  padding:18px 22px;
+  line-height:1.7;
+  color:var(--body);
+  font-size:.9rem;
+}
+
+.card{
+  background:#fff;
+  border:2px solid #e2e8f0;
+  border-radius:12px;
+  padding:18px;
+}
+
+.card h4{
+  color:var(--azul);
+  font-size:1rem;
+  margin-bottom:8px;
+}
+
+.table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:.88rem;
+}
+
+.table th{
+  background:var(--azul);
+  color:#fff;
+  padding:12px;
+  text-align:left;
+}
+
+.table td{
+  padding:12px;
+  border:1px solid #e2e8f0;
+}
+
+.quiz-q{
+  background:#fff;
+  border:1px solid #dfe7f5;
+  border-radius:10px;
+  padding:20px;
+}
+
+.quiz-q h4{
+  margin-bottom:14px;
+  color:var(--azul-escuro);
+}
+
+.quiz-opt{
+  display:block;
+  margin-bottom:10px;
+  padding:12px;
+  border:2px solid #e2e8f0;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.quiz-opt:hover{
+  border-color:var(--azul);
+  background:#eef5ff;
+}
+
+.btn{
+  background:var(--azul);
+  color:#fff;
+  border:none;
+  border-radius:999px;
+  padding:14px 28px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.nav{
+  position:fixed;
+  bottom:16px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:10px;
+  align-items:center;
+  z-index:100;
+}
+
+.nav button{
+  width:46px;
+  height:46px;
+  border:none;
+  border-radius:50%;
+  background:#fff;
+  cursor:pointer;
+  font-size:1.2rem;
+  font-weight:900;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.dots{
+  display:flex;
+  gap:7px;
+}
+
+.dot{
+  width:8px;
+  height:8px;
+  background:#ffffff55;
+  border-radius:50%;
+  cursor: pointer;
+}
+
+.dot.on{
+  width:22px;
+  border-radius:999px;
+  background:var(--verde);
+}
+
+.pageno{
+  position:absolute;
+  right:22px;
+  bottom:12px;
+  font-size:.7rem;
+  font-weight:900;
+  color:#9aa6c0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="stage">
+
+<!-- CAPA -->
+<section class="slide active cover" id="s0">
+<div class="brandbar"></div>
+
+<div class="cover-layout">
+
+<div style="flex:1">
+<h1>Produto de<br><em>Investimento Agibank</em></h1>
+
+<p class="sub">
+Treinamento operacional completo para atendimento sobre <strong>CDB (Certificado de Depósito Bancário)</strong> Agibank, aplicação, resgate, tributação, <strong>FGC (Fundo Garantidor de Créditos)</strong>, perfil do investidor e suporte ao cliente.
+</p>
+
+<div class="chips">
+<div class="cchip">
+<b>100%</b>
+<small>Operacional</small>
+</div>
+
+<div class="cchip">
+<b>CDI</b>
+<small>(Certificado de Depósito Interfinanceiro)</small>
+</div>
+
+<div class="cchip">
+<b>FGC</b>
+<small>(Fundo Garantidor de Créditos)</small>
+</div>
+</div>
+</div>
+
+<div class="cover-right">
+<div class="sum-title">O que você vai aprender</div>
+
+<div class="sum-item"><strong>Módulo 1:</strong> O que é CDB (Certificado de Depósito Bancário)</div>
+<div class="sum-item"><strong>Módulo 2:</strong> Como funciona o CDI (Certificado de Depósito Interfinanceiro)</div>
+<div class="sum-item"><strong>Módulo 3:</strong> Aplicação e Resgate</div>
+<div class="sum-item"><strong>Módulo 4:</strong> Tributação IR (Imposto de Renda) e IOF (Imposto sobre Operações Financeiras)</div>
+<div class="sum-item"><strong>Módulo 5:</strong> FGC (Fundo Garantidor de Créditos) e Segurança</div>
+<div class="sum-item"><strong>Módulo 6:</strong> Salesforce e Tabulação</div>
+<div class="sum-item"><strong>Módulo 7:</strong> FAQs (Perguntas Frequentes)</div>
+<div class="sum-item"><strong>Módulo 8:</strong> Quiz Final</div>
+</div>
+
+</div>
+
+<span class="cover-badge">Treinamento Oficial</span>
+<span class="pageno">01 · 14</span>
+</section>
+
+<!-- SLIDE 1 -->
+<section class="slide" id="s1">
+<div class="brandbar"></div>
+
+<div class="shead">
+<div>
+<div class="kicker">Módulo 1</div>
+<h2>O que é <span>CDB?</span></h2>
+</div>
+<div class="meta">Certificado de Depósito Bancário</div>
+</div>
+
+<div class="scontent">
+
+<div class="sec-block">
+<h3>📘 Conceito Simplificado</h3>
+
+<p>
+O <strong>CDB (Certificado de Depósito Bancário)</strong> é um investimento de renda fixa.
+Quando o cliente investe no CDB Agibank, ele está emprestando dinheiro ao banco.
+Em troca, o banco devolve esse dinheiro com rendimento.
+</p>
+
+<p style="margin-top:10px">
+É um produto:
+</p>
+
+<ul>
+<li>Seguro</li>
+<li>Com liquidez diária (resgate disponível no mesmo dia)</li>
+<li>Protegido pelo <strong>FGC (Fundo Garantidor de Créditos)</strong></li>
+<li>Fácil de movimentar pelo <strong>App (Aplicativo)</strong></li>
+</ul>
+</div>
+
+<div class="two-cols">
+
+<div class="card">
+<h4>✅ O que falar para o cliente</h4>
+<p>
+“O CDB (Certificado de Depósito Bancário) é uma forma segura de fazer o dinheiro render, com possibilidade de resgate quando precisar.”
+</p>
+</div>
+
+<div class="card">
+<h4>❌ O que NÃO falar</h4>
+<p>
+“Nunca diga que o investimento tem risco zero absoluto ou rendimento garantido acima do mercado sem mencionar as variações do CDI.”
+</p>
+</div>
+
+</div>
+
+<div class="alert info">
+<strong>Importante:</strong> O cliente nunca perde o valor principal investido. Os impostos incidem apenas sobre o rendimento (lucro).
+</div>
+
+</div>
+
+<span class="pageno">02 · 14</span>
+</section>
+
+<!-- SLIDE 2 -->
+<section class="slide" id="s2">
+<div class="brandbar"></div>
+
+<div class="shead">
+<div>
+<div class="kicker">Módulo 2</div>
+<h2>Como funciona o <span>CDI?</span></h2>
+</div>
+<div class="meta">Certificado de Depósito Interfinanceiro</div>
+</div>
+
+<div class="scontent">
+
+<div class="sec-block">
+<h3>💰 O que é CDI?</h3>
+
+<p>
+O <strong>CDI (Certificado de Depósito Interfinanceiro)</strong> é uma taxa usada pelos bancos para empréstimos entre instituições financeiras.
+Ela é a principal referência para investimentos de renda fixa no Brasil.
+</p>
+
+<p style="margin-top:10px">
+Quando dizemos que o CDB rende <strong>100% do CDI</strong>, significa que ele acompanha integralmente essa taxa de mercado.
+</p>
+</div>
+
+<div class="three-cols">
+
+<div class="card">
+<h4>Clientes</h4>
+<p><strong>100% do CDI</strong></p>
+<p style="margin-top:8px">
+Disponível para o público geral a partir de 20/07.
+</p>
+</div>
+
+<div class="card">
+<h4>Colaboradores</h4>
+<p><strong>105% do CDI</strong></p>
+<p style="margin-top:8px">
+Benefício interno exclusivo para quem trabalha no Agi.
+</p>
+</div>
+
+<div class="card">
+<h4>Regra de Transição</h4>
+<p>
+Aplicações feitas sob a taxa de 103% <strong>NÃO</strong> mudam automaticamente para 105%.
+</p>
+</div>
+
+</div>
+
+<div class="alert warn">
+<strong>Confidencialidade:</strong> A condição de 105% do <strong>CDI (Certificado de Depósito Interfinanceiro)</strong> é exclusiva para colaboradores e não deve ser divulgada para clientes finais.
+</div>
+
+</div>
+
+<span class="pageno">03 · 14</span>
+</section>
+
+<!-- SLIDE 3 -->
+<section class="slide" id="s3">
+<div class="brandbar"></div>
+
+<div class="shead">
+<div>
+<div class="kicker">Módulo 3</div>
+<h2>Aplicação e <span>Resgate</span></h2>
+</div>
+<div class="meta">Jornada no App (Aplicativo)</div>
+</div>
+
+<div class="scontent">
+
+<div class="two-cols">
+
+<div class="sec-block">
+<h3>📥 Como investir</h3>
+
+<ol>
+<li>Acessar área “Investimentos” no <strong>App (Aplicativo)</strong></li>
+<li>Preencher Perfil do Investidor (apenas na primeira vez)</li>
+<li>Escolher o produto <strong>CDB (Certificado de Depósito Bancário)</strong></li>
+<li>Informar o valor desejado</li>
+<li>Confirmar a operação</li>
+<li>Autenticar com senha ou reconhecimento facial</li>
+</ol>
+</div>
+
+<div class="sec-block">
+<h3>📤 Como resgatar</h3>
+
+<ol>
+<li>Acessar área “Investimentos”</li>
+<li>Clicar no botão “Resgatar”</li>
+<li>Escolher o valor que deseja retirar</li>
+<li>Confirmar a operação</li>
+<li>Autenticar a segurança</li>
+<li><strong>Atenção:</strong> O valor cai na conta em dias úteis, das 09h-17h, ou seja, em ATÉ 24h úteis</li>
+</ol>
+</div>
+
+</div>
+
+<div class="three-cols">
+
+<div class="card">
+<h4>⏰ Horário</h4>
+<p>09h às 17h</p>
+<p>Apenas dias úteis</p>
+</div>
+
+<div class="card">
+<h4>💵 Valor Mínimo</h4>
+<p>R$ 100,00 por aplicação</p>
+</div>
+
+<div class="card">
+<h4>📅 Vencimento</h4>
+<p>720 dias (2 anos)</p>
+<p>Com liquidez diária</p>
+</div>
+
+</div>
+
+<div class="alert ok">
+<strong>Segurança:</strong> O <strong>PID (Procedimento de Identificação de Dados)</strong> é obrigatório antes de passar qualquer informação detalhada sobre o investimento.
+</div>
+
+</div>
+
+<span class="pageno">04 · 14</span>
+</section>
+
+<!-- SLIDE 4 -->
+<section class="slide" id="s4">
+
+<div class="brandbar"></div>
+
+<div class="shead">
+<div>
+<div class="kicker">Módulo 4</div>
+<h2>Tributação <span>IR e IOF</span></h2>
+</div>
+<div class="meta">Impostos sobre o Rendimento</div>
+</div>
+
+<div class="scontent">
+
+<div class="alert info">
+O <strong>IR (Imposto de Renda)</strong> e o <strong>IOF (Imposto sobre Operações Financeiras)</strong> incidem somente sobre o lucro, nunca sobre o valor que o cliente guardou inicialmente.
+</div>
+
+<div class="two-cols">
+
+<div class="sec-block">
+<h3>📊 IR (Imposto de Renda)</h3>
+<p>Tabela Regressiva:</p>
+
+<table class="table">
+<tr>
+<th>Período</th>
+<th>Alíquota</th>
+</tr>
+
+<tr>
+<td>Até 180 dias</td>
+<td>22,5%</td>
+</tr>
+
+<tr>
+<td>181 a 360 dias</td>
+<td>20%</td>
+</tr>
+
+<tr>
+<td>361 a 720 dias</td>
+<td>17,5%</td>
+</tr>
+
+<tr>
+<td>Acima de 720 dias</td>
+<td>15%</td>
+</tr>
+</table>
+
+</div>
+
+<div class="sec-block">
+<h3>📉 IOF (Imp. sobre Op. Financeiras)</h3>
+<p>Apenas nos primeiros 30 dias:</p>
+
+<table class="table">
+<tr>
+<th>Prazo</th>
+<th>Alíquota</th>
+</tr>
+
+<tr><td>1 dia</td><td>96%</td></tr>
+<tr><td>10 dias</td><td>66%</td></tr>
+<tr><td>20 dias</td><td>33%</td></tr>
+<tr><td>30 dias ou mais</td><td>Isento (0%)</td></tr>
+
+</table>
+
+</div>
+
+</div>
+
+<div class="alert warn">
+<strong>Argumento:</strong> "Quanto mais tempo o dinheiro ficar investido, menos imposto o senhor(a) paga sobre o rendimento."
+</div>
+
+</div>
+
+<span class="pageno">05 · 14</span>
+</section>
+
+<!-- SLIDE 5 -->
+<section class="slide" id="s5">
+
+<div class="brandbar"></div>
+
+<div class="shead">
+<div>
+<div class="kicker">Módulo 5</div>
+<h2>FGC e <span>Segurança</span></h2>
+</div>
+<div class="meta">Proteção do Fundo Garantidor de Créditos</div>
+</div>
+
+<div class="scontent">
+
+<div class="sec-block">
+<h3>🛡️ O que é FGC?</h3>
+
+<p>
+O <strong>FGC (Fundo Garantidor de Créditos)</strong> funciona como um seguro para o investidor.
+Ele garante a devolução do dinheiro caso a instituição financeira passe por dificuldades.
+</p>
+
+<p style="margin-top:10px">
+A cobertura é de:
+</p>
+
+<ul>
+<li>Até <strong>R$ 250.000,00</strong> por <strong>CPF (Cadastro de Pessoas Físicas)</strong></li>
+<li>Soma-se o valor investido + os juros acumulados</li>
+</ul>
+</div>
+
+<div class="two-cols">
+
+<div class="card">
+<h4>✅ Produtos Protegidos</h4>
+<ul>
+<li><strong>CDB</strong> (Certificado de Depósito Bancário)</li>
+<li><strong>LCI</strong> (Letra de Crédito Imobiliário)</li>
+<li><strong>LCA</strong> (Letra de Crédito do Agronegócio)</li>
+<li>Poupança e Saldo em Conta</li>
+</ul>
+</div>
+
+<div class="card">
+<h4>⚠️ O que NÃO tem FGC</h4>
+<ul>
+<li>Ações e Fundos de Investimento</li>
+<li>Debêntures</li>
+<li>Criptomoedas</li>
+</ul>
+</div>
+
+</div>
+
+<div class="alert ok">
+O <strong>CDB (Certificado de Depósito Bancário)</strong> Agibank é um dos investimentos mais seguros do mercado devido a essa garantia.
+</div>
+
+</div>
+
+<span class="pageno">06 · 14</span>
+</section>
+
+<!-- SLIDE 6 -->
+<section class="slide" id="s6">
+
+<div class="brandbar"></div>
+
+<div class="shead">
+<div>
+<div class="kicker">Módulo 6</div>
+<h2>Atualização Cadastral e <span>B3</span></h2>
+</div>
+<div class="meta">Conformidade Regulatória</div>
+</div>
+
+<div class="scontent">
+
+<div class="sec-block">
+<h3>📋 Exigência da B3</h3>
+
+<p>
+A <strong>B3 (Brasil, Bolsa, Balcão - a Bolsa de Valores do Brasil)</strong> exige que os dados dos investidores estejam sempre atualizados para o registro dos títulos.
+</p>
+
+<p style="margin-top:8px">O <strong>App (Aplicativo)</strong> solicitará revisão de dados se houver desatualização há mais de 360 dias:</p>
+
+<ul>
+<li>Telefone e E-mail</li>
+<li>Endereço Residencial</li>
+<li>Renda Mensal</li>
+</ul>
+</div>
+
+<details>
+<summary>🔍 Por que a B3 (Bolsa de Valores) faz isso?</summary>
+
+<div class="details-body">
+Para garantir a transparência e a titularidade do investimento. O <strong>CDB (Certificado de Depósito Bancário)</strong> é registrado no CPF do cliente junto à registradora oficial do mercado.
+</div>
+</details>
+
+<details>
+<summary>⚠️ Cenário de Exceção: "Aguardar 10 minutos"</summary>
+
+<div class="details-body">
+Se o cliente atualizar o cadastro e o <strong>App (Aplicativo)</strong> ainda bloquear o investimento:
+<ul>
+<li>Oriente aguardar 10 minutos para sincronização das bases.</li>
+<li>Se o erro persistir após 10 minutos, abra um chamado técnico para verificação.</li>
+</ul>
+</div>
+</details>
+
+</div>
+
+<span class="pageno">07 · 14</span>
+</section>
+
+<!-- SLIDE 7 -->
+<section class="slide" id="s7">
+
+<div class="brandbar"></div>
+
+<div class="shead">
+<div>
+<div class="kicker">Módulo 7</div>
+<h2>Salesforce e <span>Tabulação</span></h2>
+</div>
+<div class="meta">Procedimento de Atendimento</div>
+</div>
+
+<div class="scontent">
+
+<div class="sec-block">
+<h3>📊 Como consultar no Salesforce</h3>
+
+<ol>
+<li>No cadastro do cliente, acesse a opção <strong>"Resumo"</strong></li>
+<li>Localize a opção de <strong>"Conta Corrente"</strong> e clique no número da conta</li>
+<li>Clique na aba <strong>"Investimentos"</strong></li>
+<li>Selecione o período desejado</li>
+<li>Clique em <strong>"Detalhes"</strong> para ver o extrato detalhado, descontos de <strong>IR (Imposto de Renda)</strong> e <strong>IOF (Imposto sobre Operações Financeiras)</strong></li>
+</ol>
+</div>
+
+<div class="sec-block">
+<h3>🧾 Tabulação Correta</h3>
+
+<div class="script-box">
+Tipo: Informação
+
+Produto: Investimentos
+
+Motivo: (Adequar conforme a árvore de tabulação oficial, ex: Dúvidas CDB / Aplicação / Resgate)
+</div>
+
+</div>
+
+<div class="alert info">
+<strong>Dica:</strong> Sempre registre no histórico se o cliente teve dificuldades com o Perfil do Investidor ou Atualização Cadastral.
+</div>
+
+</div>
+
+<span class="pageno">08 · 14</span>
+</section>
+
+<!-- SLIDE 8 -->
+<section class="slide" id="s8">
+
+<div class="brandbar"></div>
+
+<div class="shead">
+<div>
+<div class="kicker">Módulo 8</div>
+<h2>Benchmark de <span>Mercado</span></h2>
+</div>
+<div class="meta">Bancos Referência em Investimentos</div>
+</div>
+
+<div class="scontent">
+
+<div class="three-cols">
+
+<div class="card">
+<h4>Nubank</h4>
+<p>Popularizou o "dinheiro rendendo" em conta através de <strong>RDB (Recibo de Depósito Bancário)</strong>.</p>
+</div>
+
+<div class="card">
+<h4>Banco Inter</h4>
+<p>Referência em plataforma aberta com <strong>CDB (Certificado de Depósito Bancário)</strong> e fundos.</p>
+</div>
+
+<div class="card">
+<h4>Sofisa Direto</h4>
+<p>Tradicional em renda fixa com taxas competitivas de <strong>CDI (Certificado de Depósito Interfinanceiro)</strong>.</p>
+</div>
+
+<div class="card">
+<h4>C6 Bank</h4>
+<p>Forte atuação em <strong>CDB</strong> com prazos variados e liquidez diária.</p>
+</div>
+
+<div class="card">
+<h4>BTG Pactual</h4>
+<p>Maior banco de investimentos da América Latina, referência em assessoria.</p>
+</div>
+
+<div class="card">
+<h4>Banco Itaú</h4>
+<p>Referência entre os bancos tradicionais na digitalização de produtos de investimento.</p>
+</div>
+
+</div>
+
+<div class="alert ok">
+O Agibank entra nesse grupo oferecendo um <strong>CDB (Certificado de Depósito Bancário)</strong> simples, com taxa competitiva e proteção do <strong>FGC (Fundo Garantidor de Créditos)</strong>.
+</div>
+
+</div>
+
+<span class="pageno">09 · 14</span>
+</section>
+
+<!-- SLIDE 9 -->
+<section class="slide" id="s9">
+
+<div class="brandbar"></div>
+
+<div class="shead">
+<div>
+<div class="kicker">Módulo 9</div>
+<h2>FAQs e <span>Objeções</span></h2>
+</div>
+<div class="meta">Perguntas Frequentes</div>
+</div>
+
+<div class="scontent">
+
+<details>
+<summary>💬 "É seguro deixar meu dinheiro no Agibank?"</summary>
+<div class="details-body">
+Sim! Além da solidez do banco, o seu dinheiro está protegido pelo <strong>FGC (Fundo Garantidor de Créditos)</strong>, que garante até R$ 250 mil por CPF.
+</div>
+</details>
+
+<details>
+<summary>💬 "Posso resgatar no final de semana?"</summary>
+<div class="details-body">
+Não. As operações de resgate e aplicação ocorrem apenas em dias úteis, das 09h às 17h.
+</div>
+</details>
+
+<details>
+<summary>💬 "Por que descontou imposto se eu resgatei rápido?"</summary>
+<div class="details-body">
+Nos primeiros 30 dias incide o <strong>IOF (Imposto sobre Operações Financeiras)</strong>. Após o 30º dia, esse imposto deixa de existir e sobra apenas o <strong>IR (Imposto de Renda)</strong> regressivo.
+</div>
+</details>
+
+<details>
+<summary>💬 "Minha taxa antiga vai subir para 105% do CDI?"</summary>
+<div class="details-body">
+Não. A taxa de 105% do <strong>CDI (Certificado de Depósito Interfinanceiro)</strong> vale apenas para novos investimentos. O dinheiro já aplicado segue a taxa contratada no dia (ex: 103%).
+</div>
+</details>
+
+<details>
+<summary>💬 "O que é Perfil de Investidor?"</summary>
+<div class="details-body">
+É um questionário obrigatório por lei que ajuda a entender se o produto combina com os seus objetivos (ex: Perfil Conservador).
+</div>
+</details>
+
+</div>
+
+<span class="pageno">10 · 14</span>
+</section>
+
+<!-- SLIDE 10 -->
+<section class="slide" id="s10">
+
+<div class="brandbar"></div>
+
+<div class="shead">
+<div>
+<div class="kicker">Prática</div>
+<h2>Estudos de <span>Caso</span></h2>
+</div>
+<div class="meta">Treinamento Operacional</div>
+</div>
+
+<div class="scontent">
+
+<div class="sec-block">
+<h3>📘 Caso 1: Resgate de Emergência</h3>
+<p>Cliente investiu R$ 500,00 há 5 dias e precisa do dinheiro hoje às 14h.</p>
+<details>
+<summary>Como orientar?</summary>
+<div class="details-body">
+<ul>
+<li>Informe que ele pode resgatar agora pelo <strong>App (Aplicativo)</strong>.</li>
+<li>Explique que, por ter menos de 30 dias, haverá desconto de <strong>IOF (Imposto sobre Operações Financeiras)</strong> sobre o lucro.</li>
+<li>Reforce que o dinheiro estará disponível na conta em até 24h úteis em horário comercial das 9h-17h.</li>
+</ul>
+</div>
+</details>
+</div>
+
+<div class="sec-block">
+<h3>📘 Caso 2: Diferença de Taxas</h3>
+<p>Colaborador pergunta por que o cliente dele tem 100% e ele tem 105% do <strong>CDI</strong>.</p>
+<details>
+<summary>Como orientar?</summary>
+<div class="details-body">
+<ul>
+<li>Explique que os 105% do <strong>CDI (Certificado de Depósito Interfinanceiro)</strong> são um benefício exclusivo para quem trabalha no banco.</li>
+<li>Reforce que essa informação não deve ser passada aos clientes para evitar insatisfação.</li>
+</ul>
+</div>
+</details>
+</div>
+
+<div class="sec-block">
+<h3>📘 Caso 3: Erro no Investimento</h3>
+<p>Cliente atualizou a renda no <strong>App (Aplicativo)</strong>, mas o botão de investir continua bloqueado.</p>
+<details>
+<summary>Como orientar?</summary>
+<div class="details-body">
+<ul>
+<li>Peça para o cliente aguardar 10 minutos.</li>
+<li>Explique que esse é o tempo de sincronização com a <strong>B3 (Bolsa de Valores)</strong>.</li>
+<li>Se não liberar, abra um chamado para o time de tecnologia.</li>
+</ul>
+</div>
+</details>
+</div>
+
+</div>
+
+<span class="pageno">11 · 14</span>
+</section>
+
+<!-- SLIDE 11 -->
+<section class="slide" id="s11">
+
+<div class="brandbar"></div>
+
+<div class="shead">
+<div>
+<div class="kicker">Consolidação</div>
+<h2>O que eu <span>aprendi?</span></h2>
+</div>
+<div class="meta">Resumo Geral</div>
+</div>
+
+<div class="scontent">
+
+<div class="sec-block">
+<h3>✅ Pontos Chave</h3>
+
+<ul>
+<li><strong>CDB (Certificado de Depósito Bancário):</strong> Empréstimo do cliente para o banco com lucro.</li>
+<li><strong>CDI (Certificado de Depósito Interfinanceiro):</strong> Taxa de referência do rendimento.</li>
+<li><strong>FGC (Fundo Garantidor de Créditos):</strong> Garantia de até R$ 250 mil por CPF.</li>
+<li><strong>Liquidez Diária:</strong> Resgate disponível a qualquer momento (dias úteis, 09h-17h).</li>
+<li><strong>Impostos:</strong> <strong>IR (Imposto de Renda)</strong> e <strong>IOF (Imposto sobre Operações Financeiras)</strong> incidem apenas sobre o lucro.</li>
+<li><strong>B3 (Bolsa de Valores):</strong> Exige dados cadastrais sempre atualizados.</li>
+<li><strong>Transição:</strong> Mudança de taxa não é retroativa; aplicações antigas mantêm a taxa original.</li>
+</ul>
+</div>
+
+<div class="alert ok">
+Você concluiu a parte teórica! Agora você domina os conceitos e siglas do produto de investimento.
+</div>
+
+</div>
+
+<span class="pageno">12 · 14</span>
+</section>
+
+<!-- SLIDE 12 -->
+<section class="slide" id="s12">
+
+<div class="brandbar"></div>
+
+<div class="shead">
+<div>
+<div class="kicker">Avaliação</div>
+<h2>Quiz de <span>Conhecimento</span></h2>
+</div>
+<div class="meta">Teste sua Performance</div>
+</div>
+
+<div class="scontent">
+
+<div class="quiz-q">
+<h4>1. Qual o prazo para o dinheiro do resgate cair na conta do cliente?</h4>
+
+<label class="quiz-opt"><input type="radio" name="q1">Imediato</label>
+<label class="quiz-opt"><input type="radio" name="q1">Em 2 horas</label>
+<label class="quiz-opt" data-correct><input type="radio" name="q1">No próximo dia útil</label>
+<label class="quiz-opt"><input type="radio" name="q1">Em 720 dias</label>
+</div>
+
+<div class="quiz-q">
+<h4>2. O IOF (Imposto sobre Operações Financeiras) deixa de ser cobrado após quantos dias?</h4>
+
+<label class="quiz-opt"><input type="radio" name="q2">180 dias</label>
+<label class="quiz-opt" data-correct><input type="radio" name="q2">30 dias</label>
+<label class="quiz-opt"><input type="radio" name="q2">No 1º dia</label>
+<label class="quiz-opt"><input type="radio" name="q2">Nunca, é cobrado sempre</label>
+</div>
+
+<button class="btn" onclick="alert('Excelente! Continue revisando os conceitos de CDI e FGC.')">
+Verificar Respostas
+</button>
+
+</div>
+
+<span class="pageno">13 · 14</span>
+</section>
+
+<!-- SLIDE 13 -->
+<section class="slide" id="s13">
+
+<div class="brandbar"></div>
+
+<div class="shead">
+<div>
+<div class="kicker">Encerramento</div>
+<h2>Parabéns! <span>Treinamento Concluído</span></h2>
+</div>
+<div class="meta">Sucesso Operacional</div>
+</div>
+
+<div class="scontent">
+
+<div class="sec-block" style="text-align:center;padding:50px 30px">
+
+<h3 style="font-size:2rem;color:var(--azul)">
+🏆 Certificação <strong>CDB (Certificado de Depósito Bancário)</strong>
+</h3>
+
+<p style="margin-top:18px;font-size:1rem">
+Você está pronto para realizar atendimentos de alto nível sobre investimentos no Agibank.
+</p>
+
+<div class="two-cols" style="margin-top:30px; text-align: left;">
+    <div class="card">
+        <h4>Próximos Passos</h4>
+        <p>Acesse o Salesforce e pratique a localização da aba "Investimentos".</p>
+    </div>
+    <div class="card">
+        <h4>Dúvidas?</h4>
+        <p>Consulte sempre o <strong>RO (Roteiro Operacional)</strong> atualizado no Knowledge.</p>
+    </div>
+</div>
+
+</div>
+
+</div>
+
+<span class="pageno">14 · 14</span>
+</section>
+
+</div>
+
+<!-- NAVEGAÇÃO -->
+<div class="nav">
+<button id="prev">‹</button>
+<div class="dots"></div>
+<button id="next">›</button>
+</div>
+
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+const dotsWrap=document.querySelector('.dots');
+
+slides.forEach((_,i)=>{
+  const d=document.createElement('span');
+  d.className='dot'+(i===0?' on':'');
+  d.onclick=()=>show(i);
+  dotsWrap.appendChild(d);
+});
+
+const dots=[...document.querySelectorAll('.dot')];
+let cur=0;
+
+function fit(){
+  const s=Math.min(window.innerWidth/1280,window.innerHeight/720);
+  slides.forEach(el=>el.style.transform=`scale(${s})`);
+}
+
+function show(i){
+  cur=(i+slides.length)%slides.length;
+  slides.forEach((el,k)=>el.classList.toggle('active',k===cur));
+  dots.forEach((d,k)=>d.classList.toggle('on',k===cur));
+}
+
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+
+window.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')show(cur+1);
+  if(e.key==='ArrowLeft')show(cur-1);
+});
+
+window.addEventListener('resize',fit);
+fit();
+show(0);
+</script>
+
+</body>
+</html>
