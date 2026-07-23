@@ -1,0 +1,1077 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Governança BU's · Storytelling de Dores</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --blue: #005ff9;
+        --navy: #000f44;
+        --green: #78df40;
+        --white: #ffffff;
+        --gray-1: #f7f9fc;
+        --gray-2: #eef2f9;
+        --gray-3: #d1daea;
+        --gray-text: #6b7a99;
+        --body-text: #1a2340;
+
+        --col-dor: #005ff9;
+        --col-causa: #7c3aed;
+        --col-impact: #dc2626;
+        --col-status: #16a34a;
+
+        --col-dor-bg: #eef2ff;
+        --col-causa-bg: #f5f0ff;
+        --col-impact-bg: #fef2f2;
+        --col-status-bg: #f0fdf4;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #fff;
+        font-family: "Inter", sans-serif;
+        color: var(--body-text);
+      }
+
+      .page {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 48px 32px 80px;
+      }
+
+      /* ── HEADER ── */
+      .doc-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding-bottom: 28px;
+        border-bottom: 2px solid var(--navy);
+        margin-bottom: 36px;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .doc-header-left h1 {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--blue);
+        margin-bottom: 6px;
+      }
+      .doc-header-left h2 {
+        font-size: 26px;
+        font-weight: 800;
+        color: var(--navy);
+        line-height: 1.15;
+      }
+      .doc-header-left h2 span {
+        color: var(--blue);
+      }
+      .doc-header-right {
+        text-align: right;
+        flex-shrink: 0;
+      }
+      .doc-meta {
+        font-size: 11px;
+        color: var(--gray-text);
+        font-weight: 500;
+        line-height: 1.8;
+      }
+      .doc-meta strong {
+        color: var(--navy);
+        font-weight: 700;
+      }
+
+      /* ── LEGEND BAR ── */
+      .legend-bar {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 36px;
+        background: var(--gray-1);
+        border: 1px solid var(--gray-3);
+        border-radius: 10px;
+        padding: 12px 16px;
+      }
+      .legend-bar-label {
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--gray-text);
+        margin-right: 4px;
+        align-self: center;
+      }
+      .legend-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border-radius: 20px;
+        padding: 4px 11px;
+      }
+      .legend-pill .lp-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+      }
+      .lp-dor {
+        background: var(--col-dor-bg);
+        color: var(--col-dor);
+      }
+      .lp-dor .lp-dot {
+        background: var(--col-dor);
+      }
+      .lp-causa {
+        background: var(--col-causa-bg);
+        color: var(--col-causa);
+      }
+      .lp-causa .lp-dot {
+        background: var(--col-causa);
+      }
+      .lp-impact {
+        background: var(--col-impact-bg);
+        color: var(--col-impact);
+      }
+      .lp-impact .lp-dot {
+        background: var(--col-impact);
+      }
+      .lp-status {
+        background: var(--col-status-bg);
+        color: var(--col-status);
+      }
+      .lp-status .lp-dot {
+        background: var(--col-status);
+      }
+
+      /* ── BU SECTION ── */
+      .bu-section {
+        margin-bottom: 52px;
+      }
+
+      .bu-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 20px;
+        padding-bottom: 14px;
+        border-bottom: 2px solid var(--gray-3);
+      }
+      .bu-num {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: 800;
+        color: #fff;
+      }
+      .bu-title {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--navy);
+      }
+      .bu-sub {
+        font-size: 11px;
+        color: var(--gray-text);
+        font-weight: 500;
+        margin-top: 2px;
+      }
+
+      /* ── LEGEND ROW (column headers) ── */
+      .legend-row {
+        display: grid;
+        grid-template-columns: 180px 1fr 1fr 1fr 1fr 1fr;
+        gap: 0;
+        margin-bottom: 8px;
+        padding: 0 0 6px;
+        border-bottom: 1px solid var(--gray-3);
+      }
+      .legend-row-cell {
+        font-size: 8px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .legend-row-cell .lrc-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .legend-row-cell.c-dor {
+        color: var(--col-dor);
+        grid-column: 2;
+      }
+      .legend-row-cell.c-causa {
+        color: var(--col-causa);
+        grid-column: 3;
+      }
+      .legend-row-cell.c-impact {
+        color: var(--col-impact);
+        grid-column: 4;
+      }
+      .legend-row-cell.c-status {
+        color: var(--col-status);
+        grid-column: 5;
+      }
+      .legend-row-cell.c-prazos {
+        color: var(--navy);
+        grid-column: 6;
+      }
+
+      /* ── DOR ROW ── */
+      .dor-row {
+        display: grid;
+        grid-template-columns: 180px 1fr 1fr 1fr 1fr 1fr;
+        gap: 0;
+        margin-bottom: 6px;
+        border: 1px solid var(--gray-3);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: box-shadow 0.18s;
+      }
+      .dor-row:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      /* dor label cell */
+      .dor-label-cell {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 14px 16px;
+        background: var(--navy);
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .dor-num-tag {
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 4px;
+      }
+      .dor-label-name {
+        font-size: 12px;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1.3;
+      }
+
+      /* content cells */
+      .dor-cell {
+        padding: 13px 14px;
+        font-size: 11.5px;
+        line-height: 1.6;
+        border-right: 1px solid var(--gray-3);
+        color: var(--body-text);
+      }
+      .dor-cell:last-child {
+        border-right: none;
+      }
+
+      .dor-cell.c-dor {
+        background: var(--col-dor-bg);
+      }
+      .dor-cell.c-causa {
+        background: var(--col-causa-bg);
+      }
+      .dor-cell.c-impact {
+        background: var(--col-impact-bg);
+      }
+      .dor-cell.c-status {
+        background: var(--col-status-bg);
+      }
+      .dor-cell.c-prazos {
+        background: #f3f7ff;
+        color: var(--navy);
+      }
+
+      .dor-cell strong {
+        font-weight: 700;
+        color: var(--navy);
+        display: block;
+        margin-bottom: 2px;
+      }
+      .dor-cell em {
+        font-style: normal;
+        font-weight: 600;
+      }
+
+      .dor-cell.c-dor em {
+        color: var(--col-dor);
+      }
+      .dor-cell.c-causa em {
+        color: var(--col-causa);
+      }
+      .dor-cell.c-impact em {
+        color: var(--col-impact);
+      }
+      .dor-cell.c-status em {
+        color: var(--col-status);
+      }
+
+      /* metric chip */
+      .metric-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 9px;
+        font-weight: 700;
+        background: #fff;
+        border: 1px solid var(--gray-3);
+        border-radius: 6px;
+        padding: 2px 8px;
+        margin-top: 5px;
+        color: var(--navy);
+      }
+      .metric-chip.red {
+        background: var(--col-impact-bg);
+        border-color: rgba(220, 38, 38, 0.2);
+        color: var(--col-impact);
+      }
+      .metric-chip.green {
+        background: var(--col-status-bg);
+        border-color: rgba(22, 163, 74, 0.2);
+        color: var(--col-status);
+      }
+      .metric-chip.blue {
+        background: var(--col-dor-bg);
+        border-color: rgba(0, 95, 249, 0.2);
+        color: var(--col-dor);
+      }
+      .metric-chip.custo {
+        background: #fff0f0;
+        border: 1.5px solid rgba(220, 38, 38, 0.35);
+        color: #b91c1c;
+        font-size: 12px;
+        font-weight: 800;
+        padding: 4px 11px;
+        letter-spacing: 0.01em;
+      }
+
+      /* status dot indicator */
+      .status-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border-radius: 20px;
+        padding: 3px 9px;
+        margin-bottom: 6px;
+      }
+      .status-indicator .si-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+      }
+      .si-pending {
+        background: #fff5e0;
+        color: #7a4200;
+      }
+      .si-pending .si-dot {
+        background: var(--col-impact);
+      }
+      .si-progress {
+        background: #eef2ff;
+        color: #3730a3;
+      }
+      .si-progress .si-dot {
+        background: var(--col-dor);
+      }
+
+      /* ── SECTION DIVIDER ── */
+      .sec-div {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+        margin-top: 0;
+      }
+      .sec-div-label {
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--gray-text);
+        white-space: nowrap;
+      }
+      .sec-div-line {
+        flex: 1;
+        height: 1px;
+        background: var(--gray-3);
+      }
+
+      /* ── FOOTER ── */
+      .doc-footer {
+        margin-top: 48px;
+        padding-top: 20px;
+        border-top: 1px solid var(--gray-3);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .footer-text {
+        font-size: 10px;
+        color: var(--gray-text);
+        font-weight: 500;
+      }
+      .footer-tag {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--blue);
+        background: var(--gray-2);
+        border-radius: 20px;
+        padding: 4px 12px;
+      }
+
+      /* ── RESPONSIVE ── */
+      @media (max-width: 860px) {
+        .legend-row,
+        .dor-row {
+          grid-template-columns: 1fr;
+        }
+        .legend-row {
+          display: none;
+        }
+        .dor-label-cell {
+          border-right: none;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 0;
+        }
+        .dor-cell {
+          border-right: none;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .dor-cell::before {
+          display: block;
+          font-size: 8px;
+          font-weight: 800;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          margin-bottom: 4px;
+          opacity: 0.6;
+        }
+        .dor-cell.c-dor::before {
+          content: "Dor";
+          color: var(--col-dor);
+        }
+        .dor-cell.c-causa::before {
+          content: "Causa Raiz";
+          color: var(--col-causa);
+        }
+        .dor-cell.c-impact::before {
+          content: "Impacto";
+          color: var(--col-impact);
+        }
+        .dor-cell.c-status::before {
+          content: "Status";
+          color: var(--col-status);
+        }
+      }
+
+      @media print {
+        .legend-row,
+        .dor-row {
+          grid-template-columns: 180px 1fr 1fr 1fr 1fr;
+        }
+        .page {
+          padding: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <!-- HEADER -->
+      <div class="doc-header">
+        <div class="doc-header-left">
+          <h1>Diretoria de Clientes · Área Consultiva</h1>
+          <h2>
+            Governança <span>BU's</span><br />Dores · Causa · Impacto · Status
+          </h2>
+        </div>
+        <div class="doc-header-right">
+          <div class="doc-meta">
+            <strong>Data</strong> Junho 2026<br />
+            <strong>Área</strong> Diretoria de Clientes<br />
+            <strong>Classificação</strong> Interno
+          </div>
+        </div>
+      </div>
+
+      <!-- LEGENDA -->
+      <div class="legend-bar">
+        <span class="legend-bar-label">Legenda:</span>
+        <span class="legend-pill lp-dor"><span class="lp-dot"></span>Dor</span>
+        <span class="legend-pill lp-causa"
+          ><span class="lp-dot"></span>Causa Raiz</span
+        >
+        <span class="legend-pill lp-impact"
+          ><span class="lp-dot"></span>Impacto</span
+        >
+        <span class="legend-pill lp-status"
+          ><span class="lp-dot"></span>Status</span
+        >
+      </div>
+
+      <!-- ═══════════════════════════════════════
+       BU 01 — CRÉDITO TRABALHADOR (CLT)
+  ═══════════════════════════════════════ -->
+      <div class="bu-section">
+        <div class="bu-header">
+          <div class="bu-num" style="background: #ff6b35">01</div>
+          <div>
+            <div class="bu-title">Crédito Trabalhador (CLT)</div>
+            <div class="bu-sub">
+              3 dores mapeadas · Foco em Ressarcimento, Desaverbação e 1ª PMT
+            </div>
+          </div>
+          <a href="https://agibank.atlassian.net/jira/software/c/projects/MPSC/boards/13771" target="_blank" style="margin-left:auto;display:inline-block;padding:8px 14px;background:#005ff9;color:#fff;border-radius:6px;text-decoration:none;font-size:11px;font-weight:600;white-space:nowrap;">Acesse o JIRA →</a>
+        </div>
+        <div class="sec-div"><span class="sec-div-label">Narrativa de Dores</span><div class="sec-div-line"></div></div>
+        <div class="legend-row">
+          <div></div>
+          <div class="legend-row-cell c-dor"><span class="lrc-dot" style="background:var(--col-dor)"></span>Dor</div>
+          <div class="legend-row-cell c-causa"><span class="lrc-dot" style="background:var(--col-causa)"></span>Causa Raiz</div>
+          <div class="legend-row-cell c-impact"><span class="lrc-dot" style="background:var(--col-impact)"></span>Impacto</div>
+          <div class="legend-row-cell c-status"><span class="lrc-dot" style="background:var(--col-status)"></span>Status</div>
+          <div class="legend-row-cell c-prazos"><span class="lrc-dot" style="background:var(--navy)"></span>Prazos</div>
+        </div>
+
+        <!-- Dor 1 — Ressarcimento e Desaverbação -->
+        <div class="dor-row">
+          <div class="dor-label-cell">
+            <div class="dor-num-tag">Dor 01</div>
+            <div class="dor-label-name">Ressarcimento e Desaverbação</div>
+          </div>
+          <div class="dor-cell c-dor">
+            Comum em casos que o cliente antecipa/quita o contrato mas, ocorre desconto. Janela de atualização muito grande <em>(Até 45 dias)</em>. Dependência do DataPrev. API ainda em construção — processo manual.
+          </div>
+          <div class="dor-cell c-causa">
+            Atualização de status lenta + ausência de API automatizada. <em>Processo totalmente manual</em> e sujeito a erro.
+          </div>
+          <div class="dor-cell c-impact">
+            <div><strong>Ressarcimento:</strong></div>
+            <span class="metric-chip custo">R$ 50k</span>
+            <span class="metric-chip red" style="font-size:11px">15,6% Rechamada</span>
+            <span class="metric-chip red">Top 3 em chamadas</span>
+            <div style="margin-top:10px;border-top:1px solid #ddd;padding-top:10px"><strong>Desaverbação:</strong></div>
+            <span class="metric-chip custo">R$ 28k</span>
+            <span class="metric-chip red" style="font-size:11px">37% Rechamada</span>
+            <span class="metric-chip red">Top 4 em chamadas</span>
+          </div>
+          <div class="dor-cell c-status">
+            <span class="status-indicator si-progress"><span class="si-dot"></span>Em andamento</span>
+            <div>2 frentes de ataque: 1ª Automação com dataprev (API); 2ª Criação de processo paliativo de baixar todo dia ~10 o CSV DATAPREV e programar o ressarcimento pró-ativo.<br/><br/>
+            <strong>Ação de treinamento (tema entrará no plano de Julho)</strong>
+            <a href="https://jornadaressarcimento.netlify.app/" target="_blank" style="display:inline-block;margin-top:10px;padding:8px 14px;background:#005ff9;color:#fff;border-radius:6px;text-decoration:none;font-size:12px;font-weight:600;">Jornada de ressarcimento na central &amp; oportunidades →</a></div>
+          </div>
+          <div class="dor-cell c-prazos">30/09/2026</div>
+        </div>
+
+        <!-- Dor 2 — Informação desatualizada no front (Agi Vendas) -->
+        <div class="dor-row">
+          <div class="dor-label-cell">
+            <div class="dor-num-tag">Dor 02</div>
+            <div class="dor-label-name">Informação desatualizada no front (Agi Vendas)</div>
+          </div>
+          <div class="dor-cell c-dor">
+            Na central não temos detalhes das informações que precisaríamos para evitar a rechamada <em>(Data do desconto, Data do repasse, Data do reembolso)</em>. Com essa informação atualizada no SF, mataríamos a dor em tempo real.
+          </div>
+          <div class="dor-cell c-causa">
+            Falta de sincronização e atualização em tempo real do SalesForce com os dados operacionais do cliente. Ex: <em>Revínculo, Repactuação.</em>
+          </div>
+          <div class="dor-cell c-impact">
+            <span class="metric-chip custo">Redução de custo operacional</span>
+            <span class="metric-chip red">Melhor experiência na central</span>
+            <div style="margin-top:6px">Informações críticas ausentes prejudicam a resolução na primeira chamada.</div>
+          </div>
+          <div class="dor-cell c-status">
+            <span class="status-indicator si-pending"><span class="si-dot"></span>Pendente</span>
+            <div>Necessário alinhamento com Tech para integração e sincronização de dados em tempo real no SalesForce. Projeto em fase de Discovery</div>
+          </div>
+          <div class="dor-cell c-prazos">TBD</div>
+        </div>
+
+        <!-- Dor 3 — Desconto 1ª PMT -->
+        <div class="dor-row">
+          <div class="dor-label-cell">
+            <div class="dor-num-tag">Dor 03</div>
+            <div class="dor-label-name">Desconto 1ª PMT em data divergente</div>
+          </div>
+          <div class="dor-cell c-dor">
+            Janela de pagamento <em>não acompanha</em> a data de débito exposta no contrato — débito ocorre antes do acordado. A necessidade é acrescentar a data de desconto. Hoje só com a data vencimento gera atrito com o cliente.
+          </div>
+          <div class="dor-cell c-causa">
+            Desalinhamento entre data contratual e data de débito real. Sem correção automática no sistema.
+          </div>
+          <div class="dor-cell c-impact">
+            <span class="metric-chip red">Alto impacto CSAT</span>
+            <div style="margin-top:6px">CSAT abaixo de <em>3 pontos</em> — fricção direta na experiência do cliente.</div>
+          </div>
+          <div class="dor-cell c-status">
+            <span class="status-indicator si-pending"><span class="si-dot"></span>Pendente</span>
+            <div>Wish aberta para alterar comunicação no contrato. Ainda pendente de execução.</div>
+          </div>
+          <div class="dor-cell c-prazos">30/06/2026</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+       BU 02 — CRÉDITO PESSOAL
+  ═══════════════════════════════════════ -->
+      <div class="bu-section">
+        <div class="bu-header">
+          <div class="bu-num" style="background: #7c3aed">02</div>
+          <div>
+            <div class="bu-title">Crédito Pessoal</div>
+            <div class="bu-sub">3 dores mapeadas · Foco em Cancelamento, Antecipação e Resumo de Contrato</div>
+          </div>
+          <a href="https://agibank.atlassian.net/jira/software/c/projects/MPSC/boards/13775" target="_blank" style="margin-left:auto;display:inline-block;padding:8px 14px;background:#005ff9;color:#fff;border-radius:6px;text-decoration:none;font-size:11px;font-weight:600;white-space:nowrap;align-self:flex-start;">Acesse o JIRA →</a>
+        </div>
+        <div class="sec-div"><span class="sec-div-label">Narrativa de Dores</span><div class="sec-div-line"></div></div>
+        <div class="legend-row">
+          <div></div>
+          <div class="legend-row-cell c-dor"><span class="lrc-dot" style="background:var(--col-dor)"></span>Dor</div>
+          <div class="legend-row-cell c-causa"><span class="lrc-dot" style="background:var(--col-causa)"></span>Causa Raiz</div>
+          <div class="legend-row-cell c-impact"><span class="lrc-dot" style="background:var(--col-impact)"></span>Impacto</div>
+          <div class="legend-row-cell c-status"><span class="lrc-dot" style="background:var(--col-status)"></span>Status</div>
+          <div class="legend-row-cell c-prazos"><span class="lrc-dot" style="background:var(--navy)"></span>Prazos</div>
+        </div>
+
+        <!-- Dor 1 — Cancelamento de Optante -->
+        <div class="dor-row">
+          <div class="dor-label-cell">
+            <div class="dor-num-tag">Dor 01</div>
+            <div class="dor-label-name">Cancelamento de Optante</div>
+          </div>
+          <div class="dor-cell c-dor">
+            Operação sem argumentos de fidelização. <em>Dificuldade no recebimento de boleto pós-mudança</em> — risco de inadimplência.
+          </div>
+          <div class="dor-cell c-causa">
+            Ausência de estímulos à fidelização e falta de pacote de argumentos para retenção na operação.
+          </div>
+          <div class="dor-cell c-impact">
+            <span class="metric-chip custo">R$ 42k</span>
+            <span class="metric-chip red" style="font-size:11px">47,6% de rechamada</span>
+            <span class="metric-chip red">Top 1 Rechamada</span>
+          </div>
+          <div class="dor-cell c-status">
+            <span class="status-indicator si-pending"><span class="si-dot"></span>Sem visibilidade</span>
+            <div><em>Sem previsão</em> para criação de pacote de argumentos de fidelização.</div>
+          </div>
+          <div class="dor-cell c-prazos">09/06/2026<br/><small style="color:var(--gray-text);font-size:10px">(Handover e Data da Data)</small></div>
+        </div>
+
+        <!-- Dor 2 — Antecipação de PMT -->
+        <div class="dor-row">
+          <div class="dor-label-cell">
+            <div class="dor-num-tag">Dor 02</div>
+            <div class="dor-label-name">Antecipação de PMT</div>
+          </div>
+          <div class="dor-cell c-dor">
+            <em>Funcionalidade inexistente no APP.</em> Problemas com contabilização das parcelas antecipadas.
+          </div>
+          <div class="dor-cell c-causa">
+            Falta de desenvolvimento de funcionalidade no APP. Processo de contabilização com falhas.
+          </div>
+          <div class="dor-cell c-impact">
+            <span class="metric-chip custo">R$ 40k</span>
+            <span class="metric-chip red" style="font-size:11px">15,2% de rechamada</span>
+            <span class="metric-chip red">Top 3 em chamada</span>
+          </div>
+          <div class="dor-cell c-status">
+            <span class="status-indicator si-pending"><span class="si-dot"></span>Sem visibilidade</span>
+            <div><em>Sem Wish aberta</em> para criação da funcionalidade no APP.</div>
+          </div>
+          <div class="dor-cell c-prazos">TBD</div>
+        </div>
+
+        <!-- Dor 3 — Resumo de Contrato -->
+        <div class="dor-row">
+          <div class="dor-label-cell">
+            <div class="dor-num-tag">Dor 03</div>
+            <div class="dor-label-name">Resumo de Contrato</div>
+          </div>
+          <div class="dor-cell c-dor">
+            Funcionalidade inexistente no APP. <em>Cliente sempre entra em contato solicitando descrição.</em>
+          </div>
+          <div class="dor-cell c-causa">
+            Falta de desenvolvimento de funcionalidade no APP.
+          </div>
+          <div class="dor-cell c-impact">
+            <span class="metric-chip custo">R$ 44k</span>
+            <span class="metric-chip red" style="font-size:11px">42,6% de rechamada</span>
+            <span class="metric-chip red">Top 5 em chamadas</span>
+          </div>
+          <div class="dor-cell c-status">
+            <span class="status-indicator si-pending"><span class="si-dot"></span>Pendente</span>
+            <div><em>Pendente de atuação.</em></div>
+          </div>
+          <div class="dor-cell c-prazos">TBD</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+       BU 03 — CONSIGNADO INSS + PÚBLICO
+  ═══════════════════════════════════════ -->
+      <div class="bu-section">
+        <div class="bu-header">
+          <div class="bu-num" style="background: #0099cc">03</div>
+          <div>
+            <div class="bu-title">Consignado INSS + Público</div>
+            <div class="bu-sub">3 dores mapeadas · Foco em Antecipação, Desaverbação e Solicitação</div>
+          </div>
+          <a href="https://agibank.atlassian.net/jira/software/c/projects/MPSC/boards/13774?issueType=10002" target="_blank" style="margin-left:auto;display:inline-block;padding:8px 14px;background:#005ff9;color:#fff;border-radius:6px;text-decoration:none;font-size:11px;font-weight:600;white-space:nowrap;align-self:flex-start;">Acesse o JIRA →</a>
+        </div>
+        <div class="sec-div"><span class="sec-div-label">Narrativa de Dores</span><div class="sec-div-line"></div></div>
+        <div class="legend-row">
+          <div></div>
+          <div class="legend-row-cell c-dor"><span class="lrc-dot" style="background:var(--col-dor)"></span>Dor</div>
+          <div class="legend-row-cell c-causa"><span class="lrc-dot" style="background:var(--col-causa)"></span>Causa Raiz</div>
+          <div class="legend-row-cell c-impact"><span class="lrc-dot" style="background:var(--col-impact)"></span>Impacto</div>
+          <div class="legend-row-cell c-status"><span class="lrc-dot" style="background:var(--col-status)"></span>Status</div>
+          <div class="legend-row-cell c-prazos"><span class="lrc-dot" style="background:var(--navy)"></span>Prazos</div>
+        </div>
+
+        <!-- Dor 1 — Solicitação e Simulação de Empréstimo (permanece) -->
+        <div class="dor-row">
+          <div class="dor-label-cell">
+            <div class="dor-num-tag">Dor 01</div>
+            <div class="dor-label-name">Solicitação e Simulação de Empréstimo</div>
+          </div>
+          <div class="dor-cell c-dor">
+            Funcionalidade inexistente no APP.
+          </div>
+          <div class="dor-cell c-causa">
+            Falta de desenvolvimento de funcionalidade no APP.
+          </div>
+          <div class="dor-cell c-impact">
+            <span class="metric-chip custo">R$ 25k</span>
+            <span class="metric-chip red">Top 1 em chamadas</span>
+          </div>
+          <div class="dor-cell c-status">
+            <span class="status-indicator si-pending"><span class="si-dot"></span>Pendente</span>
+            <div><em>Pendente de atuação.</em></div>
+          </div>
+          <div class="dor-cell c-prazos">TBD</div>
+        </div>
+
+        <!-- Dor 2 — Antecipação de Parcelas -->
+        <div class="dor-row">
+          <div class="dor-label-cell">
+            <div class="dor-num-tag">Dor 02</div>
+            <div class="dor-label-name">Antecipação de Parcelas</div>
+          </div>
+          <div class="dor-cell c-dor">
+            A jornada do cliente para antecipação não é fluida (Baixa de Pagto para liberar, Falta funcionalidades no APP, Problemas com pagtos antecipados).
+          </div>
+          <div class="dor-cell c-causa">
+            O Fluxo de atendimento não é otimizado. Falta de funcionalidade no APP.
+          </div>
+          <div class="dor-cell c-impact">
+            <span class="metric-chip custo">R$ 15k</span>
+            <span class="metric-chip red" style="font-size:11px">20% de Rechamada</span>
+            <span class="metric-chip red">TOP2 em chamadas</span>
+          </div>
+          <div class="dor-cell c-status">
+            <span class="status-indicator si-pending"><span class="si-dot"></span>Aguardando priorização</span>
+            <div>Endereçamos uma automação que revisará os fluxos desde liquidação até ressarcimento (quando for preciso ressarcir). Desenvolvimento <em>ROADMAP-2508</em>.</div>
+          </div>
+          <div class="dor-cell c-prazos">30/09/2026</div>
+        </div>
+
+        <!-- Dor 3 — Desaverbação (Cartão) -->
+        <div class="dor-row">
+          <div class="dor-label-cell">
+            <div class="dor-num-tag">Dor 03</div>
+            <div class="dor-label-name">Desaverbação (Cartão)</div>
+          </div>
+          <div class="dor-cell c-dor">
+            Existe fricção no processo de desaverbar a margem do cliente, o que também pode gerar débito indevido.
+          </div>
+          <div class="dor-cell c-causa">
+            Falta de automação para liberação de margem, afetando inclusive prazos regulatórios.
+          </div>
+          <div class="dor-cell c-impact">
+            <span class="metric-chip custo">R$ 2k</span>
+            <span class="metric-chip red" style="font-size:11px">27% de Rechamada</span>
+            <span class="metric-chip red">TOP5 em chamadas</span>
+          </div>
+          <div class="dor-cell c-status">
+            <span class="status-indicator si-pending"><span class="si-dot"></span>Aguardando priorização</span>
+            <div>Endereçamos uma automação para liberar margem dos convênios INSS e trabalhador visando eliminar a dor na central e cumprir prazos regulatórios. Desenvolvimento <em>ROADMAP-2512</em>.</div>
+          </div>
+          <div class="dor-cell c-prazos">30/07/2026</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+       BU 04 — CONSUMER BANKING
+  ═══════════════════════════════════════ -->
+      <div class="bu-section">
+        <div class="bu-header">
+          <div class="bu-num" style="background: #ff4757">04</div>
+          <div>
+            <div class="bu-title">Consumer Banking</div>
+            <div class="bu-sub">3 dores mapeadas · Foco em PIX, Autosserviço e Erros no APP</div>
+          </div>
+          <a href="https://agibank.atlassian.net/jira/software/c/projects/MPSC/boards/13772" target="_blank" style="margin-left:auto;display:inline-block;padding:8px 14px;background:#005ff9;color:#fff;border-radius:6px;text-decoration:none;font-size:11px;font-weight:600;white-space:nowrap;">Acesse o JIRA →</a>
+        </div>
+        <div class="sec-div"><span class="sec-div-label">Narrativa de Dores</span><div class="sec-div-line"></div></div>
+        <div class="legend-row">
+          <div></div>
+          <div class="legend-row-cell c-dor"><span class="lrc-dot" style="background:var(--col-dor)"></span>Dor</div>
+          <div class="legend-row-cell c-causa"><span class="lrc-dot" style="background:var(--col-causa)"></span>Causa Raiz</div>
+          <div class="legend-row-cell c-impact"><span class="lrc-dot" style="background:var(--col-impact)"></span>Impacto</div>
+          <div class="legend-row-cell c-status"><span class="lrc-dot" style="background:var(--col-status)"></span>Status</div>
+          <div class="legend-row-cell c-prazos"><span class="lrc-dot" style="background:var(--navy)"></span>Prazos</div>
+        </div>
+
+        <!-- Dor 1 — Problemas PIX -->
+        <div class="dor-row">
+          <div class="dor-label-cell">
+            <div class="dor-num-tag">Dor 01</div>
+            <div class="dor-label-name">Problemas PIX</div>
+          </div>
+          <div class="dor-cell c-dor">
+            <strong>1º Transação não autorizada (49%):</strong>
+            <div style="margin-top:6px;line-height:1.8">
+              - 19% Limite de PIX excedido (Sem estar)<br/>
+              - 17% Mensagens de erro Genéricas<br/>
+              - 13% Demais fricções (Compensação, Golpe, etc)
+            </div>
+          </div>
+          <div class="dor-cell c-causa">
+            Assunto apenas escalado. <em>Sem callback ou close the loop</em>. Nenhuma orientação de fricções na central. Como a mensagem ao cliente é "padrão", não temos visibilidade ou orientação do que fazer com ele em linha.
+          </div>
+          <div class="dor-cell c-impact">
+            <span class="metric-chip custo">R$ 129k</span>
+            <span class="metric-chip red">Top 1 chamadas</span>
+          </div>
+          <div class="dor-cell c-status">
+            <span class="status-indicator si-pending"><span class="si-dot"></span>Pendente</span>
+            <div><em>Ainda com fricção</em> e baixa resolutividade na jornada do cliente na área PIX.</div>
+          </div>
+          <div class="dor-cell c-prazos">TBD</div>
+        </div>
+
+        <!-- Dor 2 — Autosserviço APP -->
+        <div class="dor-row">
+          <div class="dor-label-cell">
+            <div class="dor-num-tag">Dor 02</div>
+            <div class="dor-label-name">Autosserviço APP</div>
+          </div>
+          <div class="dor-cell c-dor">
+            <div style="line-height:1.6">Resumo de contrato: <strong>65%</strong></div>
+            <div>Emissão de Boleto: <strong>11%</strong></div>
+            <div>Alteração Cadastral: <strong>4%</strong></div>
+          </div>
+          <div class="dor-cell c-causa">
+            Serviços tratados na central de atendimento que poderiam ser inseridos no autoatendimento, endereçando inclusive o <em>PA 1150 (MK)</em>.
+          </div>
+          <div class="dor-cell c-impact">
+            <span class="metric-chip custo">R$ 123k</span>
+            <div style="margin-top:8px;line-height:1.7">
+              <strong>CLT:</strong> 70%<br/>
+              <strong>CP:</strong> 22%<br/>
+              <strong>Consignado INSS:</strong> 4%
+            </div>
+          </div>
+          <div class="dor-cell c-status">
+            <span class="status-indicator si-pending"><span class="si-dot"></span>Pendente</span>
+            <div><em>Pendente de atuação.</em></div>
+          </div>
+          <div class="dor-cell c-prazos">TBD</div>
+        </div>
+
+        <!-- Dor 3 — Erros no APP -->
+        <div class="dor-row">
+          <div class="dor-label-cell">
+            <div class="dor-num-tag">Dor 03</div>
+            <div class="dor-label-name">Erros no APP</div>
+          </div>
+          <div class="dor-cell c-dor">
+            Quando o cliente entra em contato na central compartilhando erro no APP, a operação não tem nenhuma visibilidade da razão do problema atuando na maior parte de forma genérica <em>(Ops)</em>.
+          </div>
+          <div class="dor-cell c-causa">
+            Ausência de base de conhecimento operacional e DExPARA de possíveis erros. Sem suporte estruturado em tempo real para o agente.
+          </div>
+          <div class="dor-cell c-impact">
+            <span class="metric-chip custo">R$ 62k</span>
+            <span class="metric-chip red">22% Rechamada</span>
+            <span class="metric-chip red">Top 2 em chamadas</span>
+            <div style="margin-top:6px">Resolutividade baixa na central.</div>
+          </div>
+          <div class="dor-cell c-status">
+            <span class="status-indicator si-pending"><span class="si-dot"></span>Pendente</span>
+            <div>Mapa de erros ainda <em>não recebido</em>. Base de conhecimento operacional não gerada.</div>
+          </div>
+          <div class="dor-cell c-prazos">TBD</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+       BU 05 — ATENDIMENTO
+  ═══════════════════════════════════════ -->
+      <div class="bu-section">
+        <div class="bu-header">
+          <div class="bu-num" style="background: #005ff9">05</div>
+          <div>
+            <div class="bu-title">Atendimento</div>
+            <div class="bu-sub">3 dores mapeadas · Foco em Empréstimo, Tabulação e Casos em Branco</div>
+          </div>
+          <a href="https://agibank.atlassian.net/jira/software/c/projects/MPSC/boards/13773" target="_blank" style="margin-left:auto;display:inline-block;padding:8px 14px;background:#005ff9;color:#fff;border-radius:6px;text-decoration:none;font-size:11px;font-weight:600;white-space:nowrap;align-self:flex-start;">Acesse o JIRA →</a>
+        </div>
+        <div class="sec-div"><span class="sec-div-label">Narrativa de Dores</span><div class="sec-div-line"></div></div>
+        <div class="legend-row">
+          <div></div>
+          <div class="legend-row-cell c-dor"><span class="lrc-dot" style="background:var(--col-dor)"></span>Dor</div>
+          <div class="legend-row-cell c-causa"><span class="lrc-dot" style="background:var(--col-causa)"></span>Causa Raiz</div>
+          <div class="legend-row-cell c-impact"><span class="lrc-dot" style="background:var(--col-impact)"></span>Impacto</div>
+          <div class="legend-row-cell c-status"><span class="lrc-dot" style="background:var(--col-status)"></span>Status</div>
+          <div class="legend-row-cell c-prazos"><span class="lrc-dot" style="background:var(--navy)"></span>Prazos</div>
+        </div>
+
+        <!-- Dor 1 -->
+        <div class="dor-row">
+          <div class="dor-label-cell">
+            <div class="dor-num-tag">Dor 01</div>
+            <div class="dor-label-name">Solicitação e Simulação de Empréstimo</div>
+          </div>
+          <div class="dor-cell c-dor">Na central não temos oferta para esta solicitação.</div>
+          <div class="dor-cell c-causa">Sem conexão direta com motor para oferta provocando <em>Zero resolutividade</em>.</div>
+          <div class="dor-cell c-impact">
+            <span class="metric-chip custo">R$ 364k</span>
+          </div>
+          <div class="dor-cell c-status">
+            <span class="status-indicator si-progress"><span class="si-dot"></span>Em andamento</span>
+            <div>Projeto de conexão com motores dando poder de oferta e direcionamento ideal. <em>Chatbot integrado.</em></div>
+          </div>
+          <div class="dor-cell c-prazos">HandOver 01/06<br/>Prazo conclusão: 31/07/2026</div>
+        </div>
+
+        <!-- Dor 2 -->
+        <div class="dor-row">
+          <div class="dor-label-cell">
+            <div class="dor-num-tag">Dor 02</div>
+            <div class="dor-label-name">Tabulação Automática</div>
+          </div>
+          <div class="dor-cell c-dor"><strong>10%</strong> da composição de TMA está na tarefa de <em>tabular o contato</em>.</div>
+          <div class="dor-cell c-causa">Falta de automação de motivos, gerando necessidade humana de classificar <em>100% dos campos</em>.</div>
+          <div class="dor-cell c-impact">
+            <span class="metric-chip custo">Tabulação manual ~R$ 233k/mês</span>
+            <div style="margin-top:6px">Manualidade do processo, risco de erro e impacto na <em>Qualidade</em> das informações.</div>
+          </div>
+          <div class="dor-cell c-status">
+            <span class="status-indicator si-progress"><span class="si-dot"></span>Em andamento</span>
+            <div>Grupo de trabalho iniciado para <em>automação de tabulação</em>.</div>
+          </div>
+          <div class="dor-cell c-prazos">HandOver 03/06<br/>Fase 1: 10/08<br/><small style="color:var(--gray-text);font-size:10px">(Automação Produto e Detalhe)</small><br/><small style="color:var(--gray-text);font-size:10px">Demais fases TBD</small></div>
+        </div>
+
+        <!-- Dor 3 -->
+        <div class="dor-row">
+          <div class="dor-label-cell">
+            <div class="dor-num-tag">Dor 03</div>
+            <div class="dor-label-name">Casos em Branco</div>
+          </div>
+          <div class="dor-cell c-dor">
+            Falha no fluxo de atendimento via chatbot (WhatsApp) integrado ao Salesforce — casos criados sem conteúdo válido. <em>Registros vazios na plataforma Salesforce.</em>
+          </div>
+          <div class="dor-cell c-causa">
+            <strong>Chat interno:</strong> sem regra de associação da mensagem versus contato.<br/>
+            <strong>Chat externo:</strong> 2 causas — Replicar regra para evitar "message session" em branco + Falha de tabulação do agente.
+          </div>
+          <div class="dor-cell c-impact">
+            Poluição operacional do dado <em>(Decisão imprecisa)</em> e perda de eficiência operacional.
+          </div>
+          <div class="dor-cell c-status">
+            <span class="status-indicator si-progress"><span class="si-dot"></span>Em andamento</span>
+            <div>Chat Interno: <em>95% concluído</em><br/>Chat Externo: <em>50% concluído</em></div>
+          </div>
+          <div class="dor-cell c-prazos">Chat Interno: 30/06<br/>Chat Externo: 10/07</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+       FONTES
+  ═══════════════════════════════════════ -->
+      <div
+        style="
+          margin-top: 60px;
+          padding: 20px;
+          background: #f7f9fc;
+          border-radius: 8px;
+        "
+      >
+        <span
+          style="
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #005ff9;
+          "
+          >Fontes de dados</span
+        >
+        <div
+          style="
+            font-size: 13px;
+            color: #6b7a99;
+            margin-top: 12px;
+            line-height: 1.8;
+          "
+        >
+          <strong style="color: #1a2340">Birdie:</strong> Análises VoC com IA
+          Skye · <strong style="color: #1a2340">Intraday:</strong> Relatório de
+          tabulação operacional ·
+          <strong style="color: #1a2340">Book:</strong> Relatório executivo ·
+          <strong style="color: #1a2340">Direx:</strong> Relatório executivo ·
+          <strong style="color: #1a2340">SalesForce:</strong> RO operacional
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════ -->
+      <div class="doc-footer">
+        <div class="footer-text">
+          Diretoria de Clientes · Governança BU's · Maio 2026 ·
+          <strong>Fontes:</strong> Book Indicadores, Intraday - Painel de filas
+        </div>
+        <div class="footer-tag">Interno · Confidencial</div>
+      </div>
+    </div>
+  </body>
+</html>
