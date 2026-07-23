@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Concierge - Julho 2026</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:#e5e7eb;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:0;
+}
+
+.dashboard-container{
+  width:1600px;
+  height:900px;
+  background:#f8fafc;
+  padding:20px 30px;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  overflow:hidden;
+}
+
+/* HEADER */
+
+.top-header{
+  background:linear-gradient(90deg,#001a99 0%,#0052cc 100%);
+  color:white;
+  padding:10px 25px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-radius:8px;
+}
+
+.title{
+  font-size:20px;
+  font-weight:700;
+}
+
+.slide-info{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:1px;
+  color:#93c5fd;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.slide-info .date{
+  color:#fff;
+  font-size:20px;
+  font-weight:800;
+}
+
+/* KPI */
+
+.kpis-wrapper{
+  display:grid;
+  grid-template-columns:1fr;
+}
+
+.kpi-group{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:10px;
+
+  background:#fff;
+  border-radius:8px;
+  padding:10px;
+  border-left:4px solid #0026d9;
+}
+
+.kpi-card{
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:6px;
+  padding:12px 6px;
+  text-align:center;
+}
+
+.kpi-value{
+  font-size:24px;
+  font-weight:800;
+  margin-bottom:5px;
+}
+
+.kpi-label{
+  font-size:10px;
+  text-transform:uppercase;
+  color:#64748b;
+  font-weight:700;
+}
+
+.kpi-delta{
+  margin-top:6px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.delta-up{
+  color:#16a34a;
+}
+
+.delta-down{
+  color:#ef4444;
+}
+
+/* SPLIT */
+
+.split-layout{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  flex:1;
+}
+
+.side-panel{
+  background:#fff;
+  border-radius:10px;
+  border:1px solid #e2e8f0;
+  padding:15px 20px;
+  display:flex;
+  flex-direction:column;
+}
+
+.panel-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:2px solid #0026d9;
+  padding-bottom:8px;
+  margin-bottom:12px;
+}
+
+.panel-title{
+  font-size:18px;
+  font-weight:900;
+  color:#0026d9;
+}
+
+.launch-badge{
+  background:#eff6ff;
+  color:#0026d9;
+  font-size:10px;
+  font-weight:700;
+  padding:4px 8px;
+  border-radius:4px;
+}
+
+.rankings-wrapper{
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
+
+.ranking-section{
+  display:flex;
+  flex-direction:column;
+}
+
+.ranking-title{
+  font-size:12px;
+  font-weight:800;
+  color:#334155;
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+
+.list-header{
+  display:grid;
+  grid-template-columns:24px 1fr 50px;
+  gap:10px;
+  font-size:9px;
+  color:#64748b;
+  text-transform:uppercase;
+  font-weight:800;
+  margin-bottom:8px;
+}
+
+.list-header-dual{
+  grid-template-columns:24px 1fr 65px 50px;
+}
+
+.ranking-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.ranking-item{
+  display:grid;
+  grid-template-columns:24px 1fr 50px;
+  gap:10px;
+  align-items:center;
+}
+
+.ranking-item-dual{
+  display:grid;
+  grid-template-columns:24px 1fr 65px 50px;
+  gap:10px;
+  align-items:center;
+}
+
+.rank-num{
+  width:24px;
+  height:24px;
+  border-radius:4px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#0026d9;
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+}
+
+.item-name{
+  font-size:13px;
+  font-weight:700;
+  color:#1e293b;
+}
+
+.item-pct{
+  font-size:13px;
+  font-weight:800;
+  text-align:right;
+}
+
+.item-pct-red{
+  color:#ef4444;
+  font-size:13px;
+  font-weight:800;
+  text-align:right;
+}
+
+.bar-bg{
+  grid-column:2/span 2;
+  width:100%;
+  height:4px;
+  background:#f1f5f9;
+  border-radius:2px;
+}
+
+.ranking-item-dual .bar-bg{
+  grid-column:2/span 3;
+}
+
+.bar-fill{
+  height:100%;
+  border-radius:2px;
+  background:#3b82f6;
+}
+
+/* CARDS EXECUTIVOS */
+
+.exec-card{
+  border-radius:8px;
+  padding:18px;
+}
+
+.exec-big{
+  font-size:34px;
+  font-weight:900;
+  margin-bottom:8px;
+  line-height:1;
+}
+
+.exec-text{
+  font-size:14px;
+  line-height:1.5;
+  color:#334155;
+}
+
+/* DEEP DIVE */
+
+.deep-dive-panel{
+  background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);
+  border-radius:12px;
+  padding:15px 25px;
+  color:white;
+  border-left:6px solid #34d399;
+}
+
+.dd-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  padding-bottom:8px;
+  margin-bottom:10px;
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.dd-title{
+  font-size:16px;
+  font-weight:800;
+  color:#34d399;
+}
+
+.dd-badge{
+  background:rgba(255,255,255,0.1);
+  padding:6px 12px;
+  border-radius:12px;
+  font-size:11px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.dd-body{
+  display:grid;
+  grid-template-columns:1fr 1.8fr;
+  gap:30px;
+}
+
+.flow-container{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:rgba(255,255,255,0.05);
+  padding:15px;
+  border-radius:8px;
+}
+
+.flow-box{
+  text-align:center;
+}
+
+.flow-box-title{
+  font-size:10px;
+  text-transform:uppercase;
+  color:#94a3b8;
+  font-weight:700;
+  margin-bottom:4px;
+}
+
+.flow-box-value{
+  font-size:18px;
+  font-weight:800;
+}
+
+.flow-box-value b{
+  display:block;
+  color:#ef4444;
+  font-size:28px;
+}
+
+.flow-arrow{
+  color:#34d399;
+  font-size:28px;
+  font-weight:900;
+}
+
+.qualitative-container{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.qualitative-text{
+  font-size:14px;
+  line-height:1.5;
+  color:#e2e8f0;
+}
+
+.qualitative-box{
+  background:rgba(239,68,68,0.1);
+  border-left:4px solid #ef4444;
+  padding:12px 15px;
+  border-radius:6px;
+}
+
+.qualitative-title{
+  font-size:11px;
+  text-transform:uppercase;
+  color:#fca5a5;
+  font-weight:800;
+  margin-bottom:8px;
+}
+
+.qualitative-list{
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+
+.qualitative-list li{
+  font-size:13px;
+  font-weight:600;
+  color:#fff;
+  display:flex;
+  align-items:flex-start;
+  gap:6px;
+  line-height:1.4;
+}
+
+.qualitative-list li::before{
+  content:'✕';
+  color:#ef4444;
+  font-weight:900;
+}
+
+.dd-footer{
+  margin-top:10px;
+  font-size:10px;
+  color:#94a3b8;
+  text-align:right;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+  <!-- HEADER -->
+  <div class="top-header">
+
+    <div class="title">
+      Comitê CX — Concierge | Evolução Operacional
+    </div>
+
+    <div class="slide-info">
+      RESULTADOS
+      <span class="date">JUL/26</span>
+    </div>
+
+  </div>
+
+  <!-- KPI -->
+  <div class="kpis-wrapper">
+
+    <div class="kpi-group">
+
+      <div class="kpi-card">
+        <div class="kpi-value">2.184</div>
+        <div class="kpi-label">Vol. Ofer.</div>
+        <div class="kpi-delta delta-down">▼ -26,1% vs Jun</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-value">92,27%</div>
+        <div class="kpi-label">NS</div>
+        <div class="kpi-delta delta-up">▲ +2,99 p.p</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-value">1.403s</div>
+        <div class="kpi-label">TMO</div>
+        <div class="kpi-delta delta-down">▲ +66s</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-value">64,21%</div>
+        <div class="kpi-label">Resolutiv.</div>
+        <div class="kpi-delta delta-up">▲ +18,6 p.p</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-value">66,53%</div>
+        <div class="kpi-label">CSAT</div>
+        <div class="kpi-delta delta-up">▲ +11,9 p.p</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-value" style="color:#16a34a;">4,53%</div>
+        <div class="kpi-label">Rechamada</div>
+        <div class="kpi-delta delta-up">▼ -5,77 p.p</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- SPLIT -->
+  <div class="split-layout">
+
+    <!-- ESQUERDA -->
+    <div class="side-panel">
+
+      <div class="panel-header">
+        <div class="panel-title">🛎️ CONCIERGE</div>
+        <div class="launch-badge">Julho/26</div>
+      </div>
+
+      <div class="rankings-wrapper">
+
+        <div class="ranking-section">
+
+          <div class="ranking-title">
+            📞 TOP MOTIVOS DE CHAMADA
+          </div>
+
+          <div class="list-header">
+            <div></div>
+            <div>Motivo</div>
+            <div style="text-align:right;">Repres.</div>
+          </div>
+
+          <div class="ranking-list">
+
+            <div class="ranking-item">
+              <div class="rank-num">1</div>
+              <div class="item-name">Ressarcimento</div>
+              <div class="item-pct">21%</div>
+
+              <div class="bar-bg">
+                <div class="bar-fill" style="width:100%;"></div>
+              </div>
+            </div>
+
+            <div class="ranking-item">
+              <div class="rank-num">2</div>
+              <div class="item-name">Valores debitados</div>
+              <div class="item-pct">15%</div>
+
+              <div class="bar-bg">
+                <div class="bar-fill" style="width:71%;"></div>
+              </div>
+            </div>
+
+            <div class="ranking-item">
+              <div class="rank-num">3</div>
+              <div class="item-name">Dúvidas Contratação</div>
+              <div class="item-pct">6%</div>
+
+              <div class="bar-bg">
+                <div class="bar-fill" style="width:28%;"></div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="ranking-section">
+
+          <div class="ranking-title">
+            🔄 TOP MOTIVOS DE RECHAMADA
+          </div>
+
+          <div class="list-header list-header-dual">
+            <div></div>
+            <div>Motivo</div>
+            <div style="text-align:right;color:#ef4444;">% Rech.</div>
+            <div style="text-align:right;">Repres.</div>
+          </div>
+
+          <div class="ranking-list">
+
+            <div class="ranking-item-dual">
+
+              <div class="rank-num" style="background:#ef4444;">1</div>
+              <div class="item-name">Ressarcimento</div>
+              <div class="item-pct-red">21%</div>
+              <div class="item-pct">29%</div>
+
+              <div class="bar-bg">
+                <div class="bar-fill" style="background:#ef4444;width:100%;"></div>
+              </div>
+
+            </div>
+
+            <div class="ranking-item-dual">
+
+              <div class="rank-num" style="background:#f97316;">2</div>
+              <div class="item-name">Transação Não Autorizada</div>
+              <div class="item-pct-red">100%</div>
+              <div class="item-pct">14%</div>
+
+              <div class="bar-bg">
+                <div class="bar-fill" style="background:#f97316;width:48%;"></div>
+              </div>
+
+            </div>
+
+            <div class="ranking-item-dual">
+
+              <div class="rank-num" style="background:#eab308;">3</div>
+              <div class="item-name">PIX</div>
+              <div class="item-pct-red">14%</div>
+              <div class="item-pct">14%</div>
+
+              <div class="bar-bg">
+                <div class="bar-fill" style="background:#eab308;width:48%;"></div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- DIREITA -->
+    <div class="side-panel">
+
+      <div class="panel-header">
+        <div class="panel-title">
+          📈 EVOLUÇÃO JULHO vs JUNHO
+        </div>
+      </div>
+
+      <div class="rankings-wrapper">
+
+        <div class="exec-card" style="background:#f0fdf4;border-left:5px solid #16a34a;">
+
+          <div class="exec-big" style="color:#16a34a;">
+            +18,6 p.p
+          </div>
+
+          <div class="exec-text">
+            Resolutividade saiu de
+            <b>45,61%</b>
+            para
+            <b>64,21%</b>.
+          </div>
+
+        </div>
+
+        <div class="exec-card" style="background:#eff6ff;border-left:5px solid #2563eb;">
+
+          <div class="exec-big" style="color:#2563eb;">
+            +11,9 p.p
+          </div>
+
+          <div class="exec-text">
+            CSAT evoluiu de
+            <b>54,61%</b>
+            para
+            <b>66,53%</b>.
+          </div>
+
+        </div>
+
+        <div class="exec-card" style="background:#fef2f2;border-left:5px solid #ef4444;">
+
+          <div class="exec-big" style="color:#ef4444;">
+            -56%
+          </div>
+
+          <div class="exec-text">
+            Rechamada caiu de
+            <b>10,3%</b>
+            para
+            <b>4,53%</b>.
+          </div>
+
+        </div>
+
+        <div class="exec-card" style="background:#fff7ed;border-left:5px solid #f97316;">
+
+          <div class="exec-big" style="color:#f97316;">
+            +66s
+          </div>
+
+          <div class="exec-text">
+            TMO aumentou de
+            <b>1.337s</b>
+            para
+            <b>1.403s</b>.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- DEEP DIVE -->
+  <div class="deep-dive-panel">
+
+    <div class="dd-header">
+
+      <div class="dd-title">
+        📉 DEEP DIVE CONCIERGE
+      </div>
+
+      <div class="dd-badge">
+        Rechamada caiu de <b>10,3%</b> para <b>4,53%</b>
+      </div>
+
+    </div>
+
+    <div class="dd-body">
+
+      <div class="flow-container">
+
+        <div class="flow-box">
+          <div class="flow-box-title">Maior Ofensor</div>
+
+          <div class="flow-box-value">
+            Ressarcimento
+            <br>
+            <b>21%</b>
+          </div>
+        </div>
+
+        <div class="flow-arrow">→</div>
+
+        <div class="flow-box">
+          <div class="flow-box-title">Impacto em Rechamada</div>
+
+          <div class="flow-box-value">
+            Reincidência
+            <br>
+            <b>29%</b>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="qualitative-container">
+
+        <p class="qualitative-text">
+          Julho apresentou melhora expressiva nos principais indicadores operacionais,
+          demonstrando evolução de experiência e capacidade de resolução.
+          Apesar da melhora, Ressarcimento segue como principal driver de contatos reincidentes.
+        </p>
+
+        <div class="qualitative-box">
+
+          <div class="qualitative-title">
+            Fricções Qualitativas
+          </div>
+
+          <ul class="qualitative-list">
+            <li>Baixa autonomia do cliente para acompanhar status.</li>
+            <li>Prazo percebido elevado para devolução financeira.</li>
+            <li>Dependência excessiva de atendimento humano.</li>
+          </ul>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="dd-footer">
+      Fonte: Comparativo Operacional Concierge — Junho vs Julho/26
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
