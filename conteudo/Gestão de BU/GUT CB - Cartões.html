@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acompanhamento - BU Consignado INSS + Público (Cartões)</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+:root{
+--agi-blue:#0026d9;
+--agi-dark-blue:#001a99;
+--text-dark:#1f2937;
+--text-gray:#6b7280;
+--bg-gray:#f4f5f7;
+
+--bar1:#ef4444;
+--bar2:#f97316;
+--bar3:#eab308;
+--bar4:#14b8a6;
+--bar5:#6366f1;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+background:#e5e7eb;
+padding:20px;
+display:flex;
+justify-content:center;
+}
+
+.dashboard{
+width:1600px;
+background:white;
+box-shadow:0 4px 6px rgba(0,0,0,0.1);
+display:flex;
+flex-direction:column;
+}
+
+.top-header{
+background:linear-gradient(90deg,var(--agi-dark-blue),var(--agi-blue));
+color:white;
+padding:16px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.title{
+font-size:22px;
+font-weight:700;
+}
+
+.date{
+font-size:22px;
+font-weight:800;
+color:#a3e635;
+}
+
+.main-grid{
+display:grid;
+grid-template-columns:380px 1fr;
+gap:20px;
+padding:20px 30px;
+background:var(--bg-gray);
+}
+
+.left-panel{
+background:white;
+border-radius:12px;
+padding:25px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.metric-title{
+font-size:11px;
+font-weight:700;
+color:var(--text-gray);
+margin-bottom:5px;
+}
+
+.metric{
+font-size:56px;
+font-weight:800;
+color:var(--agi-blue);
+}
+
+.kpi-row{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin:20px 0;
+}
+
+.kpi{
+border:1px solid #e5e7eb;
+border-radius:8px;
+padding:10px;
+text-align:center;
+background:#fafafa;
+}
+
+.kpi p{
+font-size:9px;
+color:var(--text-gray);
+font-weight:700;
+}
+
+.kpi h4{
+font-size:16px;
+font-weight:800;
+}
+
+.chart-title{
+font-size:11px;
+font-weight:700;
+color:var(--text-gray);
+margin-bottom:8px;
+}
+
+.chart-box{
+height:240px;
+}
+
+.right-panel{
+background:white;
+border-radius:12px;
+padding:30px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+display:flex;
+flex-direction:column;
+gap:25px;
+}
+
+.section-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+}
+
+.section-title{
+font-size:16px;
+font-weight:700;
+}
+
+.pill{
+background:#ef4444;
+color:white;
+font-size:12px;
+font-weight:800;
+padding:4px 12px;
+border-radius:16px;
+}
+
+.top-header-row{
+display:grid;
+grid-template-columns:40px 260px 1fr 70px 70px 70px 80px;
+font-size:10px;
+font-weight:700;
+color:var(--text-gray);
+margin-bottom:5px;
+}
+
+.top-item{
+display:grid;
+grid-template-columns:40px 260px 1fr 70px 70px 70px 80px;
+align-items:center;
+gap:10px;
+margin-bottom:12px;
+}
+
+.square{
+width:28px;
+height:28px;
+border-radius:6px;
+color:white;
+font-weight:800;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.c1{background:var(--bar1)}
+.c2{background:var(--bar2)}
+.c3{background:var(--bar3)}
+.c4{background:var(--bar4)}
+.c5{background:var(--bar5)}
+
+.bar{
+height:10px;
+border-radius:6px;
+}
+
+.b1{background:var(--bar1)}
+.b2{background:var(--bar2)}
+.b3{background:var(--bar3)}
+.b4{background:var(--bar4)}
+.b5{background:var(--bar5)}
+
+.stat{
+text-align:right;
+font-weight:700;
+}
+
+.delta-neg{
+text-align:right;
+font-weight:800;
+color:#ef4444;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+text-align:left;
+padding:9px;
+font-size:11px;
+color:var(--text-gray);
+border-bottom:2px solid #e5e7eb;
+}
+
+td{
+padding:7px;
+font-size:12px;
+border-bottom:1px solid #f3f4f6;
+}
+
+.right{text-align:right}
+
+.bottom-footer{
+background:#0f172a;
+color:#cbd5e1;
+padding:16px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:12px;
+}
+
+.footer-badge{
+border:1px solid #ef4444;
+color:#ef4444;
+padding:6px 12px;
+border-radius:4px;
+font-weight:800;
+font-size:11px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<div class="top-header">
+<div class="title">Acompanhamento - BU Consignado INSS + Público (Cartões)</div>
+<div class="date">JUN/26</div>
+</div>
+
+<div class="main-grid">
+
+<div class="left-panel">
+
+<div class="metric-title">TOTAL CONTATOS · CARTÕES CONSIGNADO</div>
+<div class="metric">1.555</div>
+
+<div class="kpi-row">
+
+<div class="kpi">
+<p>ABR</p>
+<h4>2.331</h4>
+</div>
+
+<div class="kpi">
+<p>MAI</p>
+<h4>1.987</h4>
+</div>
+
+<div class="kpi">
+<p>VAR TRI</p>
+<h4 style="color:#ef4444">-33%</h4>
+</div>
+
+</div>
+
+<div class="chart-title">EVOLUÇÃO DE VOLUME — ABR A JUN/26</div>
+
+<div class="chart-box">
+<canvas id="chartVolume"></canvas>
+</div>
+
+</div>
+
+<div class="right-panel">
+
+<div>
+
+<div class="section-header">
+<div>
+<span class="pill">TOP 5</span>
+<span class="section-title">Maiores assuntos</span>
+</div>
+</div>
+
+<div class="top-header-row">
+<div></div>
+<div>MOTIVO</div>
+<div></div>
+<div style="text-align:right">ABR</div>
+<div style="text-align:right">MAI</div>
+<div style="text-align:right">JUN</div>
+<div style="text-align:right">Δ</div>
+</div>
+
+<div class="top-item">
+<div class="square c1">1</div>
+<div>Limite Disponível</div>
+<div><div class="bar b1" style="width:100%"></div></div>
+<div class="stat">629</div>
+<div class="stat">424</div>
+<div class="stat">228</div>
+<div class="delta-neg">-64%</div>
+</div>
+
+<div class="top-item">
+<div class="square c2">2</div>
+<div>2ª Via de Fatura</div>
+<div><div class="bar b2" style="width:53%"></div></div>
+<div class="stat">194</div>
+<div class="stat">162</div>
+<div class="stat">121</div>
+<div class="delta-neg">-38%</div>
+</div>
+
+<div class="top-item">
+<div class="square c3">3</div>
+<div>2ª Via de Cartão</div>
+<div><div class="bar b3" style="width:50%"></div></div>
+<div class="stat">147</div>
+<div class="stat">135</div>
+<div class="stat">114</div>
+<div class="delta-neg">-22%</div>
+</div>
+
+<div class="top-item">
+<div class="square c4">4</div>
+<div>Cancelamento de Cartão</div>
+<div><div class="bar b4" style="width:54%"></div></div>
+<div class="stat">104</div>
+<div class="stat">150</div>
+<div class="stat">123</div>
+<div class="delta-neg">+18%</div>
+</div>
+
+<div class="top-item">
+<div class="square c5">5</div>
+<div>Status do Cartão</div>
+<div><div class="bar b5" style="width:37%"></div></div>
+<div class="stat">131</div>
+<div class="stat">101</div>
+<div class="stat">84</div>
+<div class="delta-neg">-36%</div>
+</div>
+
+</div>
+
+<div>
+
+<div class="section-header">
+<div class="section-title">Demais principais assuntos</div>
+</div>
+
+<table>
+
+<thead>
+<tr>
+<th>#</th>
+<th>Motivo</th>
+<th class="right">Abr</th>
+<th class="right">Mai</th>
+<th class="right">Jun</th>
+<th class="right">Δ</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr><td>6</td><td>Desaverbar Margem</td><td class="right">127</td><td class="right">106</td><td class="right">95</td><td class="right">-25%</td></tr>
+<tr><td>7</td><td>Valores debitados</td><td class="right">110</td><td class="right">102</td><td class="right">76</td><td class="right">-31%</td></tr>
+<tr><td>8</td><td>Baixa de Pagamento</td><td class="right">191</td><td class="right">47</td><td class="right">41</td><td class="right">-79%</td></tr>
+<tr><td>9</td><td>Acordo</td><td class="right">85</td><td class="right">102</td><td class="right">86</td><td class="right">+1%</td></tr>
+<tr><td>10</td><td>Cancelamento de Limite</td><td class="right">62</td><td class="right">90</td><td class="right">60</td><td class="right">-3%</td></tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="bottom-footer">
+
+<p>
+<strong>Insight chave:</strong> A BU Consignado INSS + Público (Cartões) apresentou retração de demanda no trimestre (-33% Abr→Jun), puxada principalmente pela queda em “Limite Disponível” (-64%). Temas de segunda via e consultas de cartão continuam representando parcela relevante da demanda, mas também apresentam redução. O único tema relevante com crescimento moderado é “Cancelamento de Cartão” (+18%), enquanto os demais permanecem estáveis ou em queda, indicando retração geral da jornada de atendimento de cartões vinculados ao consignado.
+</p>
+
+<div class="footer-badge">QUEDA DE DEMANDA</div>
+
+</div>
+
+</div>
+
+<script>
+
+const ctx=document.getElementById('chartVolume');
+
+new Chart(ctx,{
+type:'line',
+data:{
+labels:['Abr/26','Mai/26','Jun/26'],
+datasets:[{
+data:[2331,1987,1555],
+borderColor:'#3b82f6',
+backgroundColor:'rgba(59,130,246,0.15)',
+fill:true,
+borderWidth:2,
+tension:0.4,
+pointRadius:5
+}]
+},
+options:{
+responsive:true,
+maintainAspectRatio:false,
+plugins:{legend:{display:false}},
+scales:{
+y:{
+min:1000,
+max:2500,
+ticks:{stepSize:500}
+}
+}
+}
+});
+
+</script>
+
+</body>
+</html>
