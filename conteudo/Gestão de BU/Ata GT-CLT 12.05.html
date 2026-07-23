@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarefas & Organização de Prioridades por GUT | BU Atendimento</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:      #005FF9;
+    --blue-deep: #0033B0;
+    --navy:      #000F44;
+    --green:     #78DF40;
+    --white:     #FFFFFF;
+    --gray-1:    #F7F9FC;
+    --gray-2:    #EEF2F9;
+    --gray-3:    #D1DAEA;
+    --gray-text: #6B7A99;
+    --body-text: #1A2340;
+    --d1: #FF4757;
+    --d2: #FF6B35;
+    --d3: #FFA502;
+    --d4: #78DF40;
+    --d5: #0099CC;
+    --d6: #005FF9;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    color: var(--body-text);
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  /* ══ HEADER ══ */
+  .doc-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-bottom: 28px;
+    border-bottom: 2px solid var(--navy);
+    margin-bottom: 36px;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .doc-header-left h1 {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--blue); margin-bottom: 6px;
+  }
+  .doc-header-left h2 {
+    font-size: 26px; font-weight: 800;
+    color: var(--navy); line-height: 1.15;
+  }
+  .doc-header-left h2 span { color: var(--blue); }
+  .doc-header-right { text-align: right; flex-shrink: 0; }
+  .doc-meta { font-size: 11px; color: var(--gray-text); font-weight: 500; line-height: 1.8; }
+  .doc-meta strong { color: var(--navy); font-weight: 700; }
+
+  /* ══ SECTION ══ */
+  .section { margin-bottom: 40px; }
+  .section-title { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .section-title-line { flex: 1; height: 1px; background: var(--gray-3); }
+  .section-label {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gray-text); white-space: nowrap;
+  }
+
+  /* ══ TAREFAS ══ */
+  .recados-grid { display: flex; flex-direction: column; gap: 8px; }
+  .recado-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--gray-1); border-radius: 10px; padding: 14px 16px;
+    border-left: 3px solid var(--blue); transition: background 0.15s;
+  }
+  .recado-item:hover { background: var(--gray-2); }
+  .recado-icon {
+    width: 28px; height: 28px; background: var(--navy); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; flex-shrink: 0;
+  }
+  .recado-text { font-size: 13px; font-weight: 400; color: var(--body-text); line-height: 1.55; }
+  .recado-text strong { font-weight: 700; color: var(--navy); }
+  .recado-text em { color: var(--blue); font-style: normal; font-weight: 600; }
+
+  .recado-item.mindset { background: var(--navy); border-left-color: var(--green); }
+  .recado-item.mindset .recado-text { color: rgba(255,255,255,0.92); }
+  .recado-item.mindset .recado-text strong { color: var(--green); }
+  .recado-item.mindset .recado-icon { background: var(--green); color: var(--navy); }
+
+  /* ══ GUT STRIP ══ */
+  .gut-strip {
+    background: var(--navy); border-radius: 12px; padding: 18px 24px;
+    display: flex; align-items: center; gap: 20px; margin-bottom: 28px;
+  }
+  .gut-strip-icon { font-size: 32px; flex-shrink: 0; }
+  .gut-strip-text h3 { font-size: 14px; font-weight: 800; color: var(--white); margin-bottom: 3px; }
+  .gut-strip-text p { font-size: 11.5px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+  .gut-strip-text p strong { color: var(--green); }
+
+  /* ══ DOR CARD ══ */
+  .dor-card {
+    border: 1px solid var(--gray-3); border-radius: 14px;
+    overflow: hidden; margin-bottom: 16px; transition: box-shadow 0.18s;
+  }
+  .dor-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
+
+  .dor-header { display: flex; align-items: stretch; }
+  .dor-num-block {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 16px 20px; min-width: 72px; flex-shrink: 0;
+  }
+  .dor-num-label {
+    font-size: 8px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 2px;
+  }
+  .dor-num { font-size: 32px; font-weight: 800; color: var(--white); line-height: 1; }
+
+  /* dark num for light bg colors */
+  .dor-num-block.dark-num .dor-num-label { color: rgba(0,0,0,0.45); }
+  .dor-num-block.dark-num .dor-num      { color: var(--navy); }
+
+  .dor-header-content { flex: 1; padding: 14px 18px; border-left: 1px solid rgba(0,0,0,0.06); }
+  .dor-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; flex-wrap: wrap; }
+  .dor-name { font-size: 15px; font-weight: 800; color: var(--navy); letter-spacing: 0.01em; }
+  .dor-prev-badge {
+    font-size: 9px; font-weight: 600; color: var(--gray-text);
+    background: var(--gray-2); border: 1px solid var(--gray-3);
+    border-radius: 20px; padding: 2px 9px; white-space: nowrap;
+  }
+  .dor-desc { font-size: 12px; color: var(--gray-text); line-height: 1.55; }
+  .dor-desc strong { color: var(--body-text); font-weight: 600; }
+
+  /* expand toggle */
+  .expand-toggle {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 10px;
+    background: none; border: none; cursor: pointer; padding: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--blue);
+  }
+  .expand-toggle:hover { opacity: 0.7; }
+  .expand-arrow { display: inline-block; transition: transform 0.2s; font-style: normal; }
+  .expand-arrow.open { transform: rotate(180deg); }
+
+  /* ══ DOR BODY ══ */
+  .dor-body {
+    padding: 14px 18px 16px; background: var(--gray-1);
+    border-top: 1px solid var(--gray-2);
+    display: block;
+  }
+  .dor-body.collapsed { display: none; }
+
+  .actions-label {
+    font-size: 8.5px; font-weight: 800; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--gray-text); margin-bottom: 10px;
+  }
+  .action-list { display: flex; flex-direction: column; gap: 7px; }
+  .action-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: var(--white); border-radius: 8px; padding: 9px 12px; border: 1px solid var(--gray-3);
+  }
+  .action-step {
+    font-size: 8px; font-weight: 800; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 2px 8px 2px 7px;
+    clip-path: polygon(0 0,90% 0,100% 50%,90% 100%,0 100%);
+    white-space: nowrap; flex-shrink: 0; margin-top: 1px; color: var(--white);
+  }
+  .action-step.dark-text { color: var(--navy); }
+  .action-content {
+    flex: 1; display: flex; align-items: flex-start;
+    justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+  .action-text { font-size: 12px; color: var(--body-text); line-height: 1.5; flex: 1; }
+  .action-text strong { font-weight: 600; }
+  .resp-badge {
+    display: flex; align-items: center; gap: 5px; background: var(--gray-2);
+    border: 1px solid var(--gray-3); border-radius: 20px; padding: 3px 10px;
+    font-size: 10px; font-weight: 700; color: var(--navy); white-space: nowrap; flex-shrink: 0;
+  }
+  .resp-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ══ FOOTER ══ */
+  .doc-footer {
+    margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--gray-3);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  }
+  .footer-text { font-size: 10px; color: var(--gray-text); font-weight: 500; }
+  .footer-tag {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--blue); background: var(--gray-2); border-radius: 20px; padding: 4px 12px;
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 28px 16px 60px; }
+    .doc-header-left h2 { font-size: 20px; }
+    .dor-num { font-size: 24px; }
+    .dor-num-block { min-width: 58px; padding: 14px 12px; }
+  }
+
+  @media print {
+    .dor-body.collapsed { display: block !important; }
+    .expand-toggle { display: none; }
+    .dor-card:hover { box-shadow: none; }
+    .page { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <h1>BU Atendimento · Área Consultiva</h1>
+      <h2>Tarefas &amp; <span>Organização</span><br>de Prioridades por GUT</h2>
+    </div>
+    <div class="doc-header-right">
+      <div class="doc-meta">
+        <strong>Data</strong> 12 de Maio de 2026<br>
+        <strong>Área</strong> Diretoria de Clientes<br>
+        <strong>Classificação</strong> Interno
+      </div>
+    </div>
+  </div>
+
+  <!-- TAREFAS -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-label">Tarefas &amp; Destaques da Reunião</span>
+      <div class="section-title-line"></div>
+    </div>
+    <div class="recados-grid">
+
+      <div class="recado-item mindset">
+        <div class="recado-icon">📅</div>
+        <div class="recado-text">
+          <strong>Jessé</strong> alterar recorrência do GT para <em>terças às 16h</em> — válido já para a próxima semana.
+        </div>
+      </div>
+
+      <div class="recado-item">
+        <div class="recado-icon">✅</div>
+        <div class="recado-text">
+          <strong>FUP da semana:</strong> Ações com envolvimento de áreas avançaram bem. Essa semana o foco é dar <strong>tração aos itens que não foram tocados</strong>.
+        </div>
+      </div>
+
+      <div class="recado-item">
+        <div class="recado-icon">🔁</div>
+        <div class="recado-text">
+          <strong>Ressarcimento:</strong> Ewerton e Bruno articulam calendário com BKO e voltam ao GT com prazos revisados.
+        </div>
+      </div>
+
+      <div class="recado-item">
+        <div class="recado-icon">🔌</div>
+        <div class="recado-text">
+          <strong>Desaverbação:</strong> Nova API conectando com Dataprev prevista para essa semana ou próxima. Ewerton formaliza e-mail.
+        </div>
+      </div>
+
+      <div class="recado-item">
+        <div class="recado-icon">📋</div>
+        <div class="recado-text">
+          <strong>Ítalo</strong> enviar os dias da semana com maior incidência de problemas de Ressarcimento.
+        </div>
+      </div>
+
+      <div class="recado-item">
+        <div class="recado-icon">🗂️</div>
+        <div class="recado-text">
+          <strong>Ítalo</strong> buscar documentação da situação de campanhas de cobrança com Tinga.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- GUT -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-label">Organização de Prioridades — GUT</span>
+      <div class="section-title-line"></div>
+    </div>
+
+    <div class="gut-strip">
+      <div class="gut-strip-icon">🔢</div>
+      <div class="gut-strip-text">
+        <h3>Prioridades organizadas por GUT</h3>
+        <p>Gravidade · Urgência · Tendência — Dores debatidas e ações definidas por responsável. <strong>Clique em cada card para expandir ou recolher.</strong></p>
+      </div>
+    </div>
+
+    <!-- DOR 01 -->
+    <div class="dor-card">
+      <div class="dor-header">
+        <div class="dor-num-block" style="background:var(--d1)">
+          <div class="dor-num-label">Dor</div>
+          <div class="dor-num">01</div>
+        </div>
+        <div class="dor-header-content">
+          <div class="dor-title-row">
+            <span class="dor-name">Ressarcimento</span>
+            <span class="dor-prev-badge">Em Andamento</span>
+          </div>
+          <div class="dor-desc">
+            Legado de atualização da BD do Lake em execução — <strong>pré-requisito crítico</strong> para o Ressarcimento, sob risco de duplicidade. Gargalo: atualização de status. Wish aberta com a tribo. Laize conseguiu repriorização com Robert, antecipando a entrega prevista para agosto.
+          </div>
+          <button class="expand-toggle" onclick="toggleDor(this)">
+            <span class="expand-arrow open">▼</span> Ocultar ações
+          </button>
+        </div>
+      </div>
+      <div class="dor-body">
+        <div class="actions-label">Ações</div>
+        <div class="action-list">
+          <div class="action-item">
+            <span class="action-step" style="background:var(--d1)">01</span>
+            <div class="action-content">
+              <div class="action-text">Aumentar a <strong>frequência de execução</strong> enquanto os pontos estruturantes do lake não forem solucionados.</div>
+              <span class="resp-badge"><span class="resp-dot" style="background:var(--d1)"></span>Ewerton / Brunão</span>
+            </div>
+          </div>
+          <div class="action-item">
+            <span class="action-step" style="background:var(--d1)">02</span>
+            <div class="action-content">
+              <div class="action-text"><strong>Ítalo</strong> mapear e enviar os dias da semana com maior incidência de problemas.</div>
+              <span class="resp-badge"><span class="resp-dot" style="background:var(--d1)"></span>Ítalo</span>
+            </div>
+          </div>
+          <div class="action-item">
+            <span class="action-step" style="background:var(--d1)">03</span>
+            <div class="action-content">
+              <div class="action-text"><strong>Ewerton e Bruno</strong> fazer rodada com BKO para montar calendário revisado e apresentar prazos no próximo GT.</div>
+              <span class="resp-badge"><span class="resp-dot" style="background:var(--d1)"></span>Ewerton / Bruno</span>
+            </div>
+          </div>
+          <div class="action-item">
+            <span class="action-step" style="background:var(--d1)">04</span>
+            <div class="action-content">
+              <div class="action-text">Item <strong>dependente</strong> do calendário consolidado (item 03).</div>
+              <span class="resp-badge"><span class="resp-dot" style="background:var(--d1)"></span>—</span>
+            </div>
+          </div>
+          <div class="action-item">
+            <span class="action-step" style="background:var(--d1)">05</span>
+            <div class="action-content">
+              <div class="action-text">Item <strong>dependente</strong> do item anterior.</div>
+              <span class="resp-badge"><span class="resp-dot" style="background:var(--d1)"></span>—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOR 02 -->
+    <div class="dor-card">
+      <div class="dor-header">
+        <div class="dor-num-block" style="background:var(--d2)">
+          <div class="dor-num-label">Dor</div>
+          <div class="dor-num">02</div>
+        </div>
+        <div class="dor-header-content">
+          <div class="dor-title-row">
+            <span class="dor-name">Desaverbação</span>
+            <span class="dor-prev-badge">Avanço Relevante</span>
+          </div>
+          <div class="dor-desc">
+            Ewerton identificou necessidade de engenharia de dados no Lake. <strong>Nova API descoberta</strong> que elimina o problema de pagamento a maior. Fluxo acertado verbalmente — formalização por e-mail pendente. Previsão: API em PROD <strong>essa semana ou na próxima</strong>, conectando com Dataprev.
+          </div>
+          <button class="expand-toggle" onclick="toggleDor(this)">
+            <span class="expand-arrow open">▼</span> Ocultar ações
+          </button>
+        </div>
+      </div>
+      <div class="dor-body">
+        <div class="actions-label">Ações</div>
+        <div class="action-list">
+          <div class="action-item">
+            <span class="action-step" style="background:var(--d2)">01</span>
+            <div class="action-content">
+              <div class="action-text"><strong>Ewerton</strong> formalizar o fluxo acordado via e-mail.</div>
+              <span class="resp-badge"><span class="resp-dot" style="background:var(--d2)"></span>Ewerton</span>
+            </div>
+          </div>
+          <div class="action-item">
+            <span class="action-step" style="background:var(--d2)">02</span>
+            <div class="action-content">
+              <div class="action-text">Acompanhar subida da <strong>nova API em PROD</strong> (essa semana ou próxima). Wish será aberta se necessário.</div>
+              <span class="resp-badge"><span class="resp-dot" style="background:var(--d2)"></span>Ewerton</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOR 03 -->
+    <div class="dor-card">
+      <div class="dor-header">
+        <div class="dor-num-block dark-num" style="background:var(--d3)">
+          <div class="dor-num-label">Dor</div>
+          <div class="dor-num">03</div>
+        </div>
+        <div class="dor-header-content">
+          <div class="dor-title-row">
+            <span class="dor-name">Visibilidade de Campanhas de Cobrança</span>
+            <span class="dor-prev-badge">Correção Executada</span>
+          </div>
+          <div class="dor-desc">
+            <strong>Bruno</strong> compartilhou que a correção já foi executada. Necessário recuperar a documentação do histórico da situação.
+          </div>
+          <button class="expand-toggle" onclick="toggleDor(this)">
+            <span class="expand-arrow open">▼</span> Ocultar ações
+          </button>
+        </div>
+      </div>
+      <div class="dor-body">
+        <div class="actions-label">Ações</div>
+        <div class="action-list">
+          <div class="action-item">
+            <span class="action-step dark-text" style="background:var(--d3)">01</span>
+            <div class="action-content">
+              <div class="action-text"><strong>Ítalo</strong> buscar documentação da situação com Tinga.</div>
+              <span class="resp-badge"><span class="resp-dot" style="background:var(--d3)"></span>Ítalo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOR 04 -->
+    <div class="dor-card">
+      <div class="dor-header">
+        <div class="dor-num-block dark-num" style="background:var(--d4)">
+          <div class="dor-num-label">Dor</div>
+          <div class="dor-num">04</div>
+        </div>
+        <div class="dor-header-content">
+          <div class="dor-title-row">
+            <span class="dor-name">Desconto da 1ª PMT em Data Divergente do Contrato</span>
+            <span class="dor-prev-badge">Esta Semana</span>
+          </div>
+          <div class="dor-desc">
+            Atividade endereçada para execução <strong>esta semana</strong>.
+          </div>
+          <button class="expand-toggle" onclick="toggleDor(this)">
+            <span class="expand-arrow open">▼</span> Ocultar ações
+          </button>
+        </div>
+      </div>
+      <div class="dor-body">
+        <div class="actions-label">Ações</div>
+        <div class="action-list">
+          <div class="action-item">
+            <span class="action-step dark-text" style="background:var(--d4)">01</span>
+            <div class="action-content">
+              <div class="action-text">Executar atividade de tratamento do <strong>desconto divergente da 1ª PMT</strong>.</div>
+              <span class="resp-badge"><span class="resp-dot" style="background:var(--d4)"></span>Equipe</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOR 05 -->
+    <div class="dor-card">
+      <div class="dor-header">
+        <div class="dor-num-block" style="background:var(--d5)">
+          <div class="dor-num-label">Dor</div>
+          <div class="dor-num">05</div>
+        </div>
+        <div class="dor-header-content">
+          <div class="dor-title-row">
+            <span class="dor-name">Novos Contratos Refinanciados por Novo Vínculo não Geram Contrato</span>
+            <span class="dor-prev-badge">Wish Aberta</span>
+          </div>
+          <div class="dor-desc">
+            <strong>Ewerton</strong> abriu wish com a tribo para adequação e envio de SMS. Prazo depende da squad — bem encaminhado.
+          </div>
+          <button class="expand-toggle" onclick="toggleDor(this)">
+            <span class="expand-arrow open">▼</span> Ocultar ações
+          </button>
+        </div>
+      </div>
+      <div class="dor-body">
+        <div class="actions-label">Ações</div>
+        <div class="action-list">
+          <div class="action-item">
+            <span class="action-step" style="background:var(--d5)">01</span>
+            <div class="action-content">
+              <div class="action-text">Acompanhar prazo da squad para <strong>adequação e envio de SMS</strong>.</div>
+              <span class="resp-badge"><span class="resp-dot" style="background:var(--d5)"></span>Ewerton</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOR 06 -->
+    <div class="dor-card">
+      <div class="dor-header">
+        <div class="dor-num-block" style="background:var(--d6)">
+          <div class="dor-num-label">Dor</div>
+          <div class="dor-num">06</div>
+        </div>
+        <div class="dor-header-content">
+          <div class="dor-title-row">
+            <span class="dor-name">Contratos Liquidados sem Atualização de Status no SF</span>
+            <span class="dor-prev-badge">Incidente Aberto</span>
+          </div>
+          <div class="dor-desc">
+            <strong>Ítalo</strong> identificou 9k contratos nessa situação e abriu incidente no ServiceNow com 2 exemplos. Tribo de CRM já está tratando. Causa raiz em investigação.
+          </div>
+          <button class="expand-toggle" onclick="toggleDor(this)">
+            <span class="expand-arrow open">▼</span> Ocultar ações
+          </button>
+        </div>
+      </div>
+      <div class="dor-body">
+        <div class="actions-label">Ações</div>
+        <div class="action-list">
+          <div class="action-item">
+            <span class="action-step" style="background:var(--d6)">01</span>
+            <div class="action-content">
+              <div class="action-text">Aguardar retorno do chamado aberto sobre <strong>causa raiz</strong>.</div>
+              <span class="resp-badge"><span class="resp-dot" style="background:var(--d6)"></span>Equipe</span>
+            </div>
+          </div>
+          <div class="action-item">
+            <span class="action-step" style="background:var(--d6)">02</span>
+            <div class="action-content">
+              <div class="action-text"><strong>Ítalo</strong> fazer alinhamento com a área sobre a causa raiz identificada.</div>
+              <span class="resp-badge"><span class="resp-dot" style="background:var(--d6)"></span>Ítalo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end section GUT -->
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div class="footer-text">BU Atendimento · Diretoria de Clientes · Maio 2026</div>
+    <div class="footer-tag">Interno · Confidencial</div>
+  </div>
+
+</div><!-- end page -->
+
+<script>
+  function toggleDor(btn) {
+    const card = btn.closest('.dor-card');
+    const body = card.querySelector('.dor-body');
+    const arrow = btn.querySelector('.expand-arrow');
+    const isOpen = !body.classList.contains('collapsed');
+
+    if (isOpen) {
+      body.classList.add('collapsed');
+      arrow.classList.remove('open');
+      const count = card.querySelectorAll('.action-item').length;
+      btn.innerHTML = '<span class="expand-arrow">▼</span> Ver ' + count + ' ação' + (count > 1 ? 'ões' : '');
+    } else {
+      body.classList.remove('collapsed');
+      arrow.classList.add('open');
+      btn.innerHTML = '<span class="expand-arrow open">▼</span> Ocultar ações';
+    }
+  }
+
+
+</script>
+</body>
+</html>
