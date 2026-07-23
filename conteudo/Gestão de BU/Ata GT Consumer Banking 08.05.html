@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarefas & Organização de Prioridades por GUT | BU Consumer Banking</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:      #005FF9;
+    --blue-deep: #0033B0;
+    --navy:      #000F44;
+    --green:     #78DF40;
+    --yellow:    #FFD600;
+    --red-soft:  #FF4757;
+    --white:     #FFFFFF;
+    --gray-1:    #F7F9FC;
+    --gray-2:    #EEF2F9;
+    --gray-3:    #D1DAEA;
+    --gray-text: #6B7A99;
+    --body-text: #1A2340;
+
+    --d1: #FF4757;
+    --d2: #FF6B35;
+    --d3: #FFA502;
+    --d4: #78DF40;
+    --d5: #0099CC;
+    --d6: #005FF9;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    color: var(--body-text);
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  /* ══ HEADER ══ */
+  .doc-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-bottom: 28px;
+    border-bottom: 2px solid var(--navy);
+    margin-bottom: 36px;
+    gap: 20px;
+  }
+  .doc-header-left h1 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+  .doc-header-left h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.15;
+  }
+  .doc-header-left h2 span { color: var(--blue); }
+  .doc-header-right {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .doc-meta {
+    font-size: 11px;
+    color: var(--gray-text);
+    font-weight: 500;
+    line-height: 1.8;
+  }
+  .doc-meta strong { color: var(--navy); font-weight: 700; }
+
+  /* ══ SECTION BLOCK ══ */
+  .section { margin-bottom: 40px; }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .section-title-line {
+    flex: 1;
+    height: 1px;
+    background: var(--gray-3);
+  }
+  .section-label {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray-text);
+    white-space: nowrap;
+  }
+
+  /* ══ TAREFAS CARD ══ */
+  .recados-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .recado-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--gray-1);
+    border-radius: 10px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--blue);
+    transition: background 0.15s;
+  }
+  .recado-item:hover { background: var(--gray-2); }
+  .recado-icon {
+    width: 28px; height: 28px;
+    background: var(--navy);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .recado-text {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--body-text);
+    line-height: 1.55;
+  }
+  .recado-text strong { font-weight: 700; color: var(--navy); }
+  .recado-text em { color: var(--blue); font-style: normal; font-weight: 600; }
+
+  .recado-item.mindset {
+    background: var(--navy);
+    border-left-color: var(--green);
+  }
+  .recado-item.mindset .recado-text { color: rgba(255,255,255,0.92); }
+  .recado-item.mindset .recado-text strong { color: var(--green); }
+  .recado-item.mindset .recado-icon { background: var(--green); color: var(--navy); }
+
+  /* ══ GUT STRIP ══ */
+  .gut-strip {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+  .gut-strip-icon { font-size: 32px; flex-shrink: 0; }
+  .gut-strip-text h3 {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 3px;
+  }
+  .gut-strip-text p {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+  }
+  .gut-strip-text p strong { color: var(--green); }
+
+  /* ══ DOR CARD ══ */
+  .dor-card {
+    border: 1px solid var(--gray-3);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    transition: box-shadow 0.18s;
+  }
+  .dor-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
+
+  .dor-header { display: flex; align-items: center; gap: 0; padding: 0; }
+  .dor-num-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 20px;
+    min-width: 72px;
+    flex-shrink: 0;
+  }
+  .dor-num-label {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 2px;
+  }
+  .dor-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1;
+  }
+  .dor-header-content {
+    flex: 1;
+    padding: 14px 18px;
+    border-left: 1px solid rgba(0,0,0,0.06);
+  }
+  .dor-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+  .dor-name {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: 0.01em;
+  }
+  .dor-prev-badge {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--gray-text);
+    background: var(--gray-2);
+    border: 1px solid var(--gray-3);
+    border-radius: 20px;
+    padding: 2px 9px;
+    white-space: nowrap;
+  }
+  .dor-desc {
+    font-size: 12px;
+    color: var(--gray-text);
+    line-height: 1.55;
+    font-weight: 400;
+  }
+  .dor-desc strong { color: var(--body-text); font-weight: 600; }
+
+  .dor-body {
+    padding: 14px 18px 16px;
+    background: var(--gray-1);
+    border-top: 1px solid var(--gray-2);
+  }
+  .actions-label {
+    font-size: 8.5px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-text);
+    margin-bottom: 10px;
+  }
+  .action-list { display: flex; flex-direction: column; gap: 7px; }
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: var(--white);
+    border-radius: 8px;
+    padding: 9px 12px;
+    border: 1px solid var(--gray-3);
+  }
+  .action-step {
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 8px 2px 7px;
+    clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: var(--white);
+  }
+  .action-content {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .action-text {
+    font-size: 12px;
+    color: var(--body-text);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .action-text strong { font-weight: 600; }
+  .resp-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--gray-2);
+    border: 1px solid var(--gray-3);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--navy);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .resp-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* dor color theming */
+  .dor-card[data-dor="1"] .dor-num-block { background: var(--d1); }
+  .dor-card[data-dor="1"] .action-step   { background: var(--d1); }
+  .dor-card[data-dor="1"] .resp-dot      { background: var(--d1); }
+
+  .dor-card[data-dor="2"] .dor-num-block { background: var(--d2); }
+  .dor-card[data-dor="2"] .action-step   { background: var(--d2); }
+  .dor-card[data-dor="2"] .resp-dot      { background: var(--d2); }
+
+  .dor-card[data-dor="3"] .dor-num-block { background: var(--d3); }
+  .dor-card[data-dor="3"] .action-step   { background: var(--d3); color: var(--navy); }
+  .dor-card[data-dor="3"] .resp-dot      { background: var(--d3); }
+
+  /* ══ FOOTER ══ */
+  .doc-footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gray-3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-text {
+    font-size: 10px;
+    color: var(--gray-text);
+    font-weight: 500;
+  }
+  .footer-tag {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--blue);
+    background: var(--gray-2);
+    border-radius: 20px;
+    padding: 4px 12px;
+  }
+
+  @media print {
+    body { background: white; }
+    .page { padding: 24px; }
+    .dor-card:hover { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══ HEADER ══ -->
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <h1>BU Consumer Banking · Área Consultiva</h1>
+      <h2>Tarefas &amp; <span>Organização</span><br>de Prioridades por GUT</h2>
+    </div>
+    <div class="doc-header-right">
+      <div class="doc-meta">
+        <strong>Data</strong> 08 de Maio de 2026<br>
+        <strong>Área</strong> Diretoria de Clientes<br>
+        <strong>Classificação</strong> Interno
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TAREFAS ══ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-label">Tarefas & Destaques da Reunião</span>
+      <div class="section-title-line"></div>
+    </div>
+
+    <div class="recados-grid">
+
+      <div class="recado-item mindset">
+        <div class="recado-icon">📊</div>
+        <div class="recado-text">
+          <strong>Jessé</strong> levantar histórico e pareto — coletar <strong>cases reais</strong> como exemplos e mandar para o grupo.
+        </div>
+      </div>
+
+      <div class="recado-item">
+        <div class="recado-icon">📁</div>
+        <div class="recado-text">
+          <strong>Álvaro</strong> enviar para <em>Vivi e Jessé</em> os erros já mapeados para entendermos onde conectar as melhorias.
+        </div>
+      </div>
+
+      <div class="recado-item">
+        <div class="recado-icon">🔧</div>
+        <div class="recado-text">
+          <strong>Rubiele e Tamires</strong> enviarão os pontos de melhoria identificados. <strong>Jessé e Vivi</strong> trabalharão nesses pontos para alimentar a central de atendimento.
+        </div>
+      </div>
+
+      <div class="recado-item">
+        <div class="recado-icon">🤝</div>
+        <div class="recado-text">
+          <strong>Governança de melhorias:</strong> Rubiele compartilha que melhorias ficam sob responsabilidade do <em>Produto</em> — podemos <strong>delegar e alinhar com o time de Produto</strong> diretamente.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ GUT ORGANIZATION ══ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-label">Organização de Prioridades — GUT</span>
+      <div class="section-title-line"></div>
+    </div>
+
+    <div class="gut-strip">
+      <div class="gut-strip-icon">🔢</div>
+      <div class="gut-strip-text">
+        <h3>Prioridades organizadas por GUT</h3>
+        <p>Gravidade · Urgência · Tendência — Temas debatidos e ordenados conforme impacto na operação e no cliente. <strong>Responsáveis definidos por ação.</strong></p>
+      </div>
+    </div>
+
+    <!-- TEMA 1 -->
+    <div class="dor-card" data-dor="1">
+      <div class="dor-header">
+        <div class="dor-num-block">
+          <div class="dor-num-label">Tema</div>
+          <div class="dor-num">01</div>
+        </div>
+        <div class="dor-header-content">
+          <div class="dor-title-row">
+            <span class="dor-name">Histórico, Pareto e Cases Reais</span>
+            <span class="dor-prev-badge">Diagnóstico</span>
+          </div>
+          <div class="dor-desc">Necessário consolidar o histórico com pareto e exemplos concretos de cases para embasar as análises e decisões do grupo. <strong>Jessé</strong> responsável por levantar e compartilhar.</div>
+        </div>
+      </div>
+      <div class="dor-body">
+        <div class="actions-label">Ações</div>
+        <div class="action-list">
+          <div class="action-item">
+            <span class="action-step">01</span>
+            <div class="action-content">
+              <div class="action-text">Levantar <strong>histórico e pareto</strong> dos principais pontos.</div>
+              <span class="resp-badge"><span class="resp-dot"></span>Jessé</span>
+            </div>
+          </div>
+          <div class="action-item">
+            <span class="action-step">02</span>
+            <div class="action-content">
+              <div class="action-text">Coletar e <strong>mandar para o grupo</strong> os cases reais já existentes como exemplos.</div>
+              <span class="resp-badge"><span class="resp-dot"></span>Jessé</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEMA 2 -->
+    <div class="dor-card" data-dor="2">
+      <div class="dor-header">
+        <div class="dor-num-block">
+          <div class="dor-num-label">Tema</div>
+          <div class="dor-num">02</div>
+        </div>
+        <div class="dor-header-content">
+          <div class="dor-title-row">
+            <span class="dor-name">Erros Mapeados — Conexão com Melhorias</span>
+            <span class="dor-prev-badge">Integração</span>
+          </div>
+          <div class="dor-desc">Álvaro possui erros já mapeados que precisam ser compartilhados com <strong>Vivi e Jessé</strong> para que a equipe entenda onde conectar as ações de melhoria.</div>
+        </div>
+      </div>
+      <div class="dor-body">
+        <div class="actions-label">Ações</div>
+        <div class="action-list">
+          <div class="action-item">
+            <span class="action-step">01</span>
+            <div class="action-content">
+              <div class="action-text">Enviar os <strong>erros já mapeados</strong> para Vivi e Jessé para análise e conexão com melhorias.</div>
+              <span class="resp-badge"><span class="resp-dot"></span>Álvaro</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEMA 3 -->
+    <div class="dor-card" data-dor="3">
+      <div class="dor-header">
+        <div class="dor-num-block">
+          <div class="dor-num-label">Tema</div>
+          <div class="dor-num">03</div>
+        </div>
+        <div class="dor-header-content">
+          <div class="dor-title-row">
+            <span class="dor-name">Pontos de Melhoria — Alimentação da Central</span>
+            <span class="dor-prev-badge">Produto & Atendimento</span>
+          </div>
+          <div class="dor-desc">Rubiele e Tamires identificaram melhorias que ficam sob responsabilidade do <strong>Produto</strong>. Os pontos serão enviados para Jessé e Vivi, que trabalharão na <strong>alimentação da central de atendimento</strong> com essas informações.</div>
+        </div>
+      </div>
+      <div class="dor-body">
+        <div class="actions-label">Ações</div>
+        <div class="action-list">
+          <div class="action-item">
+            <span class="action-step">01</span>
+            <div class="action-content">
+              <div class="action-text">Enviar os <strong>pontos de melhoria identificados</strong> para Jessé e Vivi.</div>
+              <span class="resp-badge"><span class="resp-dot"></span>Rubiele / Tamires</span>
+            </div>
+          </div>
+          <div class="action-item">
+            <span class="action-step">02</span>
+            <div class="action-content">
+              <div class="action-text">Trabalhar nos pontos recebidos e <strong>alimentar a central</strong> de atendimento com as melhorias.</div>
+              <span class="resp-badge"><span class="resp-dot"></span>Jessé / Vivi</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end section GUT -->
+
+  <!-- ══ FOOTER ══ -->
+  <div class="doc-footer">
+    <div class="footer-text">BU Consumer Banking · Diretoria de Clientes · Maio 2026</div>
+    <div class="footer-tag">Interno · Confidencial</div>
+  </div>
+
+</div><!-- end page -->
+</body>
+</html>
