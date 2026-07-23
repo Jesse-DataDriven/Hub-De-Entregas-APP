@@ -76,6 +76,8 @@ const FOLDERS = [
       { title: "Processo Cross AGIMAIS", html: "conteudo/Gestão PMC/Processo Cross AGIMAIS.html" },
       { title: "Processo de Erro no APP", html: "conteudo/Gestão PMC/Processo de Erro no APP.html" },
       { title: "Processos Meios de Pgto", html: "conteudo/Gestão PMC/Processos Meios de Pgto.html" },
+      { title: "Melhoria processo ressarcimento", url: "https://jornadaressarcimento.netlify.app/" },
+      { title: "Matriz de mapeamento de dores", url: "https://matriz-de-dores.netlify.app/" },
     ],
   },
   {
@@ -84,6 +86,7 @@ const FOLDERS = [
     items: [
       { title: "Ganhos Concierge - Ação de Qualidade", html: "conteudo/Gestão de Qualidade/Ganhos Concierge - Ação de Qualidade.html" },
       { title: "Job Discription Monitor Birdie", html: "conteudo/Gestão de Qualidade/Job Discription Monitor Birdie.html" },
+      { title: "Sistema próprio de monitoria", url: "https://agia-sistema-de-monitoramento.netlify.app/" },
     ],
   },
   {
@@ -97,6 +100,7 @@ const FOLDERS = [
       { title: "Novo Fluxo LNT", html: "conteudo/Gestão de Treinamento/Novo Fluxo LNT.html" },
       { title: "Relatório de Treinamento Junho", html: "conteudo/Gestão de Treinamento/Relatório de Treinamento Junho.html" },
       { title: "Treinamento Corban", html: "conteudo/Gestão de Treinamento/Treinamento Corban.html" },
+      { title: "Simulador do APP Agibank", url: "https://appsimulador.netlify.app/" },
     ],
   },
 ];
