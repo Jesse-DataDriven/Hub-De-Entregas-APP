@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Oportunidades RO PIX</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --blue-deep: #0d1f6e;
+        --blue-mid: #1a3a9f;
+        --blue-brand: #2563eb;
+        --blue-light: #3b82f6;
+        --text-dark: #0f172a;
+        --text-mid: #334780;
+        --text-soft: #6b82b0;
+        --radius: 18px;
+      }
+      body {
+        font-family: "Nunito", sans-serif;
+        margin: 0;
+        background: #fff;
+        color: var(--text-dark);
+      }
+      .page {
+        max-width: 1320px;
+        margin: auto;
+        padding: 40px 24px;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      .header-pill {
+        display: inline-flex;
+        gap: 8px;
+        padding: 6px 18px;
+        border-radius: 100px;
+        background: rgba(37, 99, 235, 0.1);
+      }
+      .header-pill span {
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--blue-brand);
+        letter-spacing: 2px;
+      }
+      h1 {
+        font-size: 36px;
+        font-weight: 900;
+        color: var(--blue-deep);
+        margin: 10px 0;
+      }
+      .header-sub {
+        color: var(--text-soft);
+        font-weight: 600;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      .card {
+        background: #f8faff;
+        border-radius: var(--radius);
+        border: 2px solid rgba(37, 99, 235, 0.12);
+        padding: 18px;
+        transition: 0.2s;
+      }
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+      }
+
+      .card-title {
+        font-size: 18px;
+        font-weight: 900;
+        color: var(--blue-deep);
+        margin-bottom: 10px;
+      }
+
+      .section {
+        margin-top: 12px;
+      }
+      .section span {
+        display: block;
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: var(--blue-brand);
+        margin-bottom: 4px;
+      }
+      .section p {
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--text-mid);
+      }
+
+      .impact {
+        background: rgba(220, 38, 38, 0.05);
+        border-left: 4px solid #dc2626;
+        padding: 10px;
+        border-radius: 10px;
+      }
+      .solution {
+        background: rgba(37, 99, 235, 0.05);
+        border-left: 4px solid var(--blue-brand);
+        padding: 10px;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page">
+      <div class="header">
+        <div class="header-pill"><span>RO PIX</span></div>
+        <h1>Oportunidades Operacionais</h1>
+        <p class="header-sub">
+          Mapeamento executivo das principais inconsistências e oportunidades de
+          melhoria no atendimento
+        </p>
+      </div>
+
+      <div class="grid">
+        <!-- CARD 1 -->
+        <div class="card">
+          <div class="card-title">Erro de Limite Transacional</div>
+
+          <div class="section">
+            <span>Oportunidade</span>
+            <p>
+              Cliente impedido de realizar transações devido à mensagem de
+              limite ultrapassado, mesmo com limite disponível e sem
+              movimentação.
+            </p>
+          </div>
+
+          <div class="section">
+            <span>Causa</span>
+            <p>
+              Falta de direcionamento no RO sobre os possíveis motivos do erro.
+            </p>
+          </div>
+
+          <div class="section impact">
+            <span>Impacto</span>
+            <p>
+              Experiência negativa e aumento do TMA pela ausência de orientação
+              clara.
+            </p>
+          </div>
+
+          <div class="section solution">
+            <span>Sugestão</span>
+            <p>
+              Inserir no RO explicação do erro, orientação ao cliente e
+              critérios de análise interna e escalonamento.
+            </p>
+          </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="card">
+          <div class="card-title">PIX Cartão Indisponível</div>
+
+          <div class="section">
+            <span>Oportunidade</span>
+            <p>
+              Cliente elegível não visualiza a funcionalidade no aplicativo.
+            </p>
+          </div>
+
+          <div class="section">
+            <span>Causa</span>
+            <p>
+              Inconsistência entre critérios de elegibilidade e disponibilidade
+              no app.
+            </p>
+          </div>
+
+          <div class="section impact">
+            <span>Impacto</span>
+            <p>Insatisfação, recorrência de contatos e aumento do TMA.</p>
+          </div>
+
+          <div class="section solution">
+            <span>Sugestão</span>
+            <p>
+              Documentar critérios técnicos, padronizar orientação e definir
+              quando escalar.
+            </p>
+          </div>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="card">
+          <div class="card-title">Mensagem de erro para PIX</div>
+
+          <div class="section">
+            <span>Oportunidade</span>
+            <p>
+              Desde a semana passada, o aplicativo do cliente vem apresentando
+              erro que impede transações, com comunicação fora do RO.
+            </p>
+          </div>
+
+          <div class="section">
+            <span>Mensagem apresentada</span>
+            <p>
+              • Já estamos agilizando tudo pra resolver. Aguarde alguns
+              instantes e tente novamente;<br />
+              • Operação indisponível.
+            </p>
+          </div>
+
+          <div class="section">
+            <span>Cenário Atual</span>
+            <p>
+              O comunicado orienta que o cliente realize a transferência por TED
+              como alternativa. Contudo, ao tentar efetuar a TED, o mesmo erro
+              ocorre, impedindo a transação.
+            </p>
+          </div>
+
+          <div class="section impact">
+            <span>Impacto</span>
+            <p>Frustração, aumento da recorrência e elevação do TMA.</p>
+          </div>
+
+          <div class="section solution">
+            <span>Sugestão</span>
+            <p>
+              Registrar no RO, corrigir orientação (removendo TED como
+              alternativa válida) e definir critérios claros de análise e
+              escalonamento.
+            </p>
+          </div>
+        </div>
+
+        <!-- CARD 4 -->
+        <div class="card">
+          <div class="card-title">Bloqueio por Limite de Consulta</div>
+
+          <div class="section">
+            <span>Oportunidade</span>
+            <p>
+              Cliente bloqueado para PIX mesmo com saldo e limite disponível.
+            </p>
+          </div>
+
+          <div class="section">
+            <span>Causa</span>
+            <p>Regra de limite de consultas não documentada.</p>
+          </div>
+
+          <div class="section impact">
+            <span>Impacto</span>
+            <p>Atendimento pouco assertivo, aumento do TMA e da recorrência.</p>
+          </div>
+
+          <div class="section solution">
+            <span>Sugestão</span>
+            <p>
+              Explicar regra no RO, orientar cliente e definir prazos e
+              critérios de análise.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
