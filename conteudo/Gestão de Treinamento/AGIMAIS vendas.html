@@ -1,0 +1,1018 @@
+```html
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Treinamento de Vendas · Clube de Benefícios AGI+</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --azul:#0064f5; --azul-escuro:#000f44; --verde:#77df40; --amarelo:#ffd600;
+      --roxo:#7c3aed; --vermelho:#dc2626;
+      --gray-3:#d1daea; --gray-text:#6b7a99; --body-text:#1a2340;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Inter',sans-serif;
+      background:radial-gradient(1200px 700px at 50% -10%,#0a1c52,#04102f 60%,#020a22);
+      color:var(--azul-escuro);overflow:hidden;height:100vh;
+    }
+
+    /* ── STAGE ── */
+    .stage{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .slide{
+      width:1280px;height:720px;background:#fff;position:absolute;
+      transform-origin:center center;display:none;flex-direction:column;overflow:hidden;
+      border-radius:6px;box-shadow:0 30px 80px rgba(0,0,0,.5);
+    }
+    .slide.active{display:flex}
+
+    /* ── BRAND BAR ── */
+    .brandbar{
+      height:7px;flex:0 0 auto;
+      background:linear-gradient(90deg,var(--azul) 0 55%,var(--verde) 55% 80%,var(--amarelo) 80% 100%);
+    }
+
+    /* ── SLIDE HEADER ── */
+    .shead{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px 48px 10px;border-bottom:1px solid #e8edf6;flex:0 0 auto;gap:16px;
+    }
+    .shead .t .kicker{
+      display:inline-flex;align-items:center;gap:7px;
+      font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--azul);margin-bottom:4px;
+    }
+    .shead .t .kicker .kdot{width:6px;height:6px;border-radius:50%;background:var(--azul)}
+    .shead .t h2{font-size:1.5rem;font-weight:800;color:var(--azul-escuro);line-height:1}
+    .shead .t h2 span{color:var(--azul)}
+    .shead .meta{font-size:.78rem;font-weight:800;color:#33405e;white-space:nowrap}
+
+    /* ── CONTENT AREA ── */
+    .scontent{flex:1;padding:24px 48px 20px;overflow-y:auto;display:flex;flex-direction:column;gap:18px}
+
+    /* ── COVER ── */
+    .cover{
+      background:radial-gradient(900px 520px at 78% 20%,#0a3bd6,#001b86 55%,#000f44);
+      color:#fff;justify-content:center;position:relative;overflow:hidden;
+    }
+    .cover .blob{position:absolute;border-radius:40px}
+    .cover .b1{width:280px;height:280px;right:-60px;top:-60px;background:#0064f5;transform:rotate(18deg);opacity:.35}
+    .cover .b2{width:170px;height:170px;right:120px;bottom:-50px;background:var(--verde);transform:rotate(-12deg);opacity:.28}
+    .cover .b3{width:120px;height:120px;right:340px;top:60px;background:var(--amarelo);transform:rotate(24deg);opacity:.18}
+    .toprow{position:absolute;top:28px;left:70px;right:70px;display:flex;justify-content:space-between;align-items:center}
+    .ckicker{
+      display:inline-flex;align-items:center;gap:7px;
+      background:rgba(255,255,255,.1);border-radius:999px;padding:6px 14px;
+      font-size:.78rem;font-weight:700;color:#fff;
+    }
+    .cover-layout{display:flex;gap:52px;position:relative;z-index:2;height:100%;padding:70px 70px 50px}
+    .cover-left{flex:1;display:flex;flex-direction:column;justify-content:space-between}
+    .cover h1{font-size:3.6rem;font-weight:900;line-height:.98;letter-spacing:-1.5px;max-width:680px}
+    .cover h1 em{font-style:normal;color:var(--verde)}
+    .cover .sub{font-size:1.1rem;font-weight:600;color:#cfe0ff;margin-top:14px;max-width:620px;line-height:1.5}
+    .cover .chips{display:flex;gap:14px;margin-top:28px}
+    .cchip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:14px 18px}
+    .cchip b{display:block;font-size:1.9rem;font-weight:900;color:#fff;line-height:1}
+    .cchip b.g{color:var(--verde)}
+    .cchip b.y{color:var(--amarelo)}
+    .cchip small{font-size:.74rem;font-weight:700;color:#bcd0ff}
+    .cover-right{
+      width:340px;display:flex;flex-direction:column;justify-content:center;gap:16px;
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+      border-radius:18px;padding:24px 22px;
+    }
+    .sum-title{font-size:.9rem;font-weight:900;color:#fff;margin-bottom:6px;letter-spacing:-.3px}
+    .sum-item{font-size:.88rem;font-weight:600;color:#cfe0ff;line-height:1.6}
+    .sum-item strong{color:#fff;font-weight:900}
+    .cover-badge{
+      position:absolute;bottom:36px;right:70px;
+      font-size:.78rem;font-weight:800;color:#001b86;
+      background:var(--verde);padding:7px 16px;border-radius:999px;z-index:2;
+    }
+
+    /* ── SECTION BLOCKS ── */
+    .sec-block{
+      background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;
+      padding:20px 24px;
+    }
+    .sec-block h3{
+      font-size:1.05rem;font-weight:800;color:var(--azul-escuro);
+      margin-bottom:12px;display:flex;align-items:center;gap:10px;
+    }
+    .sec-block h3 .num{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:28px;height:28px;border-radius:50%;
+      background:var(--azul);color:#fff;font-size:.8rem;
+    }
+    .sec-block p, .sec-block ul{font-size:.88rem;line-height:1.7;color:var(--body-text)}
+    .sec-block ul{padding-left:20px;margin-top:8px}
+    .sec-block ul li{margin-bottom:6px}
+    .sec-block strong{font-weight:700;color:var(--azul-escuro)}
+    .sec-block em{font-style:normal;font-weight:600;color:var(--azul)}
+
+    /* ── TWO COLS ── */
+    .two-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .three-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+
+    /* ── ALERT BOX ── */
+    .alert-box{
+      background:#fef2f2;border:2px solid var(--vermelho);border-radius:10px;
+      padding:14px 18px;display:flex;align-items:flex-start;gap:12px;
+    }
+    .alert-box .icon{
+      width:24px;height:24px;border-radius:50%;background:var(--vermelho);
+      color:#fff;display:flex;align-items:center;justify-content:center;
+      font-weight:900;font-size:1rem;flex-shrink:0;
+    }
+    .alert-box .txt{font-size:.85rem;line-height:1.6;color:#7f1d1d;font-weight:600}
+    .alert-box.info{background:#eef2ff;border-color:var(--azul)}
+    .alert-box.info .icon{background:var(--azul)}
+    .alert-box.info .txt{color:#1e3a8a}
+    .alert-box.success{background:#f0fdf4;border-color:var(--verde)}
+    .alert-box.success .icon{background:var(--verde)}
+    .alert-box.success .txt{color:#166534}
+
+    /* ── PLAN CARD ── */
+    .plan-card{
+      background:#fff;border:2px solid #e2e8f0;border-radius:12px;
+      padding:20px;text-align:center;transition:.15s;
+    }
+    .plan-card:hover{border-color:var(--azul);box-shadow:0 4px 12px rgba(0,100,245,.15)}
+    .plan-card .plan-name{
+      font-size:1.1rem;font-weight:800;color:var(--azul-escuro);margin-bottom:8px;
+    }
+    .plan-card .plan-price{
+      font-size:2.2rem;font-weight:900;color:var(--azul);line-height:1;margin-bottom:4px;
+    }
+    .plan-card .plan-period{
+      font-size:.75rem;color:var(--gray-text);font-weight:600;margin-bottom:16px;
+    }
+    .plan-card .plan-credit{
+      background:#f0fdf4;border:1px solid var(--verde);border-radius:8px;
+      padding:8px 12px;font-size:.85rem;font-weight:700;color:#166534;
+      margin-bottom:16px;
+    }
+    .plan-card ul{list-style:none;padding:0;text-align:left}
+    .plan-card li{
+      font-size:.82rem;color:var(--body-text);line-height:1.6;
+      padding:6px 0;border-bottom:1px solid #f1f5f9;
+      display:flex;align-items:center;gap:8px;
+    }
+    .plan-card li:last-child{border-bottom:none}
+    .plan-card li:before{content:'✓';color:var(--verde);font-weight:900;font-size:1rem}
+
+    /* ── FAQ ITEM ── */
+    .faq-item{
+      background:#fff;border:1px solid #e2e8f0;border-radius:10px;
+      padding:16px 20px;margin-bottom:12px;
+    }
+    .faq-q{
+      font-size:.95rem;font-weight:800;color:var(--azul-escuro);
+      margin-bottom:8px;display:flex;align-items:center;gap:10px;
+    }
+    .faq-q:before{
+      content:'Q';display:inline-flex;align-items:center;justify-content:center;
+      width:24px;height:24px;border-radius:50%;background:var(--azul);
+      color:#fff;font-size:.75rem;font-weight:900;flex-shrink:0;
+    }
+    .faq-a{font-size:.85rem;line-height:1.7;color:var(--body-text);padding-left:34px}
+
+    /* ── PAGE NUMBER ── */
+    .pageno{
+      position:absolute;bottom:14px;right:22px;
+      font-size:.68rem;font-weight:800;color:#9aa6c0;
+    }
+
+    /* ── NAV ── */
+    .nav{
+      position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+      display:flex;gap:12px;align-items:center;z-index:100;padding:0 8px;
+    }
+    .nav button{
+      background:rgba(255,255,255,.95);border:1px solid rgba(0,0,0,.15);
+      color:#001b86;border-radius:999px;width:46px;height:46px;
+      font-size:1.25rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+      transition:.15s;box-shadow:0 10px 20px rgba(0,0,0,.12);
+    }
+    .nav button:hover{background:#fff;color:#0033b0;border-color:#0033b0}
+    .nav button:disabled{opacity:.3;cursor:not-allowed}
+    .dots{display:flex;gap:8px;align-items:center}
+    .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:.15s}
+    .dot.on{background:var(--verde);width:22px;border-radius:999px}
+
+    /* ── KEYBOARD HINT ── */
+    .kb-hint{
+      position:fixed;bottom:16px;right:24px;
+      font-size:.68rem;font-weight:700;color:rgba(255,255,255,.3);
+      letter-spacing:.06em;
+    }
+
+    /* ── BENEFIT CARD ── */
+    .benefit-card{
+      background:#fff;border:2px solid #e2e8f0;border-radius:12px;
+      padding:18px 20px;display:flex;align-items:flex-start;gap:14px;
+      transition:.15s;
+    }
+    .benefit-card:hover{border-color:var(--azul);box-shadow:0 4px 12px rgba(0,100,245,.1)}
+    .benefit-icon{
+      width:48px;height:48px;border-radius:12px;background:var(--azul);
+      color:#fff;display:flex;align-items:center;justify-content:center;
+      font-size:1.5rem;flex-shrink:0;
+    }
+    .benefit-icon.green{background:var(--verde)}
+    .benefit-icon.purple{background:var(--roxo)}
+    .benefit-icon.yellow{background:var(--amarelo);color:var(--azul-escuro)}
+    .benefit-content h4{
+      font-size:.95rem;font-weight:800;color:var(--azul-escuro);margin-bottom:6px;
+    }
+    .benefit-content p{font-size:.82rem;line-height:1.6;color:var(--body-text)}
+
+    /* ── INTERACTIVE GABARITO STYLES ── */
+    .btn-gabarito {
+      background: var(--azul);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      display: inline-block;
+      transition: background 0.2s;
+    }
+    .btn-gabarito:hover {
+      background: var(--azul-escuro);
+    }
+    .gabarito-box {
+      margin-top: 10px;
+      padding: 12px 16px;
+      background: #f0fdf4;
+      border-left: 4px solid var(--verde);
+      border-radius: 6px;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: #14532d;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- ══════════ COVER (SLIDE 00) ══════════ -->
+  <section class="slide active cover" id="s0">
+    <div class="brandbar" style="position:absolute;top:0;left:0;right:0"></div>
+    <div class="toprow">
+      <span class="ckicker">Treinamento Comercial · Módulo de Vendas (Agi+)</span>
+    </div>
+    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+    <div class="cover-layout">
+      <div class="cover-left">
+        <div>
+          <h1>Agi+<br><em>Módulo de Vendas</em></h1>
+          <p class="sub">Técnicas de argumentação, contorno de objeções, gatilhos de vendas e cross-selling integrados à central de atendimento.</p>
+          <div class="chips">
+            <div class="cchip"><b class="g">3</b><small>Planos</small></div>
+            <div class="cchip"><b>12+</b><small>Pitches Práticos</small></div>
+            <div class="cchip"><b class="y">Cross</b><small>Selling</small></div>
+          </div>
+        </div>
+      </div>
+      <div class="cover-right">
+        <div class="sum-title">Conteúdo Programático</div>
+        <div class="sum-item"><strong>Mód. 1 & 2:</strong> Conceitos & Os 3 Planos</div>
+        <div class="sum-item"><strong>Mód. 3:</strong> Regras Importantes do Produto</div>
+        <div class="sum-item"><strong>Mód. 4:</strong> A Arte do Cross-Selling</div>
+        <div class="sum-item"><strong>Mód. 5:</strong> Gatilhos Mentais de Venda</div>
+        <div class="sum-item"><strong>Mód. 6:</strong> Argumentação por Plano</div>
+        <div class="sum-item"><strong>Mód. 7:</strong> Contorno de Objeções</div>
+        <div class="sum-item"><strong>Mód. 8:</strong> Cenários Delicados & Atrito</div>
+        <div class="sum-item"><strong>Mód. 9 a 11:</strong> Prática, Incentivo & Êxito</div>
+      </div>
+    </div>
+    <span class="cover-badge">Julho 2026</span>
+    <span class="pageno">01 · 17</span>
+  </section>
+
+  <!-- ══════════ MÓDULO 1: O QUE É O AGI+ (SLIDE 01) ══════════ -->
+  <section class="slide" id="s1">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 01</div>
+        <h2>O que é o <span>AGI+?</span></h2>
+      </div>
+      <div class="meta">Conceito e Proposta de Valor</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">🎯</span>Definição Rápida</h3>
+        <p><strong>O AGI+ é um clube de benefícios por assinatura.</strong> Não é plano de saúde ou seguro. É um programa de membership acessível, completo e sem burocracia, feito para proteger, cuidar e recompensar o cliente no dia a dia.</p>
+        <p style="margin-top:10px">Pagando um valor mensal fixo debitado diretamente em conta, o titular tem acesso imediato a:</p>
+        <div class="two-cols" style="margin-top:10px">
+          <ul>
+            <li><strong>Telemedicina 24h:</strong> Consultas ilimitadas de clínico geral por vídeo.</li>
+            <li><strong>Descontos Médicos e Farmácia:</strong> Consultas presenciais a partir de R$ 39,90 e até 80% de desconto em farmácias (ePharma).</li>
+            <li><strong>Assistência Residencial:</strong> Chaveiro, eletricista, encanador e vidraceiro 24h para emergências.</li>
+          </ul>
+          <ul>
+            <li><strong>Plano Odonto Nacional:</strong> Atendimento de emergência ou tratamento completo.</li>
+            <li><strong>Assistência Pet:</strong> Veterinário emergencial e funeral pet.</li>
+            <li><strong>Cashback em Créditos:</strong> De R$ 100 a R$ 150 mensais de volta para usar em diversos parceiros (como mercados, farmácias, recarga mensal de celular e aplicativos de transporte ou delivery - iFood, 99). A cartela de parceiros pode variar mensalmente.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert-box success">
+        <div class="icon">💚</div>
+        <div class="txt"><strong>Proposta Comercial Imbatível:</strong> O grande segredo da venda é mostrar ao cliente que o plano **se paga sozinho**. Os créditos mensais que ele ganha retornam em serviços que ele já consome e o valor do cashback é superior à própria mensalidade!</div>
+      </div>
+    </div>
+    <span class="pageno">02 · 17</span>
+  </section>
+
+  <!-- ══════════ MÓDULO 2: OS 3 PLANOS (SLIDE 02) ══════════ -->
+  <section class="slide" id="s2">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 02</div>
+        <h2>Os 3 <span>Planos do Agi+</span></h2>
+      </div>
+      <div class="meta">Básico, Na Medida e Completo</div>
+    </div>
+    <div class="scontent">
+      <div class="three-cols">
+        <!-- Plano Básico -->
+        <div class="plan-card">
+          <div class="plan-name">Básico</div>
+          <div class="plan-price">R$ 39,90</div>
+          <div class="plan-period">/mês</div>
+          <div class="plan-credit">+ R$ 100 em créditos</div>
+          <ul style="font-size:0.75rem">
+            <li>Telemedicina Geral 24h</li>
+            <li>Consultas presenciais a partir de R$39,90</li>
+            <li>Até 80% de desconto em remédios</li>
+            <li>Assistência Residencial Plus (Chaveiro, encanador, eletricista)</li>
+            <li>Odonto Urgência (Sempre Odonto)</li>
+            <li>Funeral Individual até R$ 5 mil</li>
+            <li>Bônus Celular de R$ 10</li>
+          </ul>
+        </div>
+
+        <!-- Plano Na Medida -->
+        <div class="plan-card">
+          <div class="plan-name">Na Medida</div>
+          <div class="plan-price">R$ 49,90</div>
+          <div class="plan-period">/mês</div>
+          <div class="plan-credit">+ R$ 120 em créditos</div>
+          <ul style="font-size:0.75rem">
+            <li><strong>Tudo do Plano Básico +</strong></li>
+            <li>Assistência Pet Completa</li>
+            <li>Telemedicina Veterinária 24h</li>
+            <li>Funeral Pet (Enterro/Cremação)</li>
+            <li>Concierge Pet (Indicações e agendamentos)</li>
+            <li>Auxílio e Suporte Digital Pet</li>
+          </ul>
+        </div>
+
+        <!-- Plano Completo -->
+        <div class="plan-card" style="border-color:var(--azul);border-width:2px">
+          <div class="plan-name" style="color:var(--azul)">Completo ⭐</div>
+          <div class="plan-price">R$ 59,90</div>
+          <div class="plan-period">/mês</div>
+          <div class="plan-credit">+ R$ 150 em créditos</div>
+          <ul style="font-size:0.75rem">
+            <li><strong>Tudo do Plano Na Medida +</strong></li>
+            <li><strong>Plano Odonto Especial</strong> (Tratamento de Canal, Extração, Limpeza e +200 procedimentos)</li>
+            <li>Assistência Residencial Premium</li>
+            <li>Limpeza de Caixa d'água anual</li>
+            <li>Conserto de Linha Branca (Geladeira, Fogão, Lavadora)</li>
+            <li><strong>Pacote Sênior</strong> (Cuidador, suporte digital, barras de apoio)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <span class="pageno">03 · 17</span>
+  </section>
+
+  <!-- ══════════ MÓDULO 3: REGRAS IMPORTANTES DO PRODUTO (SLIDE 03) ══════════ -->
+  <section class="slide" id="s3">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 03</div>
+        <h2>Regras <span>Importantes</span></h2>
+      </div>
+      <div class="meta">O que o operador precisa dominar antes de ofertar</div>
+    </div>
+    <div class="scontent">
+      <div class="two-cols">
+        <div class="sec-block" style="padding:14px 20px">
+          <h3><span class="num">💳</span>Elegibilidade e Regras de Cobrança</h3>
+          <ul style="font-size: 0.8rem; line-height: 1.5">
+            <li><strong>Restrição Importante de Renda:</strong> O <strong>Plano Completo não estará disponível</strong> para clientes que recebem até 1 salário mínimo e meio (1,5 SM).</li>
+            <li><strong>Foco Comercial da Campanha:</strong> A oferta está direcionada exclusivamente a <strong>clientes domiciliados</strong> (que recebem salário ou benefício no Agibank).</li>
+            <li><strong>Regras de Cobrança por Perfil:</strong>
+              <ul style="margin-top:4px">
+                <li><strong>Cliente Domiciliado:</strong> O pagamento ocorre no próximo salário. <em>Nota crucial:</em> Se ele contratar exatamente no dia em que o salário cair, ele não paga na hora; o desconto vai direto para o salário do mês seguinte.</li>
+                <li><strong>Cliente Benefício Temporário:</strong> O pagamento/desconto é realizado no momento exato da contratação.</li>
+              </ul>
+            </li>
+            <li><strong>Sem Limite de Idade:</strong> Qualquer titular dentro do perfil elegível pode contratar, sem aumento de custo por faixa etária.</li>
+          </ul>
+        </div>
+
+        <div class="sec-block" style="padding:14px 20px">
+          <h3><span class="num">⏰</span>Carências e Prazos do Produto</h3>
+          <ul style="font-size: 0.8rem; line-height: 1.5">
+            <li><strong>Ativação do Plano:</strong> Vigência inicia <strong>24 horas</strong> após a contratação.</li>
+            <li><strong>Sem Carência:</strong> Telemedicina, desconto em farmácias, SOS Odonto de Urgência.</li>
+            <li><strong>30 dias:</strong> Assistência residencial Plus, Assistência pet, suporte digital sênior.</li>
+            <li><strong>60 dias:</strong> Conserto de Linha Branca e Adaptação residencial sênior.</li>
+            <li><strong>90 dias:</strong> Limpeza de caixa d'água e Cuidador de idosos.</li>
+            <li><strong>Assistência Funeral:</strong> Sem carência para morte acidental. Cobertura <strong>até 80 anos</strong> de idade no ato do óbito. Suicídio possui carência legal de <strong>24 meses</strong>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert-box">
+        <div class="icon">🚨</div>
+        <div class="txt"><strong>A REGRA DE OURO DO ACIONAMENTO (Evite Reclamações):</strong> O cliente <strong>DEVE LIGAR ANTES</strong> para a central de assistência do Agi+ para solicitar os serviços de chaveiro, encanador, eletricista, consertos ou veterinário. Se ele contratar um profissional por conta própria sem abertura de protocolo prévio, <strong>NÃO haverá reembolso</strong>!</div>
+      </div>
+    </div>
+    <span class="pageno">04 · 17</span>
+  </section>
+
+  <!-- ══════════ MÓDULO 4: A ARTE DO CROSS-SELLING (SLIDE 04) ══════════ -->
+  <section class="slide" id="s4">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 04</div>
+        <h2>A Arte do <span>Cross-Selling</span></h2>
+      </div>
+      <div class="meta">Fazendo a Transição de Atendimento para Venda de Forma Fluida</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">🔄</span>O Segredo está na "Ponte de Transição"</h3>
+        <p>A maior barreira para o operador é o receio de parecer inconveniente ao ofertar um produto. O segredo é nunca usar scripts robóticos de vendas. Você deve usar uma **Ponte de Transição** que conecta a conclusão do serviço à oportunidade do Agi+.</p>
+      </div>
+
+      <div class="alert-box success">
+        <div class="icon">💡</div>
+        <div class="txt"><strong>POR QUE EVITAR A PERGUNTA:</strong> <em>"O senhor gostaria de conhecer nosso clube de benefícios?"</em><br>Porque o cliente responderá "Não" por impulso automático. Em vez de pedir permissão para falar de um produto, <strong>notifique-o de um benefício que ele já tem direito</strong> por ser cliente domiciliado.</div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">🗣️</span>Exemplos de Pontes de Transição de Alta Conversão</h3>
+        <ul style="list-style:none;padding-left:0">
+          <li style="margin-bottom:10px;padding:10px;background:#fff;border:1px solid #e2e8f0;border-radius:8px">
+            <strong>1. Ponte do Benefício Liberado no CPF:</strong><br>
+            <em style="color:var(--body-text);font-size:0.82rem">"Prontinho, Sr. João, alteração cadastral finalizada com sucesso. Enquanto eu salvava o seu protocolo, o sistema emitiu um aviso excelente de **Benefício Liberado** no seu CPF. O Agibank selecionou o senhor para receber de volta R$ 150 mensais para gastar em diversos parceiros (como mercados, farmácias, recarga de celular ou aplicativos). Deixa eu te mostrar como funciona..."</em>
+          </li>
+          <li style="margin-bottom:10px;padding:10px;background:#fff;border:1px solid #e2e8f0;border-radius:8px">
+            <strong>2. Ponte da Economia Doméstica:</strong><br>
+            <em style="color:var(--body-text);font-size:0.82rem">"Fatura enviada para seu e-mail, Dona Maria. E para ajudar a senhora a economizar nas suas contas, o banco liberou no seu perfil o convite do Agi+. Deixa eu te explicar como ele te devolve R$ 120 todo mês para usar em diversos parceiros, como mercados, farmácias, recarga de celular ou aplicativos..."</em>
+          </li>
+          <li style="padding:10px;background:#fff;border:1px solid #e2e8f0;border-radius:8px">
+            <strong>3. Ponte do Gancho Contextual (Se o cliente mencionou saúde, remédios, etc. durante a ligação):</strong><br>
+            <em style="color:var(--body-text);font-size:0.82rem">"Fico muito feliz que conseguimos resolver essa dúvida. A senhora comentou comigo no início da ligação que estava preocupada com as compras de remédios... Sabia que o Agibank liberou um benefício no seu CPF que dá até 80% de desconto em farmácias e ainda te devolve R$ 100 por mês para usar com mercados, farmácias e recargas?"</em>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <span class="pageno">05 · 17</span>
+  </section>
+
+  <!-- ══════════ MÓDULO 5: GATILHOS MENTAIS DE VENDA (SLIDE 05) ══════════ -->
+  <section class="slide" id="s5">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 05</div>
+        <h2>Gatilhos de <span>Vendas</span></h2>
+      </div>
+      <div class="meta">Aceleradores de Decisão para Atendimento Receptivo</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">🧠</span>Como usar a psicologia de vendas a seu favor</h3>
+        <p>Como o operador da central atua de forma receptiva (atendendo uma dúvida ou problema do cliente), a venda não pode parecer "empurrada". Os gatilhos mentais ajudam o cliente a perceber a oferta como uma <strong>oportunidade de ajuda real</strong> oferecida pelo atendente.</p>
+      </div>
+
+      <div class="two-cols">
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">⚓</div>
+          <div class="benefit-content">
+            <h4>Ancoragem (Inverter o Valor)</h4>
+            <p><strong>Conceito:</strong> Mostre o valor que o cliente recebe de volta antes de falar o custo.</p>
+            <p style="margin-top:4px;font-style:italic">"Sr. João, o banco vai colocar R$ 150 em créditos todo mês para usar com diversos parceiros, como farmácias, mercados ou recarga de celular. Para ter direito a esse dinheiro de volta mais o dentista e médico de graça, a mensalidade é de apenas R$ 59,90. O senhor ganha mais do que paga."</p>
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">🤝</div>
+          <div class="benefit-content">
+            <h4>Reciprocidade (A troca natural)</h4>
+            <p><strong>Conceito:</strong> Após resolver perfeitamente a dúvida do cliente, ele se sente grato e inclinado a te ouvir.</p>
+            <p style="margin-top:4px;font-style:italic">"Seu problema de cobrança já está 100% resolvido, fiz questão de agilizar tudo pessoalmente para o senhor! Agora, como forma de agradecer pela parceria, o sistema me abriu um benefício exclusivo..."</p>
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">⭐</div>
+          <div class="benefit-content">
+            <h4>Elegibilidade / Exclusividade</h4>
+            <p><strong>Conceito:</strong> Mostre que o produto não é para todos, mas liberado para ele devido ao seu bom perfil.</p>
+            <p style="margin-top:4px;font-style:italic">"O sistema me emitiu um aviso especial aqui. Devido ao seu excelente histórico de movimentação conosco, o senhor foi selecionado para receber o convite do clube Agi+..."</p>
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">🔥</div>
+          <div class="benefit-content">
+            <h4>Contraste de Custo</h4>
+            <p><strong>Conceito:</strong> Comparar a mensalidade do plano com um gasto gigante real do dia a dia.</p>
+            <p style="margin-top:4px;font-style:italic">"Se o seu chuveiro queimar ou se precisar de um canal no dente hoje, o senhor vai gastar muito dinheiro. Com o plano Completo, por menos de R$ 2,00 por dia, o senhor tem tudo isso resolvido de graça."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="pageno">06 · 17</span>
+  </section>
+
+  <!-- ══════════ MÓDULO 6: ARGUMENTAÇÃO - PLANO BÁSICO (SLIDE 06) ══════════ -->
+  <section class="slide" id="s6">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 06</div>
+        <h2>Argumentação · <span>Plano Básico</span></h2>
+      </div>
+      <div class="meta">Pitches Práticos (R$ 39,90/mês)</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">🎯</span>Pitch Principal (O plano se paga sozinho)</h3>
+        <p style="font-style:italic; font-size:0.9rem; color:var(--azul-escuro)">
+          "Sr. João, o Plano Básico custa apenas R$ 39,90 por mês, mas o Agibank te devolve R$ 100 todo mês em créditos para gastar em diversos parceiros de sua preferência, como mercados, farmácias, recarga mensal de celular ou aplicativos de transporte e entrega. Como a cartela de parceiros pode variar a cada mês, o senhor sempre ganha novas formas de economizar, saindo no lucro e com a sua saúde e bolso totalmente protegidos!"
+        </p>
+      </div>
+
+      <div class="sec-block" style="padding: 12px 24px">
+        <h3 style="margin-bottom: 6px">💡 4 Sugestões de Abordagem para o Plano Básico:</h3>
+        <ul style="list-style:none; padding-left:0; font-size:0.8rem">
+          <li style="margin-bottom:8px">
+            <strong>1. Ganho Financeiro Direto:</strong> <em>"Imagine trocar R$ 39,90 por R$ 100 todos os meses para usar em compras de mercado, farmácias ou até recarga do seu celular. É exatamente isso que esse clube faz pelo senhor, além de dar consultas de graça por vídeo!"</em>
+          </li>
+          <li style="margin-bottom:8px">
+            <strong>2. Alívio no Bolso com Remédios (ePharma):</strong> <em>"O senhor costuma comprar remédios todo mês? No nosso plano básico, os descontos em farmácias credenciadas chegam a até 80%. O que o senhor economiza na primeira compra já paga a assinatura inteira e o senhor ainda aproveita os créditos em outros parceiros."</em>
+          </li>
+          <li style="margin-bottom:8px">
+            <strong>3. Proteção e Prevenção Residencial:</strong> <em>"Se o senhor precisar chamar um eletricista ou chaveiro de emergência hoje à noite na sua cidade, não gasta menos de R$ 150. Com o Plano Básico, o senhor tem essa mão de obra de graça, não passa sufoco e os R$ 100 mensais voltam em créditos para o senhor usar como preferir."</em>
+          </li>
+          <li style="margin-bottom:0">
+            <strong>4. O Fim da Fila do Posto de Saúde:</strong> <em>"Não precisa mais acordar de madrugada para pegar fila no posto ou pagar consulta particular caríssima. Com a nossa Telemedicina, o senhor conversa com um clínico geral de excelência pelo celular em poucos minutos, sem sair de casa."</em>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <span class="pageno">07 · 17</span>
+  </section>
+
+  <!-- ══════════ MÓDULO 6: ARGUMENTAÇÃO - PLANO NA MEDIDA (SLIDE 07) ══════════ -->
+  <section class="slide" id="s7">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 06</div>
+        <h2>Argumentação · <span>Plano Na Medida</span></h2>
+      </div>
+      <div class="meta">Pitches Práticos (R$ 49,90/mês)</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">🐾</span>Pitch Principal (Cuidado completo para o Pet)</h3>
+        <p style="font-style:italic; font-size:0.9rem; color:var(--azul-escuro)">
+          "Dona Maria, se o seu cãozinho ou gatinho passar mal de madrugada, uma consulta de emergência em clínica veterinária particular custa mais de R$ 250. Com o Plano Na Medida, por apenas R$ 49,90 por mês, você tem veterinário 24h, telemedicina pet ilimitada e até assistência funeral para ele. Além de tudo, o banco te dá R$ 120 em créditos todo mês para usar com recarga de celular, mercados, farmácias ou aplicativos de transporte e entrega parceiros. Como a cartela de parceiros pode variar mensalmente, você sempre tem opções de economizar!"
+        </p>
+      </div>
+
+      <div class="sec-block" style="padding: 12px 24px">
+        <h3 style="margin-bottom: 6px">💡 4 Sugestões de Abordagem para o Plano Na Medida:</h3>
+        <ul style="list-style:none; padding-left:0; font-size:0.8rem">
+          <li style="margin-bottom:8px">
+            <strong>1. Ancoragem de Custo Veterinário:</strong> <em>"Quem tem bicho de estimação sabe que remédios e clínicas são caros. Ter telemedicina veterinária ilimitada pelo celular salva vidas e evita gastos surpresa de centenas de reais por apenas R$ 49,90 mensais."</em>
+          </li>
+          <li style="margin-bottom:8px">
+            <strong>2. O Plano que Dá Lucro (R$ 120 em Créditos):</strong> <em>"O plano custa R$ 49,90, mas liberamos R$ 120 em créditos todo mês para a senhora gastar em diversos parceiros, como mercados, farmácias, recarga de celular ou apps de transporte. A cartela de parceiros pode variar mensalmente, dando sempre novas opções de economia!"</em>
+          </li>
+          <li style="margin-bottom:8px">
+            <strong>3. Tranquilidade em Momentos Difíceis:</strong> <em>"Nossos pets são parte da família. Ter a segurança de um funeral pet coberto em até R$ 500 nos tira uma preocupação financeira enorme em um momento de tanta dor."</em>
+          </li>
+          <li style="margin-bottom:0">
+            <strong>4. Suporte Completo de Informações (Concierge Pet):</strong> <em>"A senhora quer saber onde tem petshop barato, quais as vacinas obrigatórias ou precisa de dicas de adestramento? O nosso concierge digital cuida de tudo isso para a senhora!"</em>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <span class="pageno">08 · 17</span>
+  </section>
+
+  <!-- ══════════ MÓDULO 6: ARGUMENTAÇÃO - PLANO COMPLETO (SLIDE 08) ══════════ -->
+  <section class="slide" id="s8">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 06</div>
+        <h2>Argumentação · <span>Plano Completo</span></h2>
+      </div>
+      <div class="meta">Pitches Práticos (R$ 59,90/mês)</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">⭐</span>Pitch Principal (O Melhor Custo-Benefício do Brasil)</h3>
+        <p style="font-style:italic; font-size:0.88rem; color:var(--azul-escuro)">
+          "Sr. João, este é o nosso plano campeão de vendas porque resolve os maiores gastos de uma vez só: ele traz um plano odontológico completo que cobre tratamento de canal, restaurações e limpezas. Se o senhor fizesse um único canal no particular, pagaria cerca de R$ 1.000. Aqui, o senhor tem odonto, conserto de geladeira e máquina de lavar, telemedicina e ainda recebe R$ 150 em créditos por mês de volta para usar com recarga de celular, farmácias, mercados ou aplicativos, pagando só R$ 59,90!"
+        </p>
+      </div>
+
+      <div class="sec-block" style="padding: 10px 24px">
+        <h3 style="margin-bottom: 4px; font-size: 0.95rem">💡 4 Sugestões de Abordagem para o Plano Completo:</h3>
+        <ul style="list-style:none; padding-left:0; font-size:0.78rem">
+          <li style="margin-bottom:6px">
+            <strong>1. Economia Absoluta no Dentista (Sempre Odonto Especial):</strong> <em>"Chega de sofrer com dor de dente ou adiar o tratamento por falta de dinheiro. Nosso plano odontológico cobre mais de 200 procedimentos presenciais em consultórios parceiros do Brasil inteiro."</em>
+          </li>
+          <li style="margin-bottom:6px">
+            <strong>2. Salvação da Linha Branca (Conserto de Eletrodomésticos):</strong> <em>"Se a sua máquina de lavar ou geladeira quebrar hoje, só a visita do técnico custa uma fortuna. Com o plano Completo, a mão de obra para consertar seus eletrodomésticos de até 6 anos de uso é por nossa conta!"</em>
+          </li>
+          <li style="margin-bottom:6px">
+            <strong>3. Pacote Sênior (Ideal para os Pais ou Idosos):</strong> <em>"Este plano é perfeito para a melhor idade. Ele dá reembolso de diária de cuidador em caso de acidentes e até manda um técnico instalar barras de apoio no banheiro e olho mágico para garantir a segurança em casa."</em>
+          </li>
+          <li style="margin-bottom:0">
+            <strong>4. Troca Lucrativa de Dinheiro (R$ 150 em Créditos):</strong> <em>"É matemática simples, Sr. João: o senhor investe R$ 59,90 no plano e o Agibank te entrega R$ 150 em créditos para usar em diversos parceiros (como mercados, farmácias, recarga de celular ou aplicativos de transporte e delivery). Como os parceiros podem variar mensalmente, o senhor sempre tem novas formas de economizar todo mês!"</em>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <span class="pageno">09 · 17</span>
+  </section>
+
+  <!-- ══════════ MÓDULO 7: CONTORNANDO OBJEÇÕES - PARTE 1 (SLIDE 09) ══════════ -->
+  <section class="slide" id="s9">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 07</div>
+        <h2>Contorno de <span>Objeções · Parte 1</span></h2>
+      </div>
+      <div class="meta">Desarmando os Principais "Nãos" do Cliente</div>
+    </div>
+    <div class="scontent">
+      <div class="faq-item">
+        <div class="faq-q">"Eu não tenho dinheiro para pagar mais uma conta mensal."</div>
+        <div class="faq-a">
+          <strong>Contorno (Foco no Ganho Financeiro):</strong> "Eu entendo perfeitamente, Sr. João, e é justamente por isso que o Agi+ é ideal para o senhor. O plano custa R$ 59,90, mas nós te damos <strong>R$ 150 em créditos reais</strong> todos os meses para usar em diversos parceiros que variam todo mês, como mercados, farmácias, recarga de celular ou aplicativos como iFood e Uber. O senhor não está gastando mais, está economizando no seu orçamento mensal!"
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">"Eu já tenho um plano de saúde tradicional."</div>
+        <div class="faq-a">
+          <strong>Contorno (Foco na Complementaridade):</strong> "Que excelente que o senhor já tem! Mas o Agi+ não concorre com o seu plano, ele o **completa**. Por exemplo: seu plano de saúde cobre conserto urgente de geladeira? Cobre chaveiro 24h ou encanador se estourar um cano na sua casa? Cobre tratamento dentário completo ou te dá R$ 150 mensais para usar em diversos parceiros como mercados, farmácias ou recarga de celular? O Agi+ cobre tudo isso por menos de R$ 2 por dia para o titular."
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">"Eu sou muito jovem e saudável, quase nunca vou ao médico."</div>
+        <div class="faq-a">
+          <strong>Contorno (Foco em Serviços e Prevenção):</strong> "Excelente, e torcemos para que continue assim! Mas o Agi+ não serve apenas para quando estamos doentes. Se você perder a chave da sua casa de madrugada, o chaveiro 24h está garantido. Além disso, os descontos em grandes farmácias de até 80% e os R$ 150 em créditos mensais para usar com recarga de celular, Uber e iFood já fazem a assinatura valer a pena todos os meses."
+        </div>
+      </div>
+    </div>
+    <span class="pageno">10 · 17</span>
+  </section>
+
+  <!-- ══════════ MÓDULO 7: CONTORNANDO OBJEÇÕES - PARTE 2 (SLIDE 10) ══════════ -->
+  <section class="slide" id="s10">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 07</div>
+        <h2>Contorno de <span>Objeções · Parte 2</span></h2>
+      </div>
+      <div class="meta">Desarmando os Principais "Nãos" do Cliente</div>
+    </div>
+    <div class="scontent">
+      <div class="faq-item">
+        <div class="faq-q">"E se eu contratar e depois for muito difícil cancelar?"</div>
+        <div class="faq-a">
+          <strong>Contorno (Foco na Liberdade e Sem Fidelidade):</strong> "Aqui a transparência é total! O Agi+ **notavelmente não tem contrato de fidelidade**. O senhor pode cancelar a qualquer momento diretamente pelo aplicativo ou ligando aqui na central, sem nenhuma multa ou complicação. O senhor fica apenas se estiver totalmente satisfeito com os benefícios."
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">"Preciso conversar com meu cônjuge antes de tomar essa decisão."</div>
+        <div class="faq-a">
+          <strong>Contorno (Foco no Senso de Urgência e Proteção):</strong> "Com certeza, conversar com a família é muito importante! Mas me diga uma coisa: se hoje à noite a sua geladeira quebrar ou um cano estourar na sua casa, seria maravilhoso poder dizer para a sua esposa que vocês já estão cobertos e não gastarão nada com encanador e técnico, não é? Como não temos fidelidade, o senhor pode ativar a proteção agora mesmo e testar os primeiros R$ 150 de créditos com ela neste fim de semana!"
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">"Esses créditos em parceiros são sempre os mesmos? Eu consigo usar fácil?"</div>
+        <div class="faq-a">
+          <strong>Contorno (Foco na Variedade e Praticidade):</strong> "Sim, o uso é super simples direto no aplicativo do Agi+! O senhor troca seus créditos por cupons de grandes redes parceiras, como iFood, Uber, farmácias, recarga de celular e mercados parceiros. Importante: a cartela de parceiros pode variar mensalmente, garantindo que o senhor sempre tenha ótimas opções diferentes para economizar!"
+        </div>
+      </div>
+    </div>
+    <span class="pageno">11 · 17</span>
+  </section>
+
+  <!-- ══════════ MÓDULO 8: CENÁRIOS DELICADOS E ATRITADOS (SLIDE 11) ══════════ -->
+  <section class="slide" id="s11">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 08</div>
+        <h2>Cenários <span>Delicados</span></h2>
+      </div>
+      <div class="meta">Como Ofertar Quando o Cliente Está Atritado ou Frustrado</div>
+    </div>
+    <div class="scontent">
+      <div class="alert-box">
+        <div class="icon">⚠️</div>
+        <div class="txt"><strong>O Maior Erro no Atrito:</strong> Ignorar a raiva do cliente e emendar um script de vendas alegre. Isso destrói a confiança. Em cenários difíceis, a **Empatia deve vir em 1º lugar** e o produto deve ser oferecido como **uma forma de cuidado ou compensação**.</div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">🛡️</span>Estratégias de Oferta em Clientes Atritados</h3>
+        <p>Se o cliente teve um problema não resolvido ou está bravo com prazos/taxas, use a **Ponte de Cuidado e Compensação Financeira**:</p>
+      </div>
+
+      <div class="two-cols">
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">🤝</div>
+          <div class="benefit-content">
+            <h4>Cenário A: Problema Não Resolvido Hoje</h4>
+            <p style="font-size:0.75rem"><em>(Ex: Aguardando análise de sistema, prazo de 3 dias úteis)</em></p>
+            <p style="margin-top:6px;font-style:italic;font-size:0.75rem;line-height:1.4">
+              "Sr. João, lamento muito que tenhamos que aguardar esse prazo de 3 dias, já abri seu chamado com prioridade máxima. Mas, para demonstrar que o Agibank se importa de verdade com o senhor e compensar esse transtorno, o sistema liberou aqui um benefício de R$ 150 em créditos mensais para o senhor usar em diversos parceiros (como mercados, farmácias ou recarga de celular), além de dar proteção de dentista e eletricista grátis para a sua residência. Quero ativar essa vantagem hoje mesmo para o senhor como cortesia comercial..."
+            </p>
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">💸</div>
+          <div class="benefit-content">
+            <h4>Cenário B: Reclamação de Falta de Dinheiro</h4>
+            <p style="font-size:0.75rem"><em>(Ex: Cliente ligou preocupado com juros, tarifas ou parcelas)</em></p>
+            <p style="margin-top:6px;font-style:italic;font-size:0.75rem;line-height:1.4">
+              "Dona Maria, compreendo perfeitamente o seu momento e sei que cada centavo economizado faz a diferença no fim do mês. É exatamente por isso que o banco liberou esse programa Agi+ para a senhora: ele custa R$ 59,90, mas te devolve R$ 150 em créditos de volta para usar em diversos parceiros, como mercados, farmácias, recarga de celular ou aplicativos de transporte e entrega. É uma ajuda financeira mensal que o banco estruturou para a senhora economizar no seu orçamento doméstico..."
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="pageno">12 · 17</span>
+  </section>
+
+  <!-- ══════════ MÓDULO 9: EXERCÍCIOS PRÁTICOS - PARTE 1 (SLIDE 12) ══════════ -->
+  <section class="slide" id="s12">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 09</div>
+        <h2>Exercícios Práticos <span>· Caso 1</span></h2>
+      </div>
+      <div class="meta">Roleplays reais para treinar com a equipe</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block" style="background:#f0fdf4; border-color:#bbf7d0">
+        <h3 style="color:#166534"><span class="num" style="background:#166534">1</span> Caso: O Aposentado Preocupado</h3>
+        <p style="font-size:0.85rem; line-height:1.6; color:#14532d">
+          <strong>Cenário:</strong> O cliente Sr. Francisco (68 anos, domiciliado) ligou para solicitar a segunda via do seu extrato e comentou casualmente que os preços dos remédios para pressão subiram muito no bairro. Sua renda cadastrada é de 1,2 salário mínimo.
+        </p>
+        
+        <div style="margin-top:15px; padding:12px; background:#fff; border-radius:8px; font-size:0.8rem; border:1px dashed #77df40">
+          <strong>Desafio para o Operador:</strong> Qual o plano ideal de oferta e qual a ponte de transição perfeita a se fazer após o envio do extrato?
+          <div style="margin-top:4px; font-weight:bold; color:var(--azul-escuro)">
+            *O plano Completo pode ser ofertado neste caso? (Dica: Olhe a regra de renda do Módulo 3)*
+          </div>
+        </div>
+        
+        <!-- Interactive Gabarito Button -->
+        <button class="btn-gabarito" onclick="toggleGabarito('g1')">Ver Resposta Recomendada (Gabarito)</button>
+        
+        <div id="g1" class="gabarito-box" style="display:none">
+          <strong>💡 GABARITO DA PONTE RECOMENDADA:</strong><br>
+          1. <strong>Plano Ideal:</strong> Plano Na Medida (ou Básico). O Plano Completo <u>não</u> está disponível pois a renda do Sr. Francisco é inferior a 1,5 salário mínimo.<br>
+          2. <strong>A Ponte Prática:</strong> <em>"Sr. Francisco, sua segunda via do extrato já foi gerada e enviada! E aproveitando que o senhor comentou sobre o preço dos remédios, o sistema liberou um benefício excelente no seu CPF para ajudar no seu bolso: o clube Agi+ Na Medida. Ele custa R$ 49,90 por mês, mas te dá até 80% de desconto em farmácias credenciadas e te entrega R$ 120 mensais de volta em créditos para gastar em diversos parceiros que variam todo mês, como mercados, farmácias ou recarga de celular. O senhor economiza nos remédios e o plano se paga sozinho!"</em>
+        </div>
+      </div>
+    </div>
+    <span class="pageno">13 · 17</span>
+  </section>
+
+  <!-- ══════════ MÓDULO 9: EXERCÍCIOS PRÁTICOS - PARTE 2 (SLIDE 13) ══════════ -->
+  <section class="slide" id="s13">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 09</div>
+        <h2>Exercícios Práticos <span>· Caso 2</span></h2>
+      </div>
+      <div class="meta">Roleplays reais para treinar com a equipe</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block" style="background:#fef2f2; border-color:#fecaca">
+        <h3 style="color:#991b1b"><span class="num" style="background:#991b1b">2</span> Caso: A Dona de Casa Resistente</h3>
+        <p style="font-size:0.85rem; line-height:1.6; color:#7f1d1d">
+          <strong>Cenário:</strong> A cliente Mariana (renda superior a 1.5 salário) acabou de resolver uma dúvida sobre o limite do seu cartão de crédito, mas reage de forma defensiva à oferta dizendo: <em>"Não quero ouvir falar de clube de benefícios, não quero mais nenhuma cobrança na minha conta, estou sem dinheiro"</em>.
+        </p>
+
+        <div style="margin-top:15px; padding:12px; background:#fff; border-radius:8px; font-size:0.8rem; border:1px dashed var(--vermelho)">
+          <strong>Desafio para o Operador:</strong> Como reverter essa objeção usando o gatilho da Ancoragem e do Contraste de Custo (inversão de valor)?
+        </div>
+
+        <!-- Interactive Gabarito Button -->
+        <button class="btn-gabarito" onclick="toggleGabarito('g2')">Ver Resposta Recomendada (Gabarito)</button>
+
+        <div id="g2" class="gabarito-box" style="display:none; background:#fef2f2; border-left:4px solid var(--vermelho); color:#7f1d1d">
+          <strong>💡 GABARITO DA REVERSÃO DE OBJEÇÃO:</strong><br>
+          1. <strong>Técnica de Ouro:</strong> Nunca insista no "produto". Mude o foco imediatamente para a "ajuda financeira" (créditos de volta) e o custo evitado em emergências.<br>
+          2. <strong>A Abordagem Prática:</strong> <em>"Mariana, compreendo perfeitamente o seu momento e concordo que não devemos gastar com o que não precisamos. É justamente por isso que o Agi+ Completo foi liberado para você. Ele custa R$ 59,90 por mês, mas o Agibank te entrega R$ 150 em créditos de volta todos os meses para usar em diversos parceiros (como mercados, farmácias, recarga de celular ou apps de transporte). Ou seja, você investe 59 e ganha 150 para usar no que já precisa comprar! É mais dinheiro para você no final do mês. Além de que, se sua geladeira ou máquina quebrarem, nós pagamos a mão de obra de graça. Vamos ativar e testar neste mês?"</em>
+        </div>
+      </div>
+    </div>
+    <span class="pageno">14 · 17</span>
+  </section>
+
+  <!-- ══════════ MÓDULO 10: RECONHECIMENTO & METAS (SLIDE 14) ══════════ -->
+  <section class="slide" id="s14">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 10</div>
+        <h2>Reconhecimento & <span>Campanhas</span></h2>
+      </div>
+      <div class="meta">Campanha de Cross-Selling</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block" style="background: radial-gradient(circle at 100% 100%, #eef2ff 0%, #f8fafc 100%); padding: 24px">
+        <h3 style="font-size: 1.3rem; color: var(--azul); margin-bottom: 16px; display: flex; align-items: center; gap: 8px">
+          <span style="font-size: 1.7rem">❓</span> Dúvida Comum: Teremos algum plano de reconhecimento, recompensa, meta/remuneração?
+        </h3>
+        <p style="font-size: 0.95rem; line-height: 1.7; margin-bottom: 14px">
+          
+    <span class="pageno">15 · 17</span>
+  </section>
+
+  <!-- ══════════ MÓDULO 11: ENCERRAMENTO (SLIDE 15) ══════════ -->
+  <section class="slide" id="s15">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 11</div>
+        <h2>Vender é <span>Ajudar!</span></h2>
+      </div>
+      <div class="meta">Próximos Passos para o Sucesso</div>
+    </div>
+    <div class="scontent">
+      <div class="two-cols">
+        <div class="sec-block" style="padding:14px 20px">
+          <h3><span class="num">🏆</span>Recapitulando as Chaves da Venda</h3>
+          <ul style="font-size:0.8rem; line-height: 1.6">
+            <li><strong>Ancoragem Primeiro:</strong> Sempre fale dos R$ 100, R$ 120 ou R$ 150 em créditos que o cliente recebe de volta antes de revelar o custo da assinatura.</li>
+            <li><strong>Sem Medo de Objeção:</strong> A objeção é apenas uma dúvida em voz alta. Contorne mostrando o ganho financeiro prático.</li>
+            <li><strong>Transição Fluida:</strong> Esqueça o robótico "posso te oferecer algo?". Notifique-o do benefício liberado no sistema.</li>
+            <li><strong>Atrito pede Empatia:</strong> Resolva a queixa primeiro, valide a insatisfação e use o Agi+ como compensação financeira e cuidado.</li>
+          </ul>
+        </div>
+
+        <div class="sec-block" style="padding:14px 20px">
+          <h3><span class="num">🎯</span>A Força do Receptivo</h3>
+          <p style="font-size:0.82rem;line-height:1.5">O cliente que liga para a nossa central de atendimento já confia no Agibank e está buscando uma solução. O seu papel não é "empurrar um produto goela abaixo", mas sim **oferecer um clube que vai de fato economizar o dinheiro dele**.</p>
+          <p style="font-size:0.82rem;line-height:1.5;margin-top:10px">Ao apresentar o Agi+ com entusiasmo e foco no retorno financeiro dos créditos, a venda virará uma consequência natural do seu excelente atendimento!</p>
+        </div>
+      </div>
+
+      <div class="alert-box success">
+        <div class="icon">🚀</div>
+        <div class="txt"><strong>Dica de Ouro:</strong> Os maiores vendedores da nossa central focam sempre no **Plano Completo (R$ 59,90)** (quando o cliente é elegível). É o que dá mais lucro para o cliente (R$ 150 em créditos), traz cobertura odontológica completa de mais de 200 procedimentos e conserto gratuito de eletrodomésticos.</div>
+      </div>
+    </div>
+    <span class="pageno">16 · 17</span>
+  </section>
+
+  <!-- ══════════ FINALIZAÇÃO / SUCESSO (SLIDE 16) ══════════ -->
+  <section class="slide" id="s16">
+    <div class="brandbar" style="position:absolute;top:0;left:0;right:0"></div>
+    <span class="blob b1" style="background:var(--verde); opacity: 0.15"></span>
+    <span class="blob b2" style="background:var(--azul); opacity: 0.2"></span>
+    <div class="scontent" style="align-items:center; justify-content:center; text-align:center; height:100%; padding:80px">
+      
+      <div style="background:rgba(255, 255, 255, 0.95); border: 2px solid var(--verde); border-radius: 18px; padding: 40px; box-shadow: 0 15px 40px rgba(0,100,245,0.08); max-width:800px; margin: 0 auto">
+        <div style="font-size: 5rem; margin-bottom: 20px; line-height: 1">🎉</div>
+        <h2 style="font-size: 2.3rem; font-weight: 900; color: var(--azul-escuro); margin-bottom: 12px">
+          Treinamento Concluído com <span>Êxito!</span>
+        </h2>
+        <p style="font-size: 1.1rem; color: var(--body-text); font-weight: 500; line-height: 1.6; max-width: 650px; margin: 0 auto 24px">
+          Parabéns! Você completou com sucesso o treinamento comercial do <strong>Clube de Benefícios AGI+</strong>.
+        </p>
+        
+        <div class="alert-box success" style="text-align: left; margin-bottom: 24px">
+          <div class="icon">🏆</div>
+          <div class="txt" style="font-size: 0.88rem; color: #166534">
+            <strong>Você está pronto para o desafio!</strong> Você agora domina o conceito do produto, as regras importantes, as pontes de transição fluida, os gatilhos de vendas práticos e o contorno de objeções realista.
+          </div>
+        </div>
+        
+        <p style="font-size: 0.9rem; color: var(--gray-text); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em">
+          Bons atendimentos e excelentes vendas! 🚀
+        </p>
+      </div>
+
+    </div>
+    <span class="pageno">17 · 17</span>
+  </section>
+
+</div><!-- end stage -->
+
+<!-- NAV -->
+<div class="nav">
+  <button id="prev">‹</button>
+  <div class="dots">
+    <span class="dot on" data-i="0"></span>
+    <span class="dot" data-i="1"></span>
+    <span class="dot" data-i="2"></span>
+    <span class="dot" data-i="3"></span>
+    <span class="dot" data-i="4"></span>
+    <span class="dot" data-i="5"></span>
+    <span class="dot" data-i="6"></span>
+    <span class="dot" data-i="7"></span>
+    <span class="dot" data-i="8"></span>
+    <span class="dot" data-i="9"></span>
+    <span class="dot" data-i="10"></span>
+    <span class="dot" data-i="11"></span>
+    <span class="dot" data-i="12"></span>
+    <span class="dot" data-i="13"></span>
+    <span class="dot" data-i="14"></span>
+    <span class="dot" data-i="15"></span>
+    <span class="dot" data-i="16"></span>
+  </div>
+  <button id="next">›</button>
+</div>
+<div class="kb-hint">← → NAVEGAR</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const dots=[...document.querySelectorAll('.dot')];
+  let cur=0;
+
+  function fit(){
+    const s=Math.min(window.innerWidth/1280,window.innerHeight/720);
+    slides.forEach(el=>el.style.transform=`scale(${s})`);
+  }
+
+  function show(i){
+    cur=(i+slides.length)%slides.length;
+    slides.forEach((el,k)=>el.classList.toggle('active',k===cur));
+    dots.forEach((d,k)=>d.classList.toggle('on',k===cur));
+  }
+
+  function toggleGabarito(id) {
+    const el = document.getElementById(id);
+    const btn = el.previousElementSibling;
+    if (el.style.display === 'none') {
+      el.style.display = 'block';
+      btn.textContent = 'Ocultar Resposta (Gabarito)';
+    } else {
+      el.style.display = 'none';
+      btn.textContent = 'Ver Resposta Recomendada (Gabarito)';
+    }
+  }
+
+  document.getElementById('next').onclick=()=>show(cur+1);
+  document.getElementById('prev').onclick=()=>show(cur-1);
+  dots.forEach(d=>d.onclick=()=>show(+d.dataset.i));
+
+  window.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' ')show(cur+1);
+    if(e.key==='ArrowLeft')show(cur-1);
+  });
+
+  window.addEventListener('resize',fit);
+  fit();show(0);
+</script>
+</body>
+</html>
+```
