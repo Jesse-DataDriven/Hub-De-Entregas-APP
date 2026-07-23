@@ -1,0 +1,873 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Treinamento · Validação por Videochamada Corban</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --azul:#0064f5; --azul-escuro:#000f44; --verde:#77df40; --amarelo:#ffd600;
+      --roxo:#7c3aed; --vermelho:#dc2626;
+      --gray-3:#d1daea; --gray-text:#6b7a99; --body-text:#1a2340;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Inter',sans-serif;
+      background:radial-gradient(1200px 700px at 50% -10%,#0a1c52,#04102f 60%,#020a22);
+      color:var(--azul-escuro);overflow:hidden;height:100vh;
+    }
+
+    /* ── STAGE ── */
+    .stage{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .slide{
+      width:1280px;height:720px;background:#fff;position:absolute;
+      transform-origin:center center;display:none;flex-direction:column;overflow:hidden;
+      border-radius:6px;box-shadow:0 30px 80px rgba(0,0,0,.5);
+    }
+    .slide.active{display:flex}
+
+    /* ── BRAND BAR ── */
+    .brandbar{
+      height:7px;flex:0 0 auto;
+      background:linear-gradient(90deg,var(--azul) 0 55%,var(--verde) 55% 80%,var(--amarelo) 80% 100%);
+    }
+
+    /* ── SLIDE HEADER ── */
+    .shead{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px 48px 10px;border-bottom:1px solid #e8edf6;flex:0 0 auto;gap:16px;
+    }
+    .shead .t .kicker{
+      display:inline-flex;align-items:center;gap:7px;
+      font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--azul);margin-bottom:4px;
+    }
+    .shead .t .kicker .kdot{width:6px;height:6px;border-radius:50%;background:var(--azul)}
+    .shead .t h2{font-size:1.5rem;font-weight:800;color:var(--azul-escuro);line-height:1}
+    .shead .t h2 span{color:var(--azul)}
+    .shead .meta{font-size:.78rem;font-weight:800;color:#33405e;white-space:nowrap}
+
+    /* ── CONTENT AREA ── */
+    .scontent{flex:1;padding:24px 48px 20px;overflow-y:auto;display:flex;flex-direction:column;gap:18px}
+
+    /* ── COVER ── */
+    .cover{
+      background:radial-gradient(900px 520px at 78% 20%,#0a3bd6,#001b86 55%,#000f44);
+      color:#fff;justify-content:center;position:relative;overflow:hidden;
+    }
+    .cover .blob{position:absolute;border-radius:40px}
+    .cover .b1{width:280px;height:280px;right:-60px;top:-60px;background:#0064f5;transform:rotate(18deg);opacity:.35}
+    .cover .b2{width:170px;height:170px;right:120px;bottom:-50px;background:var(--verde);transform:rotate(-12deg);opacity:.28}
+    .cover .b3{width:120px;height:120px;right:340px;top:60px;background:var(--amarelo);transform:rotate(24deg);opacity:.18}
+    .toprow{position:absolute;top:28px;left:70px;right:70px;display:flex;justify-content:space-between;align-items:center}
+    .ckicker{
+      display:inline-flex;align-items:center;gap:7px;
+      background:rgba(255,255,255,.1);border-radius:999px;padding:6px 14px;
+      font-size:.78rem;font-weight:700;color:#fff;
+    }
+    .cover-layout{display:flex;gap:52px;position:relative;z-index:2;height:100%;padding:70px 70px 50px}
+    .cover-left{flex:1;display:flex;flex-direction:column;justify-content:space-between}
+    .cover h1{font-size:3.6rem;font-weight:900;line-height:.98;letter-spacing:-1.5px;max-width:680px}
+    .cover h1 em{font-style:normal;color:var(--verde)}
+    .cover .sub{font-size:1.1rem;font-weight:600;color:#cfe0ff;margin-top:14px;max-width:620px;line-height:1.5}
+    .cover .chips{display:flex;gap:14px;margin-top:28px}
+    .cchip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:14px 18px}
+    .cchip b{display:block;font-size:1.9rem;font-weight:900;color:#fff;line-height:1}
+    .cchip b.g{color:var(--verde)}
+    .cchip small{font-size:.74rem;font-weight:700;color:#bcd0ff}
+    .cover-right{
+      width:340px;display:flex;flex-direction:column;justify-content:center;gap:16px;
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+      border-radius:18px;padding:24px 22px;
+    }
+    .sum-title{font-size:.9rem;font-weight:900;color:#fff;margin-bottom:6px;letter-spacing:-.3px}
+    .sum-item{font-size:.88rem;font-weight:600;color:#cfe0ff;line-height:1.6}
+    .sum-item strong{color:#fff;font-weight:900}
+    .cover-badge{
+      position:absolute;bottom:36px;right:70px;
+      font-size:.78rem;font-weight:800;color:#001b86;
+      background:var(--verde);padding:7px 16px;border-radius:999px;z-index:2;
+    }
+
+    /* ── SECTION BLOCKS ── */
+    .sec-block{
+      background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;
+      padding:20px 24px;
+    }
+    .sec-block h3{
+      font-size:1.05rem;font-weight:800;color:var(--azul-escuro);
+      margin-bottom:12px;display:flex;align-items:center;gap:10px;
+    }
+    .sec-block h3 .num{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:28px;height:28px;border-radius:50%;
+      background:var(--azul);color:#fff;font-size:.8rem;
+    }
+    .sec-block p, .sec-block ul{font-size:.88rem;line-height:1.7;color:var(--body-text)}
+    .sec-block ul{padding-left:20px;margin-top:8px}
+    .sec-block ul li{margin-bottom:6px}
+    .sec-block strong{font-weight:700;color:var(--azul-escuro)}
+    .sec-block em{font-style:normal;font-weight:600;color:var(--azul)}
+
+    /* ── SCRIPT BOX ── */
+    .script-box{
+      background:#fff;border:2px solid var(--azul);border-radius:10px;
+      padding:16px 20px;margin-top:10px;
+    }
+    .script-box .label{
+      font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--azul);margin-bottom:8px;
+    }
+    .script-box .text{
+      font-size:.9rem;line-height:1.65;color:var(--body-text);
+      font-style:italic;
+    }
+
+    /* ── TWO COLS ── */
+    .two-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+    /* ── ALERT BOX ── */
+    .alert-box{
+      background:#fef2f2;border:2px solid var(--vermelho);border-radius:10px;
+      padding:14px 18px;display:flex;align-items:flex-start;gap:12px;
+    }
+    .alert-box .icon{
+      width:24px;height:24px;border-radius:50%;background:var(--vermelho);
+      color:#fff;display:flex;align-items:center;justify-content:center;
+      font-weight:900;font-size:1rem;flex-shrink:0;
+    }
+    .alert-box .txt{font-size:.85rem;line-height:1.6;color:#7f1d1d;font-weight:600}
+
+    /* ── FLOW IMAGE ── */
+    .flow-img{
+      width:100%;border-radius:10px;border:1px solid #e2e8f0;
+      box-shadow:0 4px 12px rgba(0,0,0,.08);
+    }
+
+    /* ── PAGE NUMBER ── */
+    .pageno{
+      position:absolute;bottom:14px;right:22px;
+      font-size:.68rem;font-weight:800;color:#9aa6c0;
+    }
+
+    /* ── NAV ── */
+    .nav{
+      position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+      display:flex;gap:12px;align-items:center;z-index:100;padding:0 8px;
+    }
+    .nav button{
+      background:rgba(255,255,255,.95);border:1px solid rgba(0,0,0,.15);
+      color:#001b86;border-radius:999px;width:46px;height:46px;
+      font-size:1.25rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+      transition:.15s;box-shadow:0 10px 20px rgba(0,0,0,.12);
+    }
+    .nav button:hover{background:#fff;color:#0033b0;border-color:#0033b0}
+    .dots{display:flex;gap:8px;align-items:center}
+    .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:.15s}
+    .dot.on{background:var(--verde);width:22px;border-radius:999px}
+
+    /* ── KEYBOARD HINT ── */
+    .kb-hint{
+      position:fixed;bottom:16px;right:24px;
+      font-size:.68rem;font-weight:700;color:rgba(255,255,255,.3);
+      letter-spacing:.06em;
+    }
+  </style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- ══════════ COVER ══════════ -->
+  <section class="slide active cover" id="s0">
+    <div class="brandbar" style="position:absolute;top:0;left:0;right:0"></div>
+    <div class="toprow">
+      <span class="ckicker">Treinamento Operacional · Validação Corban</span>
+    </div>
+    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+    <div class="cover-layout">
+      <div class="cover-left">
+        <div>
+          <h1>Validação por<br><em>Videochamada</em></h1>
+          <p class="sub">Fluxo de atendimento e confirmação de contratação por vídeo-chamada — Vendas Corban.</p>
+          <div class="chips">
+            <div class="cchip"><b class="g">100%</b><small>Propostas validadas</small></div>
+            <div class="cchip"><b>5-6min</b><small>TMO esperado</small></div>
+          </div>
+        </div>
+      </div>
+      <div class="cover-right">
+        <div class="sum-title">O que você vai aprender</div>
+        <div class="sum-item"><strong>Contexto:</strong> Por que validamos via vídeo</div>
+        <div class="sum-item"><strong>Fluxo:</strong> Etapas da videochamada</div>
+        <div class="sum-item"><strong>Scripts:</strong> O que falar em cada produto</div>
+        <div class="sum-item"><strong>Antifraude:</strong> Perguntas obrigatórias</div>
+        <div class="sum-item"><strong>Sistema:</strong> Como registrar no Salesforce</div>
+      </div>
+    </div>
+    <span class="cover-badge">Junho 2026</span>
+    <span class="pageno">01 · 12</span>
+  </section>
+
+  <!-- ══════════ SLIDE 1: PROPÓSITO ══════════ -->
+  <section class="slide" id="s1">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 01</div>
+        <h2>O que esperamos <span>ensinar para você hoje?</span></h2>
+      </div>
+      <div class="meta">Propósito do Treinamento</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">🎯</span>Objetivo do Treinamento</h3>
+        <p>Capacitar operadores da AlmaViva para <strong>conduzir videochamadas de validação</strong> de propostas de crédito originadas por parceiros Corban, garantindo:</p>
+        <ul>
+          <li><strong>Confirmação de identidade</strong> do cliente</li>
+          <li><strong>Ciência sobre a operação contratada</strong></li>
+          <li><strong>Prevenção a fraudes</strong> e cobranças indevidas</li>
+          <li><strong>Atualização cadastral</strong> e oportunidade de cross-sell</li>
+        </ul>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">📋</span>O que você vai dominar</h3>
+        <p>Ao final deste treinamento, você será capaz de:</p>
+        <ul>
+          <li>Conduzir o <em>fluxo completo de validação por videochamada</em></li>
+          <li>Aplicar os <em>scripts específicos</em> para cada tipo de produto (Consignado Novo, Refin, Portabilidade)</li>
+          <li>Executar as <em>perguntas antifraude obrigatórias</em> de forma clara e assertiva</li>
+          <li>Registrar corretamente a <em>aprovação ou reprovação</em> no sistema</li>
+          <li>Oferecer <em>abertura de conta</em> como oportunidade de relacionamento</li>
+        </ul>
+      </div>
+
+      <div class="alert-box">
+        <div class="icon">!</div>
+        <div class="txt"><strong>Importante:</strong> Este treinamento é para <em>a AlmaViva</em> que farão a validação das vendas. Não é um treinamento para os parceiros Corban.</div>
+      </div>
+    </div>
+    <span class="pageno">02 · 12</span>
+  </section>
+
+  <!-- ══════════ SLIDE 2: CONTEXTO ══════════ -->
+  <section class="slide" id="s2">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 02</div>
+        <h2>Contexto e <span>Justificativa</span></h2>
+      </div>
+      <div class="meta">Por que validamos?</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">🔍</span>O Cenário Atual</h3>
+        <p>As vendas realizadas por <strong>parceiros Corban</strong> geram receio quanto a:</p>
+        <ul>
+          <li><strong>Riscos de fraudes:</strong> Cliente pode não ter ciência da operação</li>
+          <li><strong>Cobranças indevidas:</strong> Parceiro pode simular prazos incorretos</li>
+          <li><strong>Transferências irregulares:</strong> Solicitação de "devolução" de parte do valor via PIX</li>
+          <li><strong>Falta de transparência:</strong> Cliente não entende completamente as condições</li>
+        </ul>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">✅</span>A Solução: Validação por Videochamada</h3>
+        <p>Para dar mais <em>segurança à operação</em> e <em>encorajar os parceiros</em> a produzirem mais, o Agibank implementou a <strong>Validação por Chamada de Vídeo para 100% das propostas Corban</strong>.</p>
+        <p style="margin-top:12px"><strong>Objetivos:</strong></p>
+        <ul>
+          <li>Confirmar a <em>ciência do cliente</em> sobre a operação</li>
+          <li>Barrar qualquer <em>tentativa de repasse de valores</em> a terceiros</li>
+          <li>Garantir a <em>legitimidade</em> da contratação</li>
+          <li>Proteger o cliente e o banco</li>
+        </ul>
+      </div>
+
+      <div class="alert-box">
+        <div class="icon">⚠</div>
+        <div class="txt"><strong>Atenção:</strong> O Agibank <em>não autoriza</em> que correspondentes, consultores ou qualquer intermediário recebam valores do cliente relacionados ao empréstimo. Qualquer solicitação nesse sentido deve ser <strong>imediatamente bloqueada</strong>.</div>
+      </div>
+    </div>
+    <span class="pageno">03 · 12</span>
+  </section>
+
+  <!-- ══════════ SLIDE 3: PRODUTOS ══════════ -->
+  <section class="slide" id="s3">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 03</div>
+        <h2>Produtos que <span>Validamos</span></h2>
+      </div>
+      <div class="meta">Escopo Corban</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">📦</span>Produtos no Escopo (Foco INSS)</h3>
+        <p>Você validará as seguintes operações vendidas pelos parceiros Corban:</p>
+      </div>
+
+      <div class="two-cols">
+        <div class="sec-block">
+          <h3>✅ Consignado Novo</h3>
+          <p>Empréstimo novo vinculado ao benefício INSS do cliente.</p>
+        </div>
+        <div class="sec-block">
+          <h3>✅ Refinanciamento INSS</h3>
+          <p>Cliente já possui contrato com Agibank e solicita refinanciamento.</p>
+        </div>
+        <div class="sec-block">
+          <h3>✅ Portabilidade INSS</h3>
+          <p>Trazer contrato(s) de outro banco para o Agibank.</p>
+        </div>
+        <div class="sec-block">
+          <h3>✅ Portabilidade + Refin INSS</h3>
+          <p>Portabilidade com valor adicional liberado ao cliente.</p>
+        </div>
+        <div class="sec-block">
+          <h3>✅ Refin N para 1</h3>
+          <p>Unificação de múltiplas parcelas em um único contrato.</p>
+        </div>
+        <div class="sec-block" style="opacity:.5">
+          <h3>❌ Crédito Pessoal Débito em Conta</h3>
+          <p><em>Descartado do escopo atual</em> — não liberado para Corban.</p>
+        </div>
+      </div>
+
+      <div class="alert-box">
+        <div class="icon">💡</div>
+        <div class="txt"><strong>Dica:</strong> Cada tipo de produto tem um <em>script específico</em> que você aprenderá nos próximos slides. O importante é entender a diferença entre eles para conduzir a validação corretamente.</div>
+      </div>
+    </div>
+    <span class="pageno">04 · 12</span>
+  </section>
+
+  <!-- ══════════ SLIDE 4: FLUXO GERAL ══════════ -->
+  <section class="slide" id="s4">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 04</div>
+        <h2>Fluxo Operacional <span>Completo</span></h2>
+      </div>
+      <div class="meta">Visão Geral</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">🔄</span>Jornada da Videochamada</h3>
+        <p>Veja abaixo o fluxo completo desde o recebimento da proposta até a finalização:</p>
+      </div>
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1180' height='420' viewBox='0 0 1180 420'%3E%3Crect width='1180' height='420' fill='%23f8fafc'/%3E%3Ctext x='590' y='210' font-family='Inter' font-size='18' fill='%236b7a99' text-anchor='middle'%3EFluxograma da Videochamada%3C/text%3E%3Ctext x='590' y='240' font-family='Inter' font-size='14' fill='%239ca3af' text-anchor='middle'%3E(Imagem do fluxo será inserida aqui)%3C/text%3E%3C/svg%3E" class="flow-img" alt="https://i.postimg.cc/VL48nZYH/9d3087b5-eb34-43fd-870a-1e2d646b0077.jpg"/>
+      <div class="sec-block" style="margin-top:12px">
+        <h3><span class="num">📊</span>Etapas Principais</h3>
+        <ul>
+          <li><strong>1. Recebimento da Proposta:</strong> Proposta aprovada cai na fila de videochamada</li>
+          <li><strong>2. Início da Videochamada:</strong> Cliente recebe SMS com link e entra na fila</li>
+          <li><strong>3. Validação de Identidade:</strong> Confirmar dados pessoais e documento</li>
+          <li><strong>4. Confirmação da Solicitação:</strong> Cliente confirma que solicitou o crédito</li>
+          <li><strong>5. Validação Antifraude:</strong> Perguntas obrigatórias sobre transferências</li>
+          <li><strong>6. Declaração Formal:</strong> Cliente declara em vídeo que não devolverá valores</li>
+          <li><strong>7. Atualização Cadastral:</strong> Confirmar e atualizar dados no sistema</li>
+          <li><strong>8. Validação do Produto:</strong> Confirmar valores, prazos e condições</li>
+          <li><strong>9. Campanha Comercial:</strong> Oferta de abertura de conta (MGM)</li>
+          <li><strong>10. Encerramento:</strong> Aprovar/reprovar e registrar no Salesforce</li>
+        </ul>
+      </div>
+    </div>
+    <span class="pageno">05 · 12</span>
+  </section>
+
+  <!-- ══════════ SLIDE 5: SCRIPT BASE ══════════ -->
+  <section class="slide" id="s5">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 05</div>
+        <h2>Script Base <span>(Usado em Todos os Produtos)</span></h2>
+      </div>
+      <div class="meta">Abertura Padrão</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">1️⃣</span>Abertura e Identificação</h3>
+        <div class="script-box">
+          <div class="label">FALE EXATAMENTE ASSIM:</div>
+          <div class="text">
+            "Olá, Sr(a). [NOME DO CLIENTE], tudo bem?<br><br>
+            Meu nome é [NOME DA OPERADORA] e eu falo do Agibank.<br><br>
+            Estamos realizando esta videochamada para confirmar algumas informações sobre a proposta de crédito que foi solicitada em seu nome através de um correspondente bancário. Essa confirmação é obrigatória para garantir a sua segurança e evitar fraudes.<br><br>
+            A ligação está sendo gravada. O(a) senhor(a) concorda em continuar?"
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">2️⃣</span>Confirmação de Identidade</h3>
+        <div class="script-box">
+          <div class="label">CONFIRME OS DADOS:</div>
+          <div class="text">
+            "Para sua segurança, preciso confirmar alguns dados.<br>
+            Por favor confirme para mim:<br>
+            • Seu nome completo<br>
+            • Seu CPF<br>
+            • Sua data de nascimento<br>
+            • Nome da sua mãe<br><br>
+            Agora peço por gentileza que mostre seu documento com foto na câmera."
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">3️⃣</span>Confirmação de Solicitação</h3>
+        <div class="script-box">
+          <div class="label">PERGUNTE:</div>
+          <div class="text">
+            "O(a) senhor(a) confirma que solicitou um empréstimo através de um correspondente do Agibank?"<br><br>
+            "Esse correspondente entrou em contato com o(a) senhor(a) por telefone, WhatsApp ou presencialmente?"
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="pageno">06 · 12</span>
+  </section>
+
+  <!-- ══════════ SLIDE 6: ANTIFRAUDE ══════════ -->
+  <section class="slide" id="s6">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 06</div>
+        <h2>Validação <span>Antifraude</span></h2>
+      </div>
+      <div class="meta">Etapa Obrigatória</div>
+    </div>
+    <div class="scontent">
+      <div class="alert-box">
+        <div class="icon">🚨</div>
+        <div class="txt"><strong>ATENÇÃO:</strong> Esta é a etapa <em>mais importante</em> da validação. Você <strong>DEVE</strong> fazer todas as perguntas abaixo de forma clara e aguardar a resposta do cliente.</div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">⚠️</span>Introdução Obrigatória</h3>
+        <div class="script-box">
+          <div class="label">FALE PRIMEIRO:</div>
+          <div class="text">
+            "Agora preciso fazer algumas perguntas importantes para garantir que nenhuma prática irregular tenha ocorrido."<br><br>
+            "É importante informar que o Agibank não autoriza que correspondentes, consultores ou qualquer intermediário recebam valores do cliente relacionados ao empréstimo."
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">1️⃣</span>Pergunta 1 (4 formas diferentes)</h3>
+        <div class="script-box">
+          <div class="label">PERGUNTE:</div>
+          <div class="text">
+            "Em algum momento foi combinado com o(a) senhor(a) que, após receber o valor do empréstimo, o(a) senhor(a) teria que:<br>
+            • transferir dinheiro para o consultor ou vendedor<br>
+            • fazer um PIX para qualquer outra pessoa<br>
+            • devolver parte do valor do empréstimo<br>
+            • ou pagar alguma taxa, comissão ou agradecimento?"
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">2️⃣</span>Pergunta 2</h3>
+        <div class="script-box">
+          <div class="label">PERGUNTE:</div>
+          <div class="text">
+            "Alguma pessoa orientou o(a) senhor(a) a não comentar com o banco sobre algum pagamento, transferência ou devolução de valores?"
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">3️⃣</span>Pergunta 3 — Confirmação Formal</h3>
+        <div class="script-box">
+          <div class="label">CONFIRME:</div>
+          <div class="text">
+            "Então, apenas para confirmar: todo o valor do empréstimo ficará integralmente com o(a) senhor(a) e o(a) senhor(a) não realizará nenhum pagamento ou transferência para o consultor ou terceiros, correto?"
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="pageno">07 · 12</span>
+  </section>
+
+  <!-- ══════════ SLIDE 7: DECLARAÇÃO ══════════ -->
+  <section class="slide" id="s7">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 07</div>
+        <h2>Declaração Formal <span>do Cliente</span></h2>
+      </div>
+      <div class="meta">Gravação Obrigatória</div>
+    </div>
+    <div class="scontent">
+      <div class="alert-box">
+        <div class="icon">🎥</div>
+        <div class="txt"><strong>IMPORTANTE:</strong> O cliente <em>DEVE</em> falar a declaração completa em vídeo. Não aceite apenas "sim" ou "ok". A declaração precisa ser <strong>clara e completa</strong>.</div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">📝</span>Declaração do Cliente</h3>
+        <div class="script-box">
+          <div class="label">SOLICITE:</div>
+          <div class="text">
+            "Peço por gentileza que o(a) senhor(a) confirme dizendo a seguinte frase:<br><br>
+            <strong>'Eu declaro que não fui solicitado a devolver ou transferir nenhum valor deste empréstimo para terceiros.'</strong>"
+          </div>
+        </div>
+        <p style="margin-top:12px;font-size:.88rem;color:var(--body-text)">
+          <strong>O que fazer se o cliente não entender:</strong><br>
+          • Repita a frase devagar<br>
+          • Explique que é apenas uma confirmação de segurança<br>
+          • Se necessário, peça que repita palavra por palavra
+        </p>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">🛡️</span>Reforço Institucional</h3>
+        <div class="script-box">
+          <div class="label">ENCERRE COM:</div>
+          <div class="text">
+            "Caso alguém solicite qualquer valor após a liberação do crédito, orientamos que o(a) senhor(a) não realize o pagamento e informe imediatamente o Agibank, pois essa prática é irregular."
+          </div>
+        </div>
+      </div>
+
+      <div class="alert-box" style="background:#fef2f2;border-color:var(--vermelho)">
+        <div class="icon">❌</div>
+        <div class="txt"><strong>SE O CLIENTE CONFIRMAR IRREGULARIDADE:</strong><br>
+        • <strong>Bloqueie a operação imediatamente</strong><br>
+        • Registre a ocorrência no sistema<br>
+        • Encaminhe para análise de fraude<br>
+        • <em>NÃO continue a validação</em></div>
+      </div>
+    </div>
+    <span class="pageno">08 · 12</span>
+  </section>
+
+  <!-- ══════════ SLIDE 8: ATUALIZAÇÃO CADASTRAL ══════════ -->
+  <section class="slide" id="s8">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 08</div>
+        <h2>Atualização <span>Cadastral</span></h2>
+      </div>
+      <div class="meta">Dados do Cliente</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">📋</span>Atualização Cadastral</h3>
+        <div class="script-box">
+          <div class="label">FALE:</div>
+          <div class="text">
+            "Antes de seguirmos, vamos confirmar seus dados de cadastro para mantermos suas informações atualizadas."
+          </div>
+        </div>
+        <p style="margin-top:12px;font-size:.88rem;color:var(--body-text)"><strong>Confirme os seguintes dados:</strong></p>
+        <ul style="padding-left:20px;margin-top:8px;font-size:.88rem;line-height:1.7">
+          <li>Telefone principal</li>
+          <li>Telefone adicional</li>
+          <li>Endereço completo (rua, número, bairro, cidade, CEP)</li>
+          <li>Estado civil</li>
+          <li>E-mail (se possuir)</li>
+        </ul>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">🎁</span>Mensagem Institucional / Campanha MGM</h3>
+        <div class="script-box">
+          <div class="label">OFEREÇA:</div>
+          <div class="text">
+            "Sr(a). [NOME], aproveitando nosso contato: o Agibank está com uma campanha especial. Se o(a) senhor(a) for até uma loja do Agibank, pode receber até R$100 de cashback.<br><br>
+            Funciona assim:<br>
+            • R$ 50 ao abrir e ativar sua conta;<br>
+            • +R$50 ao trazer seu benefício ou salário para o Agibank após o primeiro recebimento.<br><br>
+            Se tiver interesse, qualquer loja Agibank pode orientar o(a) senhor(a)."
+          </div>
+        </div>
+      </div>
+
+      <div class="alert-box" style="background:#f0fdf4;border-color:var(--verde)">
+        <div class="icon">💡</div>
+        <div class="txt"><strong>Dica:</strong> Esta é uma oportunidade de <em>cross-sell</em> e de fortalecer o relacionamento com o cliente. Seja natural e entusiasta ao apresentar a campanha.</div>
+      </div>
+    </div>
+    <span class="pageno">09 · 12</span>
+  </section>
+
+  <!-- ══════════ SLIDE 9: VALIDAÇÃO PRODUTO ══════════ -->
+  <section class="slide" id="s9">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 09</div>
+        <h2>Validação do <span>Produto</span></h2>
+      </div>
+      <div class="meta">Confirmação de Valores</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">💰</span>Consignado Novo INSS</h3>
+        <div class="script-box">
+          <div class="label">CONFIRME:</div>
+          <div class="text">
+            "Agora vou confirmar os dados do empréstimo solicitado.<br><br>
+            O(a) senhor(a) solicitou um empréstimo consignado novo vinculado ao seu(s) benefício(s) do INSS, correto?"<br><br>
+            • Valor solicitado: "O valor do empréstimo é de aproximadamente R$ [valor], correto?"<br>
+            • Quantidade de parcelas: "[X] parcelas"<br>
+            • Valor aproximado da parcela: "aproximadamente R$ [valor] por mês"<br>
+            • Forma de pagamento: "desconto direto no benefício do INSS"
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">🔄</span>Portabilidade com Refinanciamento INSS</h3>
+        <div class="script-box">
+          <div class="label">EXPLIQUE:</div>
+          <div class="text">
+            "O(a) senhor(a) possui empréstimo(s) consignado(s) em outro(s) banco(s) e solicitou a portabilidade desse(s) contrato(s) para o Agibank, correto?"<br><br>
+            "Na portabilidade, o Agibank quita seu(s) contrato(s) atual(is) no outro banco e assume a(s) dívida(s)."<br><br>
+            "Além da portabilidade, foi solicitado também refinanciamento(s), onde o(s) contrato(s) é(serão) recalculado(s) e o(a) senhor(a) recebe valor adicional. O(a) senhor(a) está ciente disso?"
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">📊</span>Refinanciamento de Carteira INSS</h3>
+        <div class="script-box">
+          <div class="label">EXPLIQUE:</div>
+          <div class="text">
+            "O(a) senhor(a) já possui um empréstimo consignado com o Agibank e solicitou um refinanciamento do contrato, correto?"<br><br>
+            "No refinanciamento, o contrato atual é recalculado. Parte do saldo devedor é quitada e o restante gera um novo contrato, podendo liberar um valor adicional para o(a) senhor(a)."
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="pageno">10 · 12</span>
+  </section>
+
+  <!-- ══════════ SLIDE 10: PERGUNTAS SEGURANÇA ══════════ -->
+  <section class="slide" id="s10">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 10</div>
+        <h2>Perguntas de <span>Segurança</span></h2>
+      </div>
+      <div class="meta">Validação Final</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">✅</span>Perguntas de Segurança (Para Todos os Produtos)</h3>
+        <div class="script-box">
+          <div class="label">PERGUNTE SEMPRE:</div>
+          <div class="text">
+            "O(a) senhor(a) entende que o valor das parcelas será descontado diretamente do seu benefício mensal do INSS?"<br><br>
+            "O(a) senhor(a) confirma que está contratando este empréstimo por vontade própria?"
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">🔁</span>Reforço Antifraude (Sempre ao Final)</h3>
+        <div class="script-box">
+          <div class="label">REFORCE:</div>
+          <div class="text">
+            "Reforçando: ninguém do Agibank pode pedir devolução de valores do empréstimo. Caso isso aconteça, pedimos que nos informe."
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">🏁</span>Encerramento Padrão</h3>
+        <div class="script-box">
+          <div class="label">FINALIZE COM:</div>
+          <div class="text">
+            "Perfeito. Suas confirmações foram registradas e sua proposta seguirá para análise e finalização."
+          </div>
+        </div>
+      </div>
+
+      <div class="alert-box" style="background:#f0fdf4;border-color:var(--verde)">
+        <div class="icon">✓</div>
+        <div class="txt"><strong>Após o encerramento:</strong><br>
+        • Registre a aprovação no Salesforce<br>
+        • Preencha todos os campos obrigatórios<br>
+        • Confirme que a gravação foi salva corretamente</div>
+      </div>
+    </div>
+    <span class="pageno">11 · 12</span>
+  </section>
+
+  <!-- ══════════ SLIDE 11: TMO E PERFORMANCE ══════════ -->
+  <section class="slide" id="s11">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 11</div>
+        <h2>TMO e <span>Performance</span></h2>
+      </div>
+      <div class="meta">Métricas Esperadas</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">⏱️</span>Tempo Médio Operacional (TMO)</h3>
+        <p>Veja abaixo os tempos esperados para cada etapa da confirmação:</p>
+      </div>
+
+      <div class="two-cols">
+        <div class="sec-block">
+          <h3>Abertura e consentimento</h3>
+          <p><strong>30 a 45 segundos</strong></p>
+        </div>
+        <div class="sec-block">
+          <h3>Confirmação de identidade + documento</h3>
+          <p><strong>45 a 60 segundos</strong></p>
+        </div>
+        <div class="sec-block">
+          <h3>Confirmação da solicitação</h3>
+          <p><strong>20 a 30 segundos</strong></p>
+        </div>
+        <div class="sec-block">
+          <h3>Antifraude completa</h3>
+          <p><strong>1min30s a 2min</strong></p>
+        </div>
+        <div class="sec-block">
+          <h3>Atualização cadastral</h3>
+          <p><strong>1min a 2min</strong></p>
+        </div>
+        <div class="sec-block">
+          <h3>Campanha institucional</h3>
+          <p><strong>20 a 30 segundos</strong></p>
+        </div>
+        <div class="sec-block">
+          <h3>Validação do produto</h3>
+          <p><strong>45s a 1min30s</strong></p>
+        </div>
+        <div class="sec-block">
+          <h3>Encerramento</h3>
+          <p><strong>15 a 20 segundos</strong></p>
+        </div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">📊</span>Tempo Total Estimado</h3>
+        <ul>
+          <li><strong>Cliente objetivo e sem divergências:</strong> 5 a 6 minutos</li>
+          <li><strong>Cliente idoso ou com dificuldade:</strong> 7 a 9 minutos</li>
+          <li><strong>Com necessidade de repetir informações:</strong> 10 a 12 minutos</li>
+        </ul>
+        <p style="margin-top:12px;font-size:.88rem;color:var(--body-text)">
+          <strong>Meta recomendada:</strong> TMO entre <em>5 e 6 minutos</em>. Abaixo disso, existe risco de perda de qualidade na validação antifraude.
+        </p>
+      </div>
+    </div>
+    <span class="pageno">12 · 12</span>
+  </section>
+
+  <!-- ══════════ SLIDE 12: ENCERRAMENTO ══════════ -->
+  <section class="slide" id="s12">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Encerramento</div>
+        <h2>Você está <span>Pronto!</span></h2>
+      </div>
+      <div class="meta">Próximos Passos</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3><span class="num">✅</span>O que você aprendeu hoje</h3>
+        <ul>
+          <li><strong>Contexto:</strong> Por que validamos 100% das propostas Corban via videochamada</li>
+          <li><strong>Produtos:</strong> Consignado Novo, Refin, Portabilidade e Portabilidade + Refin</li>
+          <li><strong>Fluxo:</strong> 10 etapas desde a abertura até o encerramento</li>
+          <li><strong>Scripts:</strong> O que falar em cada etapa de forma clara e objetiva</li>
+          <li><strong>Antifraude:</strong> Perguntas obrigatórias e declaração formal do cliente</li>
+          <li><strong>Cross-sell:</strong> Como oferecer abertura de conta (MGM) de forma natural</li>
+          <li><strong>Performance:</strong> TMO esperado de 5 a 6 minutos</li>
+        </ul>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">🎯</span>Próximos Passos</h3>
+        <ul>
+          <li><strong>Prática:</strong> Realize simulações com o time de qualidade</li>
+          <li><strong>Sistema:</strong> Familiarize-se com o Salesforce e o registro de validações</li>
+          <li><strong>Dúvidas:</strong> Tire todas as dúvidas com seu supervisor antes de iniciar</li>
+          <li><strong>Go-Live:</strong> A partir de 19/06/2026, você estará apto a atender</li>
+        </ul>
+      </div>
+
+      <div class="alert-box" style="background:#f0fdf4;border-color:var(--verde)">
+        <div class="icon">💪</div>
+        <div class="txt"><strong>Lembre-se:</strong> Você é a <em>primeira linha de defesa</em> contra fraudes e a <em>voz do Agibank</em> na validação. Seja claro, objetivo e sempre priorize a segurança do cliente.</div>
+      </div>
+
+      <div class="sec-block" style="text-align:center;padding:32px 24px">
+        <h3 style="font-size:1.8rem;color:var(--azul);margin-bottom:16px">Parabéns! 🎉</h3>
+        <p style="font-size:1.1rem;color:var(--body-text);font-weight:600">Você concluiu o treinamento de Validação por Videochamada.</p>
+        <p style="font-size:.9rem;color:var(--gray-text);margin-top:8px">Agora é hora de colocar em prática!</p>
+      </div>
+    </div>
+    <span class="pageno">13 · 12</span>
+  </section>
+
+</div><!-- end stage -->
+
+<!-- NAV -->
+<div class="nav">
+  <button id="prev">‹</button>
+  <div class="dots">
+    <span class="dot on" data-i="0"></span>
+    <span class="dot" data-i="1"></span>
+    <span class="dot" data-i="2"></span>
+    <span class="dot" data-i="3"></span>
+    <span class="dot" data-i="4"></span>
+    <span class="dot" data-i="5"></span>
+    <span class="dot" data-i="6"></span>
+    <span class="dot" data-i="7"></span>
+    <span class="dot" data-i="8"></span>
+    <span class="dot" data-i="9"></span>
+    <span class="dot" data-i="10"></span>
+    <span class="dot" data-i="11"></span>
+    <span class="dot" data-i="12"></span>
+  </div>
+  <button id="next">›</button>
+</div>
+<div class="kb-hint">← → NAVEGAR</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const dots=[...document.querySelectorAll('.dot')];
+  let cur=0;
+  function fit(){
+    const s=Math.min(window.innerWidth/1280,window.innerHeight/720);
+    slides.forEach(el=>el.style.transform=`scale(${s})`);
+  }
+  function show(i){
+    cur=(i+slides.length)%slides.length;
+    slides.forEach((el,k)=>el.classList.toggle('active',k===cur));
+    dots.forEach((d,k)=>d.classList.toggle('on',k===cur));
+  }
+  document.getElementById('next').onclick=()=>show(cur+1);
+  document.getElementById('prev').onclick=()=>show(cur-1);
+  dots.forEach(d=>d.onclick=()=>show(+d.dataset.i));
+  window.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' ')show(cur+1);
+    if(e.key==='ArrowLeft')show(cur-1);
+  });
+  window.addEventListener('resize',fit);
+  fit();show(0);
+</script>
+</body>
+</html>
