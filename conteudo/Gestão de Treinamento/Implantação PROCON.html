@@ -1,0 +1,1061 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Treinamento · Atendimento PROCON</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --azul: #0066FF; --azul-escuro: #000f44; --verde: #4CAF50; --amarelo: #FFC107;
+      --roxo: #764ba2; --vermelho: #F44336; --laranja: #FF6B35;
+      --gray-3: #d1daea; --gray-text: #6b7a99; --body-text: #1a2340;
+    }
+    *,*::before,*::after {box-sizing:border-box;margin:0;padding:0}
+    body {
+      font-family:'Inter',sans-serif;
+      background:radial-gradient(1200px 700px at 50% -10%,#0a1c52,#04102f 60%,#020a22);
+      color:var(--azul-escuro);overflow:hidden;height:100vh;
+    }
+
+    /* ── STAGE ── */
+    .stage {width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .slide {
+      width:1280px;height:720px;background:#fff;position:absolute;
+      transform-origin:center center;display:none;flex-direction:column;overflow:hidden;
+      border-radius:6px;box-shadow:0 30px 80px rgba(0,0,0,.5);
+      transition:transform 0.3s ease;
+    }
+    .slide.active {display:flex}
+
+    /* ── BRAND BAR ── */
+    .brandbar {
+      height:7px;flex:0 0 auto;
+      background:linear-gradient(90deg,var(--azul) 0 55%,var(--verde) 55% 80%,var(--amarelo) 80% 100%);
+    }
+
+    /* ── SLIDE HEADER ── */
+    .shead {
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px 48px 10px;border-bottom:1px solid #e8edf6;flex:0 0 auto;gap:16px;
+    }
+    .shead .t .kicker {
+      display:inline-flex;align-items:center;gap:7px;
+      font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--azul);margin-bottom:4px;
+    }
+    .shead .t .kicker .kdot {width:6px;height:6px;border-radius:50%;background:var(--azul)}
+    .shead .t h2 {font-size:1.5rem;font-weight:800;color:var(--azul-escuro);line-height:1}
+    .shead .t h2 span {color:var(--azul)}
+    .shead .meta {font-size:.78rem;font-weight:800;color:#33405e;white-space:nowrap}
+
+    /* ── CONTENT AREA ── */
+    .scontent {flex:1;padding:24px 48px 40px;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+    
+    /* Scrollbar */
+    .scontent::-webkit-scrollbar {width: 10px;}
+    .scontent::-webkit-scrollbar-track {background: #f1f5f9;}
+    .scontent::-webkit-scrollbar-thumb {background: #cbd5e1; border-radius: 5px;}
+    .scontent::-webkit-scrollbar-thumb:hover {background: #94a3b8;}
+
+    /* ── COVER ── */
+    .cover {
+      background:radial-gradient(900px 520px at 78% 20%,#0066FF,#001b86 55%,#000f44);
+      color:#fff;justify-content:center;position:relative;overflow:hidden;
+    }
+    .cover .blob {position:absolute;border-radius:40px}
+    .cover .b1 {width:280px;height:280px;right:-60px;top:-60px;background:#0064f5;transform:rotate(18deg);opacity:.35}
+    .cover .b2 {width:170px;height:170px;right:120px;bottom:-50px;background:var(--verde);transform:rotate(-12deg);opacity:.28}
+    .cover .b3 {width:120px;height:120px;right:340px;top:60px;background:var(--amarelo);transform:rotate(24deg);opacity:.18}
+    .toprow {position:absolute;top:28px;left:70px;right:70px;display:flex;justify-content:space-between;align-items:center}
+    .ckicker {
+      display:inline-flex;align-items:center;gap:7px;
+      background:rgba(255,255,255,.1);border-radius:999px;padding:6px 14px;
+      font-size:.78rem;font-weight:700;color:#fff;
+    }
+    .cover-layout {display:flex;gap:52px;position:relative;z-index:2;height:100%;padding:70px 70px 50px}
+    .cover-left {flex:1;display:flex;flex-direction:column;justify-content:space-between}
+    .cover h1 {font-size:3.6rem;font-weight:900;line-height:.98;letter-spacing:-1.5px;max-width:680px}
+    .cover h1 em {font-style:normal;color:var(--verde)}
+    .cover .sub {font-size:1.1rem;font-weight:600;color:#cfe0ff;margin-top:14px;max-width:620px;line-height:1.5}
+    .cover .chips {display:flex;gap:14px;margin-top:28px;flex-wrap:wrap}
+    .cchip {background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:14px 18px}
+    .cchip b {display:block;font-size:1.9rem;font-weight:900;color:#fff;line-height:1}
+    .cchip b.g {color:var(--verde)}
+    .cchip small {font-size:.74rem;font-weight:700;color:#bcd0ff}
+    .cover-right {
+      width:340px;display:flex;flex-direction:column;justify-content:center;gap:16px;
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+      border-radius:18px;padding:24px 22px;
+    }
+    .sum-title {font-size:.9rem;font-weight:900;color:#fff;margin-bottom:6px;letter-spacing:-.3px}
+    .sum-item {font-size:.88rem;font-weight:600;color:#cfe0ff;line-height:1.6}
+    .sum-item strong {color:#fff;font-weight:900}
+    .cover-badge {
+      position:absolute;bottom:36px;right:70px;
+      font-size:.78rem;font-weight:800;color:#001b86;
+      background:var(--verde);padding:7px 16px;border-radius:999px;z-index:2;
+    }
+
+    /* ── SECTION BLOCKS ── */
+    .sec-block {
+      background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;
+      padding:20px 24px;
+    }
+    .sec-block h3 {
+      font-size:1.05rem;font-weight:800;color:var(--azul-escuro);
+      margin-bottom:12px;display:flex;align-items:center;gap:10px;
+    }
+    .sec-block h3 .num {
+      display:inline-flex;align-items:center;justify-content:center;
+      width:28px;height:28px;border-radius:50%;
+      background:var(--azul);color:#fff;font-size:.8rem;
+    }
+    .sec-block p, .sec-block ul, .sec-block ol {font-size:.88rem;line-height:1.7;color:var(--body-text)}
+    .sec-block ul, .sec-block ol {padding-left:20px;margin-top:8px}
+    .sec-block ul li, .sec-block ol li {margin-bottom:6px}
+    .sec-block strong {font-weight:700;color:var(--azul-escuro)}
+    .sec-block em {font-style:normal;font-weight:600;color:var(--azul)}
+
+    /* ── SCRIPT BOX ── */
+    .script-box {
+      background:#1e1e1e;border-radius:8px;
+      padding:16px 20px;margin-top:10px;color:#d4d4d4;
+      font-family:'Courier New', monospace; font-size:0.85rem; white-space:pre-wrap;
+    }
+
+    /* ── GRIDS ── */
+    .two-cols {display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .three-cols {display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+
+    /* ── ALERT BOX ── */
+    .alert-box {
+      background:#fef2f2;border:2px solid var(--vermelho);border-radius:10px;
+      padding:14px 18px;display:flex;align-items:flex-start;gap:12px; margin-bottom: 10px;
+    }
+    .alert-box.info {background:#e3f2fd;border-color:var(--azul);}
+    .alert-box.info .icon {background:var(--azul);}
+    .alert-box.info .txt {color:#0d47a1;}
+    
+    .alert-box.success {background:#e8f5e9;border-color:var(--verde);}
+    .alert-box.success .icon {background:var(--verde);}
+    .alert-box.success .txt {color:#1b5e20;}
+
+    .alert-box.warning {background:#fff3e0;border-color:var(--amarelo);}
+    .alert-box.warning .icon {background:var(--amarelo); color:#333;}
+    .alert-box.warning .txt {color:#e65100;}
+    
+    .alert-box .icon {
+      width:24px;height:24px;border-radius:50%;background:var(--vermelho);
+      color:#fff;display:flex;align-items:center;justify-content:center;
+      font-weight:900;font-size:1rem;flex-shrink:0;
+    }
+    .alert-box .txt {font-size:.88rem;line-height:1.6;color:#7f1d1d;font-weight:500}
+    .alert-box .txt strong {font-weight:800;}
+
+    /* ── ACCORDION (Details) - FIXED ── */
+    details { 
+      background: #fff; 
+      border: 2px solid var(--azul); 
+      border-radius: 10px; 
+      margin-bottom: 12px; 
+      overflow: visible;
+      box-shadow: 0 2px 8px rgba(0,100,245,0.1); 
+    }
+    
+    summary { 
+      background: var(--azul); 
+      color: #fff; 
+      padding: 16px 24px; 
+      font-weight: 700; 
+      font-size: 0.95rem;
+      cursor: pointer; 
+      list-style: none; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      user-select: none;
+      border-radius: 8px;
+      transition: background 0.2s ease;
+    }
+    
+    summary:hover {
+      background: #0052cc;
+    }
+    
+    summary::-webkit-details-marker { 
+      display: none; 
+    }
+    
+    summary::after { 
+      content: '▼'; 
+      font-size: 0.75em;
+      transition: transform 0.3s ease;
+    }
+    
+    details[open] summary::after { 
+      transform: rotate(-180deg);
+    }
+    
+    details[open] summary { 
+      background: #0052cc;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    
+    .details-body { 
+      padding: 20px 24px; 
+      font-size: 0.88rem; 
+      color: var(--body-text); 
+      background: #fff; 
+      max-height: none;
+      overflow: visible;
+      animation: slideDown 0.3s ease;
+    }
+    
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .details-body h4 { 
+      color: var(--azul); 
+      margin-top: 15px; 
+      margin-bottom: 8px; 
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    
+    .details-body p {
+      margin-bottom: 10px;
+      line-height: 1.7;
+    }
+    
+    .details-body ul {
+      padding-left: 20px;
+      margin-top: 8px;
+    }
+    
+    .details-body ul li {
+      margin-bottom: 6px;
+    }
+
+    /* ── MOTIVO CARD ── */
+    .motivo-card {
+      background:#fff;border:2px solid #e2e8f0;border-radius:12px;
+      padding:18px 22px;display:flex;align-items:center;justify-content:space-between;
+      transition:.15s;
+    }
+    .motivo-card:hover {border-color:var(--azul);box-shadow:0 4px 12px rgba(0,100,245,.1)}
+    .motivo-info {flex:1}
+    .motivo-info h4 {font-size:.95rem;font-weight:800;color:var(--azul-escuro);margin-bottom:4px}
+    .motivo-info p {font-size:.78rem;color:var(--gray-text);font-weight:600}
+    .motivo-number {
+      width:80px;text-align:right;
+    }
+    .motivo-number .big {font-size:2rem;font-weight:900;color:var(--azul);line-height:1}
+    .motivo-number .small {font-size:.7rem;color:var(--gray-text);font-weight:700;margin-top:2px}
+
+    /* ── QUIZ ── */
+    .quiz-q { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+    .quiz-q h4 { color: var(--azul-escuro); margin-bottom: 15px; font-size: 1rem; }
+    .quiz-opt { display: block; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; background:#f8fafc; font-size:0.9rem;}
+    .quiz-opt:hover { border-color: var(--azul); background: #f0f7ff; }
+    .quiz-opt input { margin-right: 12px; }
+    .quiz-opt.correct { border-color: var(--verde); background: #e8f5e9; }
+    .quiz-opt.incorrect { border-color: var(--vermelho); background: #ffebee; }
+    .btn { background: var(--azul); color: #fff; border: none; padding: 14px 30px; border-radius: 25px; font-weight: 700; cursor: pointer; margin-top: 10px; transition:0.3s; font-size: 1rem;}
+    .btn:hover { background: #0052cc; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    .quiz-result { margin-top: 20px; padding: 20px; border-radius: 10px; text-align: center; font-size: 1.1rem; font-weight: 700; display:none;}
+    .quiz-result.passed { background: #e8f5e9; color: #2e7d32; display:block;}
+    .quiz-result.failed { background: #ffebee; color: #c62828; display:block;}
+
+    /* ── CHECKLIST ITEMS ── */
+    .chk-list { list-style: none; padding:0; }
+    .chk-list li { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;}
+    .chk-list li::before { content: "✓"; background: var(--verde); color: #fff; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; flex-shrink: 0;}
+
+    /* ── LEARNING BOX ── */
+    .learning-box {
+      background:linear-gradient(135deg, var(--azul) 0%, #0052cc 100%);
+      border-radius:12px;padding:24px 28px;color:#fff;
+    }
+    .learning-box h3 {font-size:1.2rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+    .learning-box h3::before {content:'💡';font-size:1.5rem}
+    .learning-box ul {list-style:none;padding:0}
+    .learning-box li {
+      padding:12px 16px;margin-bottom:10px;background:rgba(255,255,255,.1);
+      border-radius:8px;font-size:.9rem;line-height:1.6;
+      border-left:4px solid var(--verde);
+    }
+    .learning-box li strong {color:var(--amarelo)}
+
+    /* ── PAGE NUMBER ── */
+    .pageno { position:absolute;bottom:14px;right:22px;font-size:.68rem;font-weight:800;color:#9aa6c0; }
+
+    /* ── NAV ── */
+    .nav {
+      position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+      display:flex;gap:12px;align-items:center;z-index:100;padding:0 8px;
+    }
+    .nav button {
+      background:rgba(255,255,255,.95);border:1px solid rgba(0,0,0,.15);
+      color:#001b86;border-radius:999px;width:46px;height:46px;
+      font-size:1.25rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+      transition:.15s;box-shadow:0 10px 20px rgba(0,0,0,.12);
+    }
+    .nav button:hover {background:#fff;color:#0033b0;border-color:#0033b0}
+    .dots {display:flex;gap:8px;align-items:center}
+    .dot {width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:.15s}
+    .dot.on {background:var(--verde);width:22px;border-radius:999px}
+
+    /* ── KEYBOARD HINT ── */
+    .kb-hint {
+      position:fixed;bottom:16px;right:24px;
+      font-size:.68rem;font-weight:700;color:rgba(255,255,255,.3);
+      letter-spacing:.06em;
+    }
+  </style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- ══════════ COVER ══════════ -->
+  <section class="slide active cover" id="s0">
+    <div class="brandbar" style="position:absolute;top:0;left:0;right:0"></div>
+    <div class="toprow">
+      <span class="ckicker">Treinamento Institucional · Operação AlmaViva</span>
+    </div>
+    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+    <div class="cover-layout">
+      <div class="cover-left">
+        <div>
+          <h1>Atendimento<br><em>PROCON</em></h1>
+          <p class="sub">Guia definitivo para capacitar você a realizar atendimentos de excelência ao PROCON, garantindo a satisfação e a proteção da imagem institucional do Agibank.</p>
+          <div class="chips">
+            <div class="cchip"><b class="g">Todas</b><small>Filas N1 e N2</small></div>
+            <div class="cchip"><b>100%</b><small>Procedimentos</small></div>
+            <div class="cchip"><b>100%</b><small>Prático</small></div>
+          </div>
+        </div>
+      </div>
+      <div class="cover-right">
+        <div class="sum-title">O que você vai aprender</div>
+        <div class="sum-item"><strong>Módulo 1:</strong> O que é PROCON?</div>
+        <div class="sum-item"><strong>Módulo 2:</strong> Fluxo Completo de Atendimento</div>
+        <div class="sum-item"><strong>Módulo 3:</strong> Sistemas Utilizados</div>
+        <div class="sum-item"><strong>Módulo 4:</strong> Principais Motivos de Contato</div>
+        <div class="sum-item"><strong>Prática:</strong> Casos, Exercícios e Quiz</div>
+      </div>
+    </div>
+    <span class="cover-badge">Versão Oficial</span>
+    <span class="pageno">01 · 09</span>
+  </section>
+
+  <!-- ══════════ SLIDE 1: O QUE É PROCON ══════════ -->
+  <section class="slide" id="s1">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 1</div>
+        <h2>O que é <span>PROCON?</span></h2>
+      </div>
+      <div class="meta">Fundamentos</div>
+    </div>
+    <div class="scontent">
+      <details>
+        <summary>📖 Definição</summary>
+        <div class="details-body">
+          <p>O <strong>PROCON</strong> (Programa de Proteção e Defesa do Consumidor) é um órgão de defesa do consumidor vinculado ao governo estadual ou municipal.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>🎯 Função Principal</summary>
+        <div class="details-body">
+          <ul class="chk-list">
+            <li>Mediar conflitos entre consumidores e empresas</li>
+            <li>Garantir direitos previstos no Código de Defesa do Consumidor</li>
+            <li>Receber e processar reclamações</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>👥 Quem é o público que entra em contato?</summary>
+        <div class="details-body">
+          <p><strong>Órgão fiscalizador</strong>, por meio do técnico PROCON que tem poder de:</p>
+          <ul style="padding-left:20px;margin-top:10px">
+            <li>Penalizar o banco</li>
+            <li>Aplicar multas</li>
+            <li>Fazer propaganda negativa na mídia em caso de atendimento ruim</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>❓ Por que temos esse atendimento?</summary>
+        <div class="details-body">
+          <ul style="padding-left:20px">
+            <li><strong>Obrigatoriedade prevista no normativo do SAC</strong></li>
+            <li><strong>Construção de relacionamento com os PROCONs</strong></li>
+            <li>Mitigar o registro formal de reclamações</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>🔄 Qual diferença de um atendimento tradicional?</summary>
+        <div class="details-body">
+          <p>No canal PROCON, normalmente o cliente precisa de <strong>várias demandas diferentes</strong>, não só um assunto que é o contexto normal de um atendimento direto com o titular na central de atendimento.</p>
+          <p style="margin-top:10px">O técnico do PROCON pode trazer múltiplas solicitações de um mesmo cliente em uma única ligação.</p>
+        </div>
+      </details>
+    </div>
+    <span class="pageno">02 · 09</span>
+  </section>
+
+  <!-- ══════════ SLIDE 2: FLUXO DE ATENDIMENTO ══════════ -->
+  <section class="slide" id="s2">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 2</div>
+        <h2>Fluxo Completo de <span>Atendimento</span></h2>
+      </div>
+      <div class="meta">Passo a Passo</div>
+    </div>
+    <div class="scontent">
+      <div class="three-cols">
+        <div class="sec-block">
+          <h4 style="color: var(--azul);">1️⃣ Recepção</h4>
+          <p>Funcionário do PROCON liga para tratar demanda relacionada a clientes.</p>
+          <ul>
+            <li>Identificar-se como atendente Agibank</li>
+            <li>Demonstrar cordialidade e disposição</li>
+          </ul>
+        </div>
+        <div class="sec-block">
+          <h4 style="color: var(--azul);">2️⃣ PID (OBRIGATÓRIO)</h4>
+          <ul class="chk-list" style="margin-top:10px;">
+            <li>CPF do cliente</li>
+            <li>Nome completo</li>
+            <li>Cidade do PROCON</li>
+          </ul>
+        </div>
+        <div class="sec-block">
+          <h4 style="color: var(--azul);">3️⃣ Verificação</h4>
+          <p>Acessar os sistemas para entender o cenário:</p>
+          <ul>
+            <li>Conductor</li>
+            <li>Recupera</li>
+            <li>Salesforce</li>
+          </ul>
+        </div>
+        <div class="sec-block">
+          <h4 style="color: var(--azul);">4️⃣ Tratativa</h4>
+          <p><strong>Assuntos que conseguimos fazer em linha:</strong> Resolver diretamente com o técnico</p>
+          <p style="margin-top:8px"><strong>Assuntos que dependem de escalonamento:</strong> Abrir caso no Salesforce</p>
+        </div>
+        <div class="sec-block">
+          <h4 style="color: var(--azul);">5️⃣ Comunicação</h4>
+          <p><strong>Total transparência</strong> com o técnico sobre as ações realizadas</p>
+          <p style="margin-top:8px"><strong>Prazo:</strong> Conforme RO de cada assunto</p>
+        </div>
+        <div class="sec-block" style="border-color:var(--verde);">
+          <h4 style="color: var(--azul);">6️⃣ Retorno</h4>
+          <p><strong>SEMPRE via e-mail institucional do PROCON</strong> (normalmente e-mail final Gov.com ou conforme lista de consulta no RO).</p>
+          <p style="color:var(--vermelho); font-weight:bold;margin-top:8px">❌ NUNCA e-mail pessoal</p>
+        </div>
+      </div>
+
+      <div class="alert-box warning">
+        <div class="icon">⚠</div>
+        <div class="txt">
+          <strong>IMPORTANTE sobre Protocolo:</strong><br>
+          ❌ NÃO informamos número de protocolo do SalesForce.<br>
+          ✅ Se solicitado, protocolo = Nome do Operador + Data + Horário (Exemplo: JOAO DA SILVA, 05/03/2021, 17:14h).
+        </div>
+      </div>
+    </div>
+    <span class="pageno">03 · 09</span>
+  </section>
+
+  <!-- ══════════ SLIDE 3: SISTEMAS UTILIZADOS ══════════ -->
+  <section class="slide" id="s3">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 3</div>
+        <h2>Sistemas <span>Utilizados</span></h2>
+      </div>
+      <div class="meta">Ferramentas de Trabalho</div>
+    </div>
+    <div class="scontent">
+      <div class="two-cols">
+        <div class="sec-block">
+          <h3><span class="num">🖥️</span>Conductor</h3>
+          <ul>
+            <li>Consulta de contratos de crédito</li>
+            <li>Informações de parcelas</li>
+            <li>Status de contratos</li>
+          </ul>
+        </div>
+        <div class="sec-block">
+          <h3><span class="num">💰</span>Recupera</h3>
+          <ul>
+            <li>Contratos em atraso</li>
+            <li>Acordos de renegociação</li>
+            <li>Histórico de cobranças</li>
+          </ul>
+        </div>
+        <div class="sec-block">
+          <h3><span class="num">📊</span>Salesforce</h3>
+          <ul>
+            <li>Abertura de casos e Acompanhamento</li>
+            <li>Direcionamento para filas</li>
+            <li>Histórico completo</li>
+          </ul>
+        </div>
+        <div class="sec-block">
+          <h3><span class="num">📁</span>Alfresco</h3>
+          <ul>
+            <li>Validação de documentos</li>
+            <li>Contratos assinados</li>
+            <li>Documentação cadastral</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert-box info">
+        <div class="icon">💡</div>
+        <div class="txt"><strong>Dica Importante:</strong> Sempre consulte o Conductor para informações atualizadas. Não confie apenas na memória!</div>
+      </div>
+    </div>
+    <span class="pageno">04 · 09</span>
+  </section>
+
+  <!-- ══════════ SLIDE 4: PRINCIPAIS MOTIVOS ══════════ -->
+  <section class="slide" id="s4">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Módulo 4</div>
+        <h2>Principais Motivos de <span>Contato</span></h2>
+      </div>
+      <div class="meta">Dados de 2026 (até maio)</div>
+    </div>
+    <div class="scontent">
+      <div class="alert-box info">
+        <div class="icon">📊</div>
+        <div class="txt"><strong>Contexto:</strong> Estes são os principais motivos pelos quais os PROCONs entram em contato com o Agibank. Conhecer esses dados ajuda a antecipar demandas e preparar respostas.</div>
+      </div>
+
+      <div class="two-cols">
+        <div class="motivo-card">
+          <div class="motivo-info">
+            <h4>Cópia de Contrato</h4>
+            <p>Cliente solicita cópia do contrato</p>
+          </div>
+          <div class="motivo-number">
+            <div class="big">1.537</div>
+            <div class="small">solicitações</div>
+          </div>
+        </div>
+
+        <div class="motivo-card">
+          <div class="motivo-info">
+            <h4>Extrato</h4>
+            <p>Solicitação de extrato detalhado</p>
+          </div>
+          <div class="motivo-number">
+            <div class="big">841</div>
+            <div class="small">solicitações</div>
+          </div>
+        </div>
+
+        <div class="motivo-card">
+          <div class="motivo-info">
+            <h4>Antecipação de Parcelas</h4>
+            <p>Cliente deseja antecipar pagamento</p>
+          </div>
+          <div class="motivo-number">
+            <div class="big">464</div>
+            <div class="small">solicitações</div>
+          </div>
+        </div>
+
+        <div class="motivo-card">
+          <div class="motivo-info">
+            <h4>Acordo</h4>
+            <p>Negociação de dívidas</p>
+          </div>
+          <div class="motivo-number">
+            <div class="big">451</div>
+            <div class="small">solicitações</div>
+          </div>
+        </div>
+
+        <div class="motivo-card">
+          <div class="motivo-info">
+            <h4>Cancelamento de Optante</h4>
+            <p>Cliente quer cancelar débito automático</p>
+          </div>
+          <div class="motivo-number">
+            <div class="big">277</div>
+            <div class="small">solicitações</div>
+          </div>
+        </div>
+
+        <div class="motivo-card">
+          <div class="motivo-info">
+            <h4>Demonstrativo Evolução de Dívida</h4>
+            <p>Detalhamento da evolução do débito</p>
+          </div>
+          <div class="motivo-number">
+            <div class="big">260</div>
+            <div class="small">solicitações</div>
+          </div>
+        </div>
+
+        <div class="motivo-card">
+          <div class="motivo-info">
+            <h4>Cancelamento de Seguro</h4>
+            <p>Cancelamento de seguro vinculado</p>
+          </div>
+          <div class="motivo-number">
+            <div class="big">202</div>
+            <div class="small">solicitações</div>
+          </div>
+        </div>
+
+        <div class="motivo-card">
+          <div class="motivo-info">
+            <h4>Ressarcimento</h4>
+            <p>Solicitação de devolução de valores</p>
+          </div>
+          <div class="motivo-number">
+            <div class="big">166</div>
+            <div class="small">solicitações</div>
+          </div>
+        </div>
+
+        <div class="motivo-card">
+          <div class="motivo-info">
+            <h4>2ª Via de Fatura</h4>
+            <p>Reenvio de boleto/fatura</p>
+          </div>
+          <div class="motivo-number">
+            <div class="big">164</div>
+            <div class="small">solicitações</div>
+          </div>
+        </div>
+
+        <div class="motivo-card">
+          <div class="motivo-info">
+            <h4>Comprovante</h4>
+            <p>Comprovante de pagamento ou quitação</p>
+          </div>
+          <div class="motivo-number">
+            <div class="big">142</div>
+            <div class="small">solicitações</div>
+          </div>
+        </div>
+
+        <div class="motivo-card">
+          <div class="motivo-info">
+            <h4>Desaverbar Margem</h4>
+            <p>Liberar margem consignável</p>
+          </div>
+          <div class="motivo-number">
+            <div class="big">121</div>
+            <div class="small">solicitações</div>
+          </div>
+        </div>
+
+        <div class="motivo-card">
+          <div class="motivo-info">
+            <h4>Atendimento ao Procon</h4>
+            <p>Demandas gerais do órgão</p>
+          </div>
+          <div class="motivo-number">
+            <div class="big">120</div>
+            <div class="small">solicitações</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="pageno">05 · 09</span>
+  </section>
+
+  <!-- ══════════ SLIDE 5: EXERCÍCIOS 1 A 3 ══════════ -->
+  <section class="slide" id="s5">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Prática</div>
+        <h2>Exercícios <span>Práticos (1 a 3)</span></h2>
+      </div>
+      <div class="meta">Aplique seu Conhecimento</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block">
+        <h3 style="color: var(--azul);">📞 Exercício 1: Identificação de Tratativa</h3>
+        <p><strong>Situação:</strong> O PROCON liga informando que um cliente solicitou cópia de contrato de crédito pessoal.</p>
+        <p><strong>Pergunta:</strong> Você consegue resolver isso em linha ou precisa escalonar?</p>
+        <details>
+          <summary>💡 Ver Resposta</summary>
+          <div class="details-body">
+            <div class="alert-box success">
+              <div class="icon">✓</div>
+              <div class="txt">
+                <strong>Resposta Correta:</strong> Precisa escalonar<br><br>
+                <strong>Procedimento:</strong> Verificar se e-mail informado = cadastro Salesforce | Validar documentos no Alfresco | Documentação: RG/CNH, Comprovante residência, Selfie | Abrir caso e direcionar para fila apropriada | Prazo: 24h úteis<br><br>
+                <strong>Retorno:</strong> Via e-mail institucional do PROCON
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="sec-block">
+        <h3 style="color: var(--azul);">📄 Exercício 2: Documentação Necessária</h3>
+        <p><strong>Situação:</strong> Cliente desconhece empréstimo realizado em sua conta e o PROCON solicita providências.</p>
+        <p><strong>Pergunta:</strong> Quais documentos você deve solicitar e qual o procedimento?</p>
+        <details>
+          <summary>💡 Ver Resposta</summary>
+          <div class="details-body">
+            <div class="alert-box success">
+              <div class="icon">✓</div>
+              <div class="txt">
+                <strong>Documentos Necessários:</strong> Extrato bancário do mês do crédito, Documento de identificação frente e verso (CNH ou RG), Comprovante de residência.<br><br>
+                <strong>Procedimento:</strong> Anexar documentação ao caso, escalonar para Prevenção a Fraude. Prazo: 5 dias úteis para análise.
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="sec-block">
+        <h3 style="color: var(--azul);">⏰ Exercício 3: Comunicação com PROCON</h3>
+        <p><strong>Situação:</strong> Você abriu um caso que precisa de análise de 48h.</p>
+        <p><strong>Pergunta:</strong> Como você comunica isso ao técnico do PROCON?</p>
+        <details>
+          <summary>💡 Ver Resposta</summary>
+          <div class="details-body">
+            <div class="alert-box success">
+              <div class="icon">✓</div>
+              <div class="txt">
+                <strong>Resposta Correta:</strong><br><br>
+                <strong>Durante a ligação:</strong> Informar claramente o prazo de análise (48h úteis) e explicar que o retorno será via e-mail institucional<br><br>
+                <strong>Após encerramento:</strong> Enviar e-mail formalizando:<br>
+                • Número do caso aberto (se permitido pela política)<br>
+                • Prazo de tratativa<br>
+                • Próximos passos<br>
+                • Contato para dúvidas<br><br>
+                <strong>Garantir:</strong> E-mail institucional do PROCON (Gov.com ou conforme lista)
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+    <span class="pageno">06 · 09</span>
+  </section>
+
+  <!-- ══════════ SLIDE 6: O QUE EU APRENDI 1 ══════════ -->
+  <section class="slide" id="s6">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Consolidação</div>
+        <h2>O que eu <span>aprendi?</span></h2>
+      </div>
+      <div class="meta">Pontos-Chave</div>
+    </div>
+    <div class="scontent">
+      <div class="learning-box">
+        <h3>📚 Principais Aprendizados</h3>
+        <ul>
+          <li>A célula de PROCON segue <strong>à risca os procedimentos atuais nos RO's</strong></li>
+          <li><strong>Não existe tabela de alçada diferenciada</strong> para atendimento PROCON</li>
+          <li>Os assuntos que conseguimos fazer tradicionalmente <strong>em linha</strong> para o cliente na central, faremos com o PROCON</li>
+          <li>Os assuntos que dependem de <strong>escalonamento</strong>, continuarão dessa forma</li>
+          <li>Os <strong>prazos e tratamentos</strong> vamos avisar ao técnico do PROCON e <strong>formalizar no E-mail</strong> conforme procedimento</li>
+        </ul>
+      </div>
+
+      <div class="alert-box info">
+        <div class="icon">💡</div>
+        <div class="txt">
+          <strong>Regra de Ouro:</strong> Transparência total com o técnico do PROCON sobre o que você está fazendo, quais os próximos passos e qual o prazo esperado.
+        </div>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">✅</span>Checklist de Qualidade no Atendimento</h3>
+        <ul class="chk-list">
+          <li>PID realizado corretamente (CPF, Nome, Cidade)</li>
+          <li>Sistemas consultados (Conductor, Recupera, Salesforce)</li>
+          <li>Tratativa clara (em linha ou escalonamento)</li>
+          <li>Comunicação transparente sobre prazos</li>
+          <li>E-mail institucional confirmado</li>
+          <li>Formalização enviada após atendimento</li>
+        </ul>
+      </div>
+    </div>
+    <span class="pageno">07 · 09</span>
+  </section>
+
+  <!-- ══════════ SLIDE 7: ESTUDO DE CASO ══════════ -->
+  <section class="slide" id="s7">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Prática Avançada</div>
+        <h2>Estudo de <span>Caso Completo</span></h2>
+      </div>
+      <div class="meta">Masterclass</div>
+    </div>
+    <div class="scontent">
+      <div class="sec-block" style="background:var(--azul); color:#fff; border:none;">
+        <h3 style="color:#fff;justify-content:center">📚 Caso Completo: Múltiplas Demandas</h3>
+        <p style="color:#fff;"><strong>Cenário:</strong> Técnica Maria do PROCON de São Paulo liga às 10h da manhã sobre reclamação da cliente Ana Silva (CPF: 123.456.789-00). A cliente tem 3 demandas:</p>
+        <ol style="color:#fff;padding-left:20px;margin-top:10px">
+          <li>Solicita cópia de contrato de crédito pessoal</li>
+          <li>Quer demonstrativo de evolução de dívida de cartão</li>
+          <li>Deseja cancelar débito automático (optante)</li>
+        </ol>
+      </div>
+
+      <details>
+        <summary>💡 Ver Resolução Completa</summary>
+        <div class="details-body">
+          <h4>1️⃣ PID Realizado</h4>
+          <p>✅ CPF: 123.456.789-00 | ✅ Nome: Ana Silva | ✅ Cidade: São Paulo</p>
+
+          <h4>2️⃣ Análise das Demandas</h4>
+          
+          <div class="alert-box info">
+            <div class="icon">📄</div>
+            <div class="txt">
+              <strong>Demanda 1: Cópia de Contrato</strong><br>
+              • <strong>Tipo:</strong> Escalonamento necessário<br>
+              • <strong>Ação:</strong> Verificar e-mail cadastrado, validar docs no Alfresco, abrir caso<br>
+              • <strong>Fila:</strong> Central de Soluções<br>
+              • <strong>Prazo:</strong> 24h úteis
+            </div>
+          </div>
+
+          <div class="alert-box success">
+            <div class="icon">📊</div>
+            <div class="txt">
+              <strong>Demanda 2: Demonstrativo Evolução Dívida</strong><br>
+              • <strong>Tipo:</strong> Pode ser resolvido em linha<br>
+              • <strong>Ação:</strong> Gerar demonstrativo no sistema e enviar por e-mail<br>
+              • <strong>Prazo:</strong> Imediato (durante a ligação)
+            </div>
+          </div>
+
+          <div class="alert-box warning">
+            <div class="icon">🔄</div>
+            <div class="txt">
+              <strong>Demanda 3: Cancelamento Optante</strong><br>
+              • <strong>Tipo:</strong> Pode ser resolvido em linha (dependendo da situação)<br>
+              • <strong>Ação:</strong> Verificar se há pendências, realizar cancelamento<br>
+              • <strong>Prazo:</strong> Imediato (ou até 48h se houver pendência)
+            </div>
+          </div>
+
+          <h4>3️⃣ Comunicação com Técnica</h4>
+          <div class="script-box">COMUNICAÇÃO DURANTE ATENDIMENTO:
+"Maria, vou resolver essas 3 demandas da seguinte forma:
+
+1) Cópia do Contrato: Vou abrir um caso para nossa equipe especializada. 
+   O retorno será em até 24 horas úteis via e-mail institucional.
+
+2) Demonstrativo de Dívida: Consigo gerar agora mesmo e envio 
+   junto com a formalização deste atendimento.
+
+3) Cancelamento do Débito Automático: Estou realizando o cancelamento 
+   agora. A cliente já não terá mais descontos a partir do próximo ciclo.
+
+Vou enviar um e-mail para saopaulo.procon@sp.gov.br formalizando 
+tudo isso. Alguma dúvida?"</div>
+
+          <h4>4️⃣ Registro no Sistema</h4>
+          <div class="script-box">REGISTRO SALESFORCE - ATENDIMENTO PROCON SP
+PID: CPF 123.456.789-00 | Ana Silva | São Paulo
+
+DEMANDA 1: Cópia Contrato CP
+- Caso aberto: [NÚMERO]
+- Fila: Central de Soluções
+- Prazo: 24h úteis
+- Status: Aguardando análise
+
+DEMANDA 2: Demonstrativo Evolução Dívida Cartão
+- Resolvido em linha
+- Documento gerado e enviado
+- Status: Concluído
+
+DEMANDA 3: Cancelamento Optante
+- Realizado em linha
+- Débito cancelado com sucesso
+- Próximo ciclo sem desconto
+- Status: Concluído
+
+RETORNO: saopaulo.procon@sp.gov.br
+PROTOCOLO: [NOME OPERADOR], 05/06/2026, 10:14h</div>
+
+          <h4>5️⃣ E-mail de Formalização</h4>
+          <div class="script-box">ASSUNTO: Retorno Demandas - Ana Silva (CPF 123.456.789-00)
+
+Prezada Maria,
+
+Conforme atendimento realizado hoje (05/06/2026, 10:14h), 
+seguem as tratativas das demandas da cliente Ana Silva:
+
+1) CÓPIA DE CONTRATO - Crédito Pessoal
+   • Caso aberto para análise
+   • Prazo de retorno: 24 horas úteis
+   • Documentação será enviada via e-mail
+
+2) DEMONSTRATIVO EVOLUÇÃO DE DÍVIDA - Cartão
+   • Documento em anexo
+   • Demanda concluída
+
+3) CANCELAMENTO DÉBITO AUTOMÁTICO
+   • Cancelamento realizado com sucesso
+   • Próximo ciclo sem desconto automático
+
+Protocolo: [NOME OPERADOR], 05/06/2026, 10:14h
+
+Atenciosamente,
+Central de Atendimento Agibank</div>
+        </div>
+      </details>
+    </div>
+    <span class="pageno">08 · 09</span>
+  </section>
+
+  <!-- ══════════ SLIDE 8: O QUE EU APRENDI 2 ══════════ -->
+  <section class="slide" id="s8">
+    <div class="brandbar"></div>
+    <div class="shead">
+      <div class="t">
+        <div class="kicker"><span class="kdot"></span>Consolidação Final</div>
+        <h2>O que eu <span>aprendi?</span></h2>
+      </div>
+      <div class="meta">Pontos-Chave Avançados</div>
+    </div>
+    <div class="scontent">
+      <div class="learning-box">
+        <h3>🎯 Lições do Estudo de Caso</h3>
+        <ul>
+          <li>Use um <strong>padrão de preenchimento</strong> para filas escalonadas conforme mostrado no estudo de caso</li>
+          <li>Tenha <strong>total comunicação</strong> com o técnico do PROCON em relação às ações que está fazendo</li>
+          <li>Garanta que ele receba o <strong>E-mail com a formalização</strong> das filas abertas</li>
+          <li>Seja <strong>transparente sobre prazos</strong> e próximos passos</li>
+          <li>Organize as demandas de forma <strong>clara e estruturada</strong></li>
+        </ul>
+      </div>
+
+      <div class="sec-block">
+        <h3><span class="num">📋</span>Template de Registro Recomendado</h3>
+        <div class="script-box">ATENDIMENTO PROCON - [CIDADE]
+PID: CPF [NÚMERO] | [NOME COMPLETO] | [CIDADE]
+
+DEMANDA [N]: [TÍTULO]
+- Tipo: [Em linha / Escalonamento]
+- Ação realizada: [DESCRIÇÃO]
+- Fila (se aplicável): [NOME DA FILA]
+- Prazo: [TEMPO]
+- Status: [Concluído / Aguardando / Em análise]
+
+RETORNO: [email institucional]
+PROTOCOLO: [NOME], [DATA], [HORA]</div>
+      </div>
+
+      <div class="alert-box success">
+        <div class="icon">✅</div>
+        <div class="txt">
+          <strong>Checklist Final:</strong><br>
+          ✓ PID completo realizado<br>
+          ✓ Todas as demandas identificadas<br>
+          ✓ Ações realizadas documentadas<br>
+          ✓ Prazos comunicados<br>
+          ✓ E-mail institucional confirmado<br>
+          ✓ Formalização enviada<br>
+          ✓ Registro completo no sistema
+        </div>
+      </div>
+    </div>
+    <span class="pageno">09 · 09</span>
+  </section>
+
+</div><!-- end stage -->
+
+<!-- NAV -->
+<div class="nav">
+  <button id="prev">‹</button>
+  <div class="dots">
+    <span class="dot on" data-i="0"></span>
+    <span class="dot" data-i="1"></span>
+    <span class="dot" data-i="2"></span>
+    <span class="dot" data-i="3"></span>
+    <span class="dot" data-i="4"></span>
+    <span class="dot" data-i="5"></span>
+    <span class="dot" data-i="6"></span>
+    <span class="dot" data-i="7"></span>
+    <span class="dot" data-i="8"></span>
+  </div>
+  <button id="next">›</button>
+</div>
+<div class="kb-hint">← → NAVEGAR</div>
+
+<script>
+  // Slide Navigation Logic
+  const slides = [...document.querySelectorAll('.slide')];
+  const dots = [...document.querySelectorAll('.dot')];
+  let cur = 0;
+  
+  function fit() {
+    const scale = Math.min(window.innerWidth/1280, window.innerHeight/720);
+    slides.forEach(el => {
+      el.style.transform = `scale(${scale})`;
+    });
+  }
+  
+  function show(i) {
+    cur = (i + slides.length) % slides.length;
+    slides.forEach((el, k) => el.classList.toggle('active', k === cur));
+    dots.forEach((d, k) => d.classList.toggle('on', k === cur));
+    // Reset scroll position on slide change
+    const activeContent = slides[cur].querySelector('.scontent');
+    if(activeContent) activeContent.scrollTop = 0;
+  }
+  
+  document.getElementById('next').onclick = () => show(cur + 1);
+  document.getElementById('prev').onclick = () => show(cur - 1);
+  dots.forEach(d => d.onclick = () => show(+d.dataset.i));
+  
+  window.addEventListener('keydown', e => {
+    // Only navigate if not interacting with inputs
+    if(e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+      if(e.key === 'ArrowRight') show(cur + 1);
+      if(e.key === 'ArrowLeft') show(cur - 1);
+    }
+  });
+  
+  window.addEventListener('resize', fit);
+  fit(); 
+  show(0);
+</script>
+</body>
+</html>
